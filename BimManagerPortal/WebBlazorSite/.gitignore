@@ -213,4 +213,5 @@ obj/
 obj/*
 /bin
 bin/
-bin/*
+/obj/
+/bin/
