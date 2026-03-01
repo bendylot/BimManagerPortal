@@ -1,7 +1,11 @@
-﻿namespace BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
 {
     public class RestrictedAreaConfigProxy
     {
+        [Required(ErrorMessage = "Имя объекта обязательно")]
+        [StringLength(20, ErrorMessage = "Имя не должно превышать 20 символов")]
         public string ObjectName { get; set; } = "";
         public DisciplinesProxy Razdels { get; set; } = new();
     }
@@ -65,9 +69,15 @@
     }
     public class PathsToModelsProxy
     {
+        [Required(ErrorMessage = "TemplatePath обязательно")]
+        [StringLength(120, ErrorMessage = "TemplatePath не должно превышать 120 символов")]
         public string TemplatePath { get; set; } = "";
+        [Required(ErrorMessage = "PathForFilesWithOnlyRestrictedAreas обязательно")]
+        [StringLength(120, ErrorMessage = "PathForFilesWithOnlyRestrictedAreas не должно превышать 120 символов")]
         public string PathForFilesWithOnlyRestrictedAreas { get; set; } = "";
+        [StringLength(20, ErrorMessage = "PrefixForFilesWithOnlyRestrictedAreas не должно превышать 20 символов")]
         public string PrefixForFilesWithOnlyRestrictedAreas { get; set; } = "";
+        [StringLength(20, ErrorMessage = "SuffixForFilesWithOnlyRestrictedAreas не должно превышать 20 символов")]
         public string SuffixForFilesWithOnlyRestrictedAreas { get; set; } = "";
         public bool ForcedRebuilding { get; set; } = false;
         public List<Model> Models { get; set; } = new();

@@ -361,107 +361,6 @@ main[b-8bvpt4d0se] {
         opacity: 0;
     }
 }
-/* /UIComponents/PluginConfigurations/AllConfigurations/AllConfiguration.razor.rz.scp.css */
-/* Основной контейнер с градиентной обводкой */
-.minimal-table-container[b-0iiehktawc] {
-    background: #ffffff;
-    padding: 1px; /* Толщина рамки */
-    border-radius: 12px;
-    background: linear-gradient(135deg, #4facfe 0%, #a944ff 100%);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-/* Внутренний фон, чтобы контент был на белом */
-.table-wrapper[b-0iiehktawc] {
-    background: white;
-    border-radius: 11px; /* Чуть меньше родительского */
-    overflow: hidden;
-}
-
-.minimal-table[b-0iiehktawc] {
-    margin-bottom: 0;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-/* Стили заголовков */
-.minimal-table thead[b-0iiehktawc] {
-    background-color: #fcfaff;
-}
-
-.minimal-table th[b-0iiehktawc] {
-    font-weight: 600;
-    color: #555;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 12px 16px;
-    border: none;
-    transition: color 0.2s;
-}
-
-.minimal-table th:hover[b-0iiehktawc] {
-    color: #4facfe;
-}
-
-/* Стили ячеек */
-.minimal-table td[b-0iiehktawc] {
-    padding: 12px 16px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #444;
-    font-size: 0.9rem;
-}
-
-/* Эффект при наведении на строку */
-.minimal-table tbody tr:hover[b-0iiehktawc] {
-    background-color: #f8f9ff;
-    transition: background 0.3s ease;
-}
-
-/* Убираем границу у последней строки */
-.minimal-table tbody tr:last-child td[b-0iiehktawc] {
-    border-bottom: none;
-}
-
-/* Кастомный input */
-.search-input[b-0iiehktawc] {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 8px 12px;
-    transition: border-color 0.3s;
-}
-
-.search-input:focus[b-0iiehktawc] {
-    outline: none;
-    border-color: #4facfe;
-    box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.1);
-}
-/* Полосатость (Zebra-striping) — подкрашиваем каждую вторую строку */
-.minimal-table tbody tr:nth-child(even)[b-0iiehktawc] {
-    background-color: rgba(249, 250, 255, 0.6); /* Очень бледный сине-фиолетовый */
-}
-
-/* Стили для выбранной строки */
-.minimal-table tbody tr.selected[b-0iiehktawc] {
-    background: linear-gradient(90deg, rgba(79, 172, 254, 0.1) 0%, rgba(169, 68, 255, 0.1) 100%) !important;
-    position: relative;
-}
-
-/* Индикатор сбоку для выбранной строки */
-.minimal-table tbody tr.selected td:first-child[b-0iiehktawc] {
-    border-left: 3px solid #4facfe;
-    padding-left: 13px; /* Компенсируем границу */
-}
-
-/* Изменение курсора и плавность */
-.minimal-table tbody tr[b-0iiehktawc] {
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.minimal-table tbody tr:hover[b-0iiehktawc] {
-    background-color: rgba(169, 68, 255, 0.05) !important;
-}
 /* /UIComponents/PluginConfigurations/ConfigTabs/ConfigTabs.razor.rz.scp.css */
 .tab[b-mpgkdape1d] {
     padding: 8px 16px;
@@ -483,33 +382,134 @@ main[b-8bvpt4d0se] {
     position: relative;
     top: 1px;
 }
-/* /UIComponents/PluginConfigurations/CreateConfigurations/CreateConfiguration.razor.rz.scp.css */
-h3[b-bsy2k0vuft] {
+/* /UIComponents/PluginConfigurations/Tabs/AllConfigurations/AllConfiguration.razor.rz.scp.css */
+/* Основной контейнер с градиентной обводкой */
+.minimal-table-container[b-vioc1ueyl9] {
+    background: #ffffff;
+    padding: 1px; /* Толщина рамки */
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4facfe 0%, #a944ff 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Внутренний фон, чтобы контент был на белом */
+.table-wrapper[b-vioc1ueyl9] {
+    background: white;
+    border-radius: 11px; /* Чуть меньше родительского */
+    overflow: hidden;
+}
+
+.minimal-table[b-vioc1ueyl9] {
+    margin-bottom: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Стили заголовков */
+.minimal-table thead[b-vioc1ueyl9] {
+    background-color: #fcfaff;
+}
+
+.minimal-table th[b-vioc1ueyl9] {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border: none;
+    transition: color 0.2s;
+}
+
+.minimal-table th:hover[b-vioc1ueyl9] {
+    color: #4facfe;
+}
+
+/* Стили ячеек */
+.minimal-table td[b-vioc1ueyl9] {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+/* Эффект при наведении на строку */
+.minimal-table tbody tr:hover[b-vioc1ueyl9] {
+    background-color: #f8f9ff;
+    transition: background 0.3s ease;
+}
+
+/* Убираем границу у последней строки */
+.minimal-table tbody tr:last-child td[b-vioc1ueyl9] {
+    border-bottom: none;
+}
+
+/* Кастомный input */
+.search-input[b-vioc1ueyl9] {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus[b-vioc1ueyl9] {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.1);
+}
+/* Полосатость (Zebra-striping) — подкрашиваем каждую вторую строку */
+.minimal-table tbody tr:nth-child(even)[b-vioc1ueyl9] {
+    background-color: rgba(249, 250, 255, 0.6); /* Очень бледный сине-фиолетовый */
+}
+
+/* Стили для выбранной строки */
+.minimal-table tbody tr.selected[b-vioc1ueyl9] {
+    background: linear-gradient(90deg, rgba(79, 172, 254, 0.1) 0%, rgba(169, 68, 255, 0.1) 100%) !important;
+    position: relative;
+}
+
+/* Индикатор сбоку для выбранной строки */
+.minimal-table tbody tr.selected td:first-child[b-vioc1ueyl9] {
+    border-left: 3px solid #4facfe;
+    padding-left: 13px; /* Компенсируем границу */
+}
+
+/* Изменение курсора и плавность */
+.minimal-table tbody tr[b-vioc1ueyl9] {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.minimal-table tbody tr:hover[b-vioc1ueyl9] {
+    background-color: rgba(169, 68, 255, 0.05) !important;
+}
+/* /UIComponents/PluginConfigurations/Tabs/CreateConfigurations/CreateConfiguration.razor.rz.scp.css */
+h3[b-xtfjt64hmy] {
     margin-bottom: 20px; /* Отступ снаружи снизу */
     padding: 10px; /* Отступ внутри */
     background-color: #f8f9fa;
 }
 
 /* Сетка плагинов */
-.plugin-selector[b-bsy2k0vuft] {
+.plugin-selector[b-xtfjt64hmy] {
     display: flex;
     gap: 10px;
     transition: all 0.4s ease-in-out;
 }
 
     /* Состояние, когда ничего не выбрано (широкие карточки) */
-    .plugin-selector.full[b-bsy2k0vuft] {
+    .plugin-selector.full[b-xtfjt64hmy] {
         flex-wrap: wrap;
     }
 
     /* Состояние, когда плагин выбран (карточки сжимаются в ряд) */
-    .plugin-selector.compact[b-bsy2k0vuft] {
+    .plugin-selector.compact[b-xtfjt64hmy] {
         flex-wrap: nowrap;
         overflow-x: auto;
         padding-bottom: 10px;
     }
 
-.plugin-card[b-bsy2k0vuft] {
+.plugin-card[b-xtfjt64hmy] {
     padding: 15px 25px;
     background: #f0f2f5;
     border: 2px solid transparent;
@@ -519,11 +519,11 @@ h3[b-bsy2k0vuft] {
     transition: all 0.2s;
 }
 
-    .plugin-card:hover[b-bsy2k0vuft] {
+    .plugin-card:hover[b-xtfjt64hmy] {
         background: #e2e6ea;
     }
 
-    .plugin-card.active[b-bsy2k0vuft] {
+    .plugin-card.active[b-xtfjt64hmy] {
         border-color: #007bff;
         background: #e7f1ff;
         color: #007bff;
@@ -531,11 +531,11 @@ h3[b-bsy2k0vuft] {
     }
 
 /* Анимация появления формы */
-.fade-in[b-bsy2k0vuft] {
-    animation: fadeIn-b-bsy2k0vuft 0.5s;
+.fade-in[b-xtfjt64hmy] {
+    animation: fadeIn-b-xtfjt64hmy 0.5s;
 }
 
-@keyframes fadeIn-b-bsy2k0vuft {
+@keyframes fadeIn-b-xtfjt64hmy {
     from {
         opacity: 0;
         transform: translateY(10px);

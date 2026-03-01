@@ -1,14 +1,17 @@
-﻿using BimManagerPortal.Domain.Entities.AppTypes;
+﻿using System.ComponentModel.DataAnnotations;
+using BimManagerPortal.Domain.Entities.AppTypes;
 using BimManagerPortal.Domain.Entities.Dtos.Requests.PluginConfigs;
 using BimManagerPortal.Domain.Entities.Plugins;
 using BimManagerPortal.Domain.Entities.PluginsConfigs;
 using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
+using BimManagerPortal.Domain.Services.Validations;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
 using Microsoft.AspNetCore.Components;
+
 // [cite: 4]
 
 
-namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.CreateConfigurations
+namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations
 {
     public partial class CreateConfiguration
     {
@@ -79,6 +82,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Creat
                 Name = PluginConfigEntity.Name,
                 Configuration = PluginConfigEntity.Data,
             };
+            ValidateConfig(dto);
             try
             {
                 await ExternalApiService.SendPluginConfigAsync(dto);
@@ -89,6 +93,40 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Creat
                 // Обработка ошибки (например, вывод в консоль или UI)
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private async Task ValidateConfig(PluginConfigRequestDto dto)
+        {
+            // Валидация перед отправкой
+            var validationErrors = ValidationService.ValidateObjectRecursive(dto);
+        
+            if (validationErrors.Any())
+            {
+                // Показываем ошибки
+                await CreatedValidationError(validationErrors);
+                return;
+            }
+        }
+
+        private string? _errorMessage;
+        private bool _isErrorOpen;
+
+        private async Task CreatedValidationError(List<ValidationResult> validationErrors)
+        {
+            var firstError = validationErrors
+                .FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ErrorMessage));
+
+            if (firstError is null)
+                return;
+
+            _errorMessage = firstError.ErrorMessage;
+            _isErrorOpen = true;
+
+            await InvokeAsync(StateHasChanged);
+        }
+        private void CloseError()
+        {
+            _isErrorOpen = false;
         }
         #endregion
     }

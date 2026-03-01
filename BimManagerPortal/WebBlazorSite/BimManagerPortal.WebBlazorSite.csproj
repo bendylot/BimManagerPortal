@@ -11,4 +11,18 @@
     <ProjectReference Include="..\..\BimManagerPortal.Domain\BimManagerPortal.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UIComponents\PluginConfigurations\Tabs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\AllConfigurations\AllConfiguration.razor" />
+    <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\CreateConfiguration.razor" />
+    <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\RestrictedAreaForm\RestrictedAreaForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\AllConfigurations\AllConfiguration.razor" />
+  </ItemGroup>
+
 </Project>

@@ -208,3 +208,9 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+/obj
+obj/
+obj/*
+/bin
+bin/
+bin/*

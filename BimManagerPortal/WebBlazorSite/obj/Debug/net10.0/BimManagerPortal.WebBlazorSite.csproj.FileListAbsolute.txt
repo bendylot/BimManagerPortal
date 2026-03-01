@@ -85,11 +85,11 @@ C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\o
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\Layout\NavMenu.razor.rz.scp.css
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\Layout\ReconnectModal.razor.rz.scp.css
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\nvrnjydrmd-{0}-abdmv1u4y3-abdmv1u4y3.gz
-C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\bin\Debug\net10.0\UIComponents\PluginConfigurations\CreateConfigurations\Forms\jsons_template\restricted_area.json
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\PluginConfigurations\ConfigTabs\ConfigTabs.razor.rz.scp.css
-C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\PluginConfigurations\CreateConfigurations\CreateConfiguration.razor.rz.scp.css
-C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\PluginConfigurations\AllConfigurations\AllConfiguration.razor.rz.scp.css
-C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\q44b8fh8nh-{0}-fxrakmrkfe-fxrakmrkfe.gz
-C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\7bt4w48hbe-{0}-fxrakmrkfe-fxrakmrkfe.gz
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\BimManagerPortal.WebBlazorSite.sourcelink.json
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\8m00a2xq77-{0}-08v1ulfw1e-08v1ulfw1e.gz
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\bin\Debug\net10.0\UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\jsons_template\restricted_area.json
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\PluginConfigurations\Tabs\AllConfigurations\AllConfiguration.razor.rz.scp.css
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\scopedcss\UIComponents\PluginConfigurations\Tabs\CreateConfigurations\CreateConfiguration.razor.rz.scp.css
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\q44b8fh8nh-{0}-pni4f7qd8g-pni4f7qd8g.gz
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal\WebBlazorSite\obj\Debug\net10.0\compressed\7bt4w48hbe-{0}-pni4f7qd8g-pni4f7qd8g.gz

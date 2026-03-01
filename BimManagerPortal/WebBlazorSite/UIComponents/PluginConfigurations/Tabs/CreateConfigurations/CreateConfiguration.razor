@@ -1,5 +1,6 @@
 ﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
-@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.CreateConfigurations.Forms
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms.RestrictedAreaForm
 
 <div class="container-box p-3">
     <h5 class="mb-3">Выберите приложение</h5>
@@ -42,6 +43,7 @@
                     if (PluginConfigEntity.Data is RestrictedAreaConfigProxy config)
                     {
                         <RestrictedAreaForm Config="config" />
+                        
                     }
                 }
                 else if (SelectedPlugin.Name == "ClashDefender")
@@ -59,6 +61,21 @@
         }
     }
 </div>
+    @if (_isErrorOpen)
+    {
+        <div class="modal-overlay">
+            <div class="error-modal">
+                <div class="error-text">
+                    @_errorMessage
+                </div>
+
+                <button class="close-btn" @onclick="CloseError">
+                    OK
+                </button>
+            </div>
+        </div>
+    }
+
 @code{
 
 }

@@ -10,3 +10,4 @@ C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debu
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\refint\BimManagerPortal.Domain.dll
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.pdb
 C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\ref\BimManagerPortal.Domain.dll
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.sourcelink.json

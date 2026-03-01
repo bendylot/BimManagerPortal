@@ -1,13 +1,8 @@
-﻿using BimManagerPortal.Domain.Entities.AppTypes;
-using BimManagerPortal.Domain.Entities.Dtos.Responses.PluginConfigsDto;
-using BimManagerPortal.Domain.Entities.Plugins;
-using BimManagerPortal.Domain.Entities.PluginsConfigs;
-using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
+﻿using BimManagerPortal.Domain.Entities.PluginsConfigs;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
 using Microsoft.AspNetCore.Components;
 
-
-namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.AllConfigurations
+namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.AllConfigurations
 {
     public partial class AllConfiguration
     {
@@ -16,27 +11,6 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.AllCo
         protected override async Task OnInitializedAsync()
         {
             Configurations = await LoadConfigurations();
-            /*Configurations = new[]
-            {
-                new PluginConfigEntity()
-                {
-                    Id = 1,
-                    Name = "Name1",
-                    Data = { }
-                },
-                new PluginConfigEntity()
-                {
-                    Id = 2,
-                    Name = "Name2",
-                    Data = { }
-                },
-                new PluginConfigEntity()
-                {
-                    Id = 3,
-                    Name = "Name3",
-                    Data = { }
-                },
-            };*/
         }
         protected IEnumerable<PluginConfigEntity>? Configurations { get; set; } = new List<PluginConfigEntity>();
         [Inject]

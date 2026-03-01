@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BimManagerPortal.WebBlazorSite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f0763017a30a1419fea6968489a527323671886")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+432c97f4b6386771d4ff8d5c5f177ab5e1b03616")]
 [assembly: System.Reflection.AssemblyProductAttribute("BimManagerPortal.WebBlazorSite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BimManagerPortal.WebBlazorSite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

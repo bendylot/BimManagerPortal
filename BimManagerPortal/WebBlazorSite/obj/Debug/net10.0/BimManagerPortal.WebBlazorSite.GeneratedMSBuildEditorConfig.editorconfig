@@ -22,6 +22,24 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/Tabs/AllConfigurations/AllConfiguration.razor]
+build_metadata.AdditionalFiles.TargetPath = 
+build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXFRhYnNcQWxsQ29uZmlndXJhdGlvbnNcQWxsQ29uZmlndXJhdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+build_metadata.AdditionalFiles.CssScope = b-vioc1ueyl9
+
+[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/Tabs/CreateConfigurations/CreateConfiguration.razor]
+build_metadata.AdditionalFiles.TargetPath = 
+build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXFRhYnNcQ3JlYXRlQ29uZmlndXJhdGlvbnNcQ3JlYXRlQ29uZmlndXJhdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+build_metadata.AdditionalFiles.CssScope = b-xtfjt64hmy
+
+[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/Tabs/CreateConfigurations/Forms/RestrictedAreaForm/RestrictedAreaForm.razor]
+build_metadata.AdditionalFiles.TargetPath = 
+build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXFRhYnNcQ3JlYXRlQ29uZmlndXJhdGlvbnNcRm9ybXNcUmVzdHJpY3RlZEFyZWFGb3JtXFJlc3RyaWN0ZWRBcmVhRm9ybS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/App.razor]
 build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXEFwcC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -46,10 +64,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXExlZnRQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/CreateConfigurations/Forms/RestrictedAreaForm.razor]
-build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXENyZWF0ZUNvbmZpZ3VyYXRpb25zXEZvcm1zXFJlc3RyaWN0ZWRBcmVhRm9ybS5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFJvdXRlcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -70,14 +84,6 @@ build_metadata.AdditionalFiles.CssScope = b-k2r5eer4x5
 build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXExheW91dFxSZWNvbm5lY3RNb2RhbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-x6i8ouxxwm
 
-[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/AllConfigurations/AllConfiguration.razor]
-build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXEFsbENvbmZpZ3VyYXRpb25zXEFsbENvbmZpZ3VyYXRpb24ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-0iiehktawc
-
 [C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/ConfigTabs/ConfigTabs.razor]
 build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXENvbmZpZ1RhYnNcQ29uZmlnVGFicy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-mpgkdape1d
-
-[C:/Users/bendylot/source/repos/BimManagerPortal/BimManagerPortal/WebBlazorSite/UIComponents/PluginConfigurations/CreateConfigurations/CreateConfiguration.razor]
-build_metadata.AdditionalFiles.TargetPath = VUlDb21wb25lbnRzXFBsdWdpbkNvbmZpZ3VyYXRpb25zXENyZWF0ZUNvbmZpZ3VyYXRpb25zXENyZWF0ZUNvbmZpZ3VyYXRpb24ucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = b-bsy2k0vuft
