@@ -1,0 +1,48 @@
+﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs
+<div class="container-box p-3">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <input type="text"
+                   class="form-control search-input"
+                   placeholder="Search by name..."
+                   @bind="_searchTerm"
+                   @bind:event="oninput" />
+        </div>
+    </div>
+
+    @if (!FilteredData.Any())
+    {
+        <div class="alert alert-light text-muted border-dashed" style="border: 2px dashed #eee;">
+            No configurations found.
+        </div>
+    }
+    else
+    {
+        <div class="minimal-table-container">
+            <div class="table-wrapper">
+                <table class="minimal-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px; cursor:pointer" @onclick='() => SortBy("Id")'>
+                            ID @SortIcon("Id")
+                        </th>
+                        <th style="cursor:pointer" @onclick='() => SortBy("Name")'>
+                            Name @SortIcon("Name")
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var config in FilteredData)
+                    {
+                        <tr @onclick="() => SelectRow(config.Id)" 
+                            class="@( _selectedId == config.Id ? "selected" : "" )">
+                            <td class="text-secondary">#@config.Id</td>
+                            <td style="font-weight: 500;">@config.Name</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

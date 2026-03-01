@@ -1,0 +1,548 @@
+/* /UIComponents/Layout/MainLayout.razor.rz.scp.css */
+.page[b-8bvpt4d0se] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-8bvpt4d0se] {
+    flex: 1;
+}
+
+.sidebar[b-8bvpt4d0se] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-8bvpt4d0se] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-8bvpt4d0se]  a, .top-row[b-8bvpt4d0se]  .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+    .top-row[b-8bvpt4d0se]  a:hover, .top-row[b-8bvpt4d0se]  .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .top-row[b-8bvpt4d0se]  a:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 640.98px) {
+    .top-row[b-8bvpt4d0se] {
+        justify-content: space-between;
+    }
+
+    .top-row[b-8bvpt4d0se]  a, .top-row[b-8bvpt4d0se]  .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-8bvpt4d0se] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-8bvpt4d0se] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-8bvpt4d0se] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row.auth[b-8bvpt4d0se]  a:first-child {
+        flex: 1;
+        text-align: right;
+        width: 0;
+    }
+
+    .top-row[b-8bvpt4d0se], article[b-8bvpt4d0se] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+#blazor-error-ui[b-8bvpt4d0se] {
+    color-scheme: light only;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss[b-8bvpt4d0se] {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+/* /UIComponents/Layout/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-k2r5eer4x5] {
+    appearance: none;
+    cursor: pointer;
+    width: 3.5rem;
+    height: 2.5rem;
+    color: white;
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") no-repeat center/1.75rem rgba(255, 255, 255, 0.1);
+}
+
+.navbar-toggler:checked[b-k2r5eer4x5] {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.top-row[b-k2r5eer4x5] {
+    min-height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand[b-k2r5eer4x5] {
+    font-size: 1.1rem;
+}
+
+.bi[b-k2r5eer4x5] {
+    display: inline-block;
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.75rem;
+    top: -1px;
+    background-size: cover;
+}
+
+.bi-house-door-fill-nav-menu[b-k2r5eer4x5] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-house-door-fill' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z'/%3E%3C/svg%3E");
+}
+
+.bi-plus-square-fill-nav-menu[b-k2r5eer4x5] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-plus-square-fill' viewBox='0 0 16 16'%3E%3Cpath d='M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z'/%3E%3C/svg%3E");
+}
+
+.bi-list-nested-nav-menu[b-k2r5eer4x5] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-list-nested' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z'/%3E%3C/svg%3E");
+}
+
+.nav-item[b-k2r5eer4x5] {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type[b-k2r5eer4x5] {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type[b-k2r5eer4x5] {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item[b-k2r5eer4x5]  .nav-link {
+        color: #d7d7d7;
+        background: none;
+        border: none;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+        width: 100%;
+    }
+
+.nav-item[b-k2r5eer4x5]  a.active {
+    background-color: rgba(255,255,255,0.37);
+    color: white;
+}
+
+.nav-item[b-k2r5eer4x5]  .nav-link:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.nav-scrollable[b-k2r5eer4x5] {
+    display: none;
+}
+
+.navbar-toggler:checked ~ .nav-scrollable[b-k2r5eer4x5] {
+    display: block;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-k2r5eer4x5] {
+        display: none;
+    }
+
+    .nav-scrollable[b-k2r5eer4x5] {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+
+        /* Allow sidebar to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}
+/* /UIComponents/Layout/ReconnectModal.razor.rz.scp.css */
+.components-reconnect-first-attempt-visible[b-x6i8ouxxwm],
+.components-reconnect-repeated-attempt-visible[b-x6i8ouxxwm],
+.components-reconnect-failed-visible[b-x6i8ouxxwm],
+.components-pause-visible[b-x6i8ouxxwm],
+.components-resume-failed-visible[b-x6i8ouxxwm],
+.components-rejoining-animation[b-x6i8ouxxwm] {
+    display: none;
+}
+
+#components-reconnect-modal.components-reconnect-show .components-reconnect-first-attempt-visible[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-show .components-rejoining-animation[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-paused .components-pause-visible[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-resume-failed .components-resume-failed-visible[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-retrying[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-retrying .components-reconnect-repeated-attempt-visible[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-retrying .components-rejoining-animation[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-failed[b-x6i8ouxxwm],
+#components-reconnect-modal.components-reconnect-failed .components-reconnect-failed-visible[b-x6i8ouxxwm] {
+    display: block;
+}
+
+
+#components-reconnect-modal[b-x6i8ouxxwm] {
+    background-color: white;
+    width: 20rem;
+    margin: 20vh auto;
+    padding: 2rem;
+    border: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 6px 2px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: display 0.5s allow-discrete, overlay 0.5s allow-discrete;
+    animation: components-reconnect-modal-fadeOutOpacity-b-x6i8ouxxwm 0.5s both;
+    &[open]
+
+{
+    animation: components-reconnect-modal-slideUp-b-x6i8ouxxwm 1.5s cubic-bezier(.05, .89, .25, 1.02) 0.3s, components-reconnect-modal-fadeInOpacity-b-x6i8ouxxwm 0.5s ease-in-out 0.3s;
+    animation-fill-mode: both;
+}
+
+}
+
+#components-reconnect-modal[b-x6i8ouxxwm]::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: components-reconnect-modal-fadeInOpacity-b-x6i8ouxxwm 0.5s ease-in-out;
+    opacity: 1;
+}
+
+@keyframes components-reconnect-modal-slideUp-b-x6i8ouxxwm {
+    0% {
+        transform: translateY(30px) scale(0.95);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes components-reconnect-modal-fadeInOpacity-b-x6i8ouxxwm {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes components-reconnect-modal-fadeOutOpacity-b-x6i8ouxxwm {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.components-reconnect-container[b-x6i8ouxxwm] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#components-reconnect-modal p[b-x6i8ouxxwm] {
+    margin: 0;
+    text-align: center;
+}
+
+#components-reconnect-modal button[b-x6i8ouxxwm] {
+    border: 0;
+    background-color: #6b9ed2;
+    color: white;
+    padding: 4px 24px;
+    border-radius: 4px;
+}
+
+    #components-reconnect-modal button:hover[b-x6i8ouxxwm] {
+        background-color: #3b6ea2;
+    }
+
+    #components-reconnect-modal button:active[b-x6i8ouxxwm] {
+        background-color: #6b9ed2;
+    }
+
+.components-rejoining-animation[b-x6i8ouxxwm] {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+    .components-rejoining-animation div[b-x6i8ouxxwm] {
+        position: absolute;
+        border: 3px solid #0087ff;
+        opacity: 1;
+        border-radius: 50%;
+        animation: components-rejoining-animation-b-x6i8ouxxwm 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+        .components-rejoining-animation div:nth-child(2)[b-x6i8ouxxwm] {
+            animation-delay: -0.5s;
+        }
+
+@keyframes components-rejoining-animation-b-x6i8ouxxwm {
+    0% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    4.9% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+
+    5% {
+        top: 40px;
+        left: 40px;
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+
+    100% {
+        top: 0px;
+        left: 0px;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+    }
+}
+/* /UIComponents/PluginConfigurations/AllConfigurations/AllConfiguration.razor.rz.scp.css */
+/* Основной контейнер с градиентной обводкой */
+.minimal-table-container[b-0iiehktawc] {
+    background: #ffffff;
+    padding: 1px; /* Толщина рамки */
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4facfe 0%, #a944ff 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Внутренний фон, чтобы контент был на белом */
+.table-wrapper[b-0iiehktawc] {
+    background: white;
+    border-radius: 11px; /* Чуть меньше родительского */
+    overflow: hidden;
+}
+
+.minimal-table[b-0iiehktawc] {
+    margin-bottom: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Стили заголовков */
+.minimal-table thead[b-0iiehktawc] {
+    background-color: #fcfaff;
+}
+
+.minimal-table th[b-0iiehktawc] {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border: none;
+    transition: color 0.2s;
+}
+
+.minimal-table th:hover[b-0iiehktawc] {
+    color: #4facfe;
+}
+
+/* Стили ячеек */
+.minimal-table td[b-0iiehktawc] {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #444;
+    font-size: 0.9rem;
+}
+
+/* Эффект при наведении на строку */
+.minimal-table tbody tr:hover[b-0iiehktawc] {
+    background-color: #f8f9ff;
+    transition: background 0.3s ease;
+}
+
+/* Убираем границу у последней строки */
+.minimal-table tbody tr:last-child td[b-0iiehktawc] {
+    border-bottom: none;
+}
+
+/* Кастомный input */
+.search-input[b-0iiehktawc] {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus[b-0iiehktawc] {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.1);
+}
+/* Полосатость (Zebra-striping) — подкрашиваем каждую вторую строку */
+.minimal-table tbody tr:nth-child(even)[b-0iiehktawc] {
+    background-color: rgba(249, 250, 255, 0.6); /* Очень бледный сине-фиолетовый */
+}
+
+/* Стили для выбранной строки */
+.minimal-table tbody tr.selected[b-0iiehktawc] {
+    background: linear-gradient(90deg, rgba(79, 172, 254, 0.1) 0%, rgba(169, 68, 255, 0.1) 100%) !important;
+    position: relative;
+}
+
+/* Индикатор сбоку для выбранной строки */
+.minimal-table tbody tr.selected td:first-child[b-0iiehktawc] {
+    border-left: 3px solid #4facfe;
+    padding-left: 13px; /* Компенсируем границу */
+}
+
+/* Изменение курсора и плавность */
+.minimal-table tbody tr[b-0iiehktawc] {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.minimal-table tbody tr:hover[b-0iiehktawc] {
+    background-color: rgba(169, 68, 255, 0.05) !important;
+}
+/* /UIComponents/PluginConfigurations/ConfigTabs/ConfigTabs.razor.rz.scp.css */
+.tab[b-mpgkdape1d] {
+    padding: 8px 16px;
+    background: #e9e9e9;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+}
+
+.tab-bar[b-mpgkdape1d] {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+.tab.active[b-mpgkdape1d] {
+    background: white;
+    position: relative;
+    top: 1px;
+}
+/* /UIComponents/PluginConfigurations/CreateConfigurations/CreateConfiguration.razor.rz.scp.css */
+h3[b-bsy2k0vuft] {
+    margin-bottom: 20px; /* Отступ снаружи снизу */
+    padding: 10px; /* Отступ внутри */
+    background-color: #f8f9fa;
+}
+
+/* Сетка плагинов */
+.plugin-selector[b-bsy2k0vuft] {
+    display: flex;
+    gap: 10px;
+    transition: all 0.4s ease-in-out;
+}
+
+    /* Состояние, когда ничего не выбрано (широкие карточки) */
+    .plugin-selector.full[b-bsy2k0vuft] {
+        flex-wrap: wrap;
+    }
+
+    /* Состояние, когда плагин выбран (карточки сжимаются в ряд) */
+    .plugin-selector.compact[b-bsy2k0vuft] {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+.plugin-card[b-bsy2k0vuft] {
+    padding: 15px 25px;
+    background: #f0f2f5;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+    .plugin-card:hover[b-bsy2k0vuft] {
+        background: #e2e6ea;
+    }
+
+    .plugin-card.active[b-bsy2k0vuft] {
+        border-color: #007bff;
+        background: #e7f1ff;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+/* Анимация появления формы */
+.fade-in[b-bsy2k0vuft] {
+    animation: fadeIn-b-bsy2k0vuft 0.5s;
+}
+
+@keyframes fadeIn-b-bsy2k0vuft {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

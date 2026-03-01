@@ -1,0 +1,239 @@
+﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
+
+@* RestrictedAreaForm.razor *@
+
+<div class="plugin-form mt-3 p-4 border rounded bg-white shadow-sm fade-in">
+    <h4 class="mb-4 text-primary border-bottom pb-2">Настройки Restricted Area</h4>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <label class="form-label">Имя объекта</label>
+            <input type="text" class="form-control" @bind="Config.ObjectName" placeholder="Пример: SV2" />
+        </div>
+    </div>
+
+    <div class="accordion" id="disciplinesAccordion">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAR">
+                    Архитектурные решения
+                </button>
+            </h2>
+            <div id="collapseAR" class="accordion-collapse collapse" data-bs-parent="#disciplinesAccordion">
+                <div class="accordion-body bg-light">
+                    <div class="card p-3 shadow-sm">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            Настройка форм АР
+                            </h6>
+                        @RenderCheckbox("Форма вокруг проема АР",
+                                                Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors,
+                                                v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors = v,
+                                                "arDoors")
+
+                        @RenderCheckbox("Форма потолка",
+                                                Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties,
+                                                v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties = v,
+                                                "arRooms")
+
+                        @RenderCheckbox("Форма Машиноместа",
+                                                Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking,
+                                                v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking = v,
+                                                "arParking")
+
+                        @RenderCheckbox("Форма вокруг проема КР",
+                                                Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete,
+                                                v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete = v,
+                                                "arDoorsRC")
+                    </div>
+
+                    @RenderPaths(Config.Razdels.ArDiscipline.PathsToModels)
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseKR">
+                    Конструктивные решения
+                </button>
+            </h2>
+            <div id="collapseKR" class="accordion-collapse collapse" data-bs-parent="#disciplinesAccordion">
+                <div class="accordion-body bg-light">
+                    <div class="card p-3 shadow-sm">
+                        <h6 class="card-subtitle mb-2 text-muted">Настройка форм КР</h6>
+                        @RenderCheckbox("Форма из колонн",
+                                                Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrStructuralColumns,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrStructuralColumns = v,
+                                                                                                "rzKrStructuralColumns")
+                        @RenderCheckbox("Форма из балок",
+                                                Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrStructuralFraming,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrStructuralFraming = v,
+                                                                                                "rzKrStructuralFraming")
+
+                        @RenderCheckbox("Форма из капителей",
+                                                Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrColumnHeads,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrColumnHeads = v,
+                                                                                                "rzKrColumnHeads")
+                        @RenderCheckbox("Форма вокруг проема КР",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrDoors,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrDoors = v,"rzKrDoors")
+                        @RenderCheckbox("RzKrWalls",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrWalls,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrWalls = v,"rzKrWalls")
+                        @RenderCheckbox("Форма по краю перекрытий",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrFloors,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrFloors = v,"rzKrFloors")
+                        @RenderCheckbox("Форма по торцам стен",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundColumnsInFloor,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundColumnsInFloor = v,"rzKrAroundColumnsInFloor")
+                        @RenderCheckbox("Форма в перекрытии в торцах стен",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundWallsInFloor,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundWallsInFloor = v,"rzKrAroundWallsInFloor")
+                        @RenderCheckbox("Форма в стене под колоннами",Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrUnderColumnInWalls,
+                                                v => Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrUnderColumnInWalls = v,"rzKrUnderColumnInWalls")
+                                                                                                                                                                                                "rzKrDoors")
+                    </div>
+                    @RenderPaths(Config.Razdels.KrDiscipline.PathsToModels)
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVIS">
+                    Инженерные системы
+                </button>
+            </h2>
+            <div id="collapseVIS" class="accordion-collapse collapse" data-bs-parent="#disciplinesAccordion">
+                <div class="accordion-body bg-light">
+                    <div class="card p-3 shadow-sm">
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            Настройка форм ВИС</h6>
+                        @RenderCheckbox("Зона просвета для лотка СС",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray = v,"rzSsCableTray")
+                        @RenderCheckbox("Зона просвета для лотка ЭОМ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray = v,"rzEomCableTray")
+                        @RenderCheckbox("Зона просвета для воздуховода ЭОМ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle = v,"rzEomDuctRectangle")
+                        @RenderCheckbox("Зона просвета для трубы ВК",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk = v,"rzPipeVk")
+                        @RenderCheckbox("Зона просвета для трубы ПТ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt = v,"rzPipePt")
+                        @RenderCheckbox("Зона просвета для трубы ОТ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt = v,"rzPipeOt")
+                        @RenderCheckbox("Зона просвета для трубы КВ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv = v,"rzPipeKv")
+                        @RenderCheckbox("Зона просвета для воздуховода ОВ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound = v,"rzDuctVentRound")
+                        @RenderCheckbox("Зона просвета для воздуховода ОВ",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle = v,"rzDuctVentRectangle")
+                        @RenderCheckbox("Зона просвета для воздуховода СС",Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle,
+                                                v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle = v,"rzDuctSsRectangle")
+                    </div>
+                    @RenderPaths(Config.Razdels.VisDiscipline.PathsToModels)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+</div>
+
+@code {
+    [Parameter] public RestrictedAreaConfigProxy Config { get; set; } = default!;
+
+    // Метод-конструктор для чекбоксов
+    private RenderFragment RenderCheckbox(string label, bool value, Action<bool> onChanged, string id) => __builder =>
+    {
+        <div class="form-check mb-2">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   checked="@value" 
+                   @onchange="@((e) => onChanged((bool)e.Value))" 
+                   id="@id">
+            <label class="form-check-label ms-2" for="@id">
+                @label
+            </label>
+        </div>
+    };
+    // Фрагмент кода для отрисовки путей к моделям (чтобы не дублировать верстку)
+    RenderFragment RenderPaths(PathsToModelsProxy paths) => __builder =>
+    {
+        <div class="card p-3 mt-3 shadow-sm">
+            <h6 class="card-subtitle mb-2 text-muted">Пути к моделям</h6>
+            <div class="row g-2">
+                <div class="col-12">
+                    <label class="small">Путь к файлу с координатами</label>
+                    <input type="text" class="form-control form-control-sm" @bind="paths.TemplatePath" />
+                </div>
+                <div class="col-12">
+                    <label class="small">Путь куда выгрузить файл с запретными зонами</label>
+                    <input type="text" class="form-control form-control-sm" @bind="paths.PathForFilesWithOnlyRestrictedAreas" />
+                </div>
+                <div class="col-md-6">
+                    <label class="small">Префикс файла</label>
+                    <input type="text" class="form-control form-control-sm" @bind="paths.PrefixForFilesWithOnlyRestrictedAreas" />
+                </div>
+                <div class="col-md-6">
+                    <label class="small">Суффикс файла</label>
+                    <input type="text" class="form-control form-control-sm" @bind="paths.SuffixForFilesWithOnlyRestrictedAreas" />
+                </div>
+                <div class="col-12 mt-2">
+                    <div class="form-check mb-2">
+                        <input id="forcedRebuilding"
+                               class="form-check-input"
+                               type="checkbox"
+                               @bind="paths.ForcedRebuilding">
+
+                        <label class="form-check-label small"
+                               for="forcedRebuilding">
+                            Принудительная пересборка
+                        </label>
+                    </div>
+                </div>
+                <div class="card p-3 shadow-sm mt-3">
+                    <h6 class="card-subtitle mb-3 text-muted">Список путей к моделям</h6>
+
+                    <div class="models-list">
+                        @for (int i = 0; i < paths.Models.Count; i++)
+                        {
+                            var index = i; // Локальная переменная для замыкания
+                                           <div class="input-group mb-2 fade-in">
+                                               <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
+
+                                <input type="text" class="form-control form-control-sm"
+                                       placeholder="Введите путь к модели..."
+                                       @bind="paths.Models[index].ModelPath" />
+
+                                <button class="btn btn-outline-danger btn-sm" type="button"
+                                        @onclick="() => RemoveModel(paths, index)">
+                                    <i class="bi bi-dash-lg"></i> −
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-grid mt-2">
+                        <button class="btn btn-outline-success btn-sm" type="button"
+                                @onclick="() => AddModel(paths)">
+                            <i class="bi bi-plus-lg"></i> + Добавить модель
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    };
+    private void AddModel(PathsToModelsProxy paths)
+    {
+        if (paths.Models == null)
+        {
+            paths.Models = new List<Model>();
+        }
+        paths.Models.Add(new Model { ModelPath = "" });
+    }
+
+    private void RemoveModel(PathsToModelsProxy paths, int index)
+    {
+        if (paths.Models != null && index >= 0 && index < paths.Models.Count)
+        {
+            paths.Models.RemoveAt(index);
+        }
+    }
+}

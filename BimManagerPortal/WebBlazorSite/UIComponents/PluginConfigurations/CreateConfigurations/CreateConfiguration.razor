@@ -1,0 +1,64 @@
+﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.CreateConfigurations.Forms
+
+<div class="container-box p-3">
+    <h5 class="mb-3">Выберите приложение</h5>
+
+    <div class="plugin-selector @(SelectedApp != null ? "compact" : "full")">
+        @foreach (var plugin in AvailableApps)
+        {
+            <div class="plugin-card @(SelectedApp == plugin ? "active" : "")"
+                 @onclick="() => SelectApp(plugin)">
+                <span>@plugin.ToString()</span>
+            </div>
+        }
+    </div>
+
+    <hr />
+
+    @if (SelectedApp != null)
+    {
+        <h5 class="mb-3">Выберите плагин</h5>
+
+        <div class="plugin-selector @(SelectedPlugin != null ? "compact" : "full")">
+            @foreach (var plugin in AvailablePlugins)
+            {
+                <div class="plugin-card @(SelectedPlugin == plugin ? "active" : "")"
+                     @onclick="() => SelectPlugin(plugin)">
+                    <span>@plugin.Name</span>
+                </div>
+            }
+        </div>
+        <hr />
+        @if (SelectedPlugin != null)
+        {
+            <div class="form-container fade-in">
+                <div class="col-md-6">
+                    <h5 class="form-label">Имя конфигурации</h5>
+                    <input type="text" class="form-control" @bind="PluginConfigEntity.Name" placeholder="Пример: SV2_AR_Vinogradov_RestrictedArea" />
+                </div>
+                @if (SelectedPlugin.Name == "RestrictedArea")
+                {
+                    if (PluginConfigEntity.Data is RestrictedAreaConfigProxy config)
+                    {
+                        <RestrictedAreaForm Config="config" />
+                    }
+                }
+                else if (SelectedPlugin.Name == "ClashDefender")
+                {
+                    <p>Здесь будут поля для ClashDefender...</p>
+                }
+                else
+                {
+                    <p>Общие настройки для @SelectedPlugin.Company...</p>
+                }
+                <div class="mt-4 d-flex justify-content-end">
+                    <button class="btn btn-primary px-5" @onclick="SendConfig">Создать конфигурацию</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+@code{
+
+}

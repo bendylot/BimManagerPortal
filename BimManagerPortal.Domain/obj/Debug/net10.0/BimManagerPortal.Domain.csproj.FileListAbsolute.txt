@@ -1,0 +1,12 @@
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\bin\Debug\net10.0\Entities\PluginsConfigs\jsons_template\restricted_area.json
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\bin\Debug\net10.0\BimManagerPortal.Domain.deps.json
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\bin\Debug\net10.0\BimManagerPortal.Domain.dll
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\bin\Debug\net10.0\BimManagerPortal.Domain.pdb
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.AssemblyInfoInputs.cache
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.AssemblyInfo.cs
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.csproj.CoreCompileInputs.cache
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.dll
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\refint\BimManagerPortal.Domain.dll
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\BimManagerPortal.Domain.pdb
+C:\Users\bendylot\source\repos\BimManagerPortal\BimManagerPortal.Domain\obj\Debug\net10.0\ref\BimManagerPortal.Domain.dll

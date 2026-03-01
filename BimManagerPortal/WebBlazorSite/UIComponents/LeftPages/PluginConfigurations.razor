@@ -1,0 +1,35 @@
+﻿@page "/plugin-configurations"
+@using BimManagerPortal.Domain.Entities.Enums
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.AllConfigurations
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.ConfigTabs
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.CreateConfigurations
+@rendermode InteractiveServer
+
+<PageTitle>Конфигурации плагинов</PageTitle>
+
+<h1>Конфигурации плагинов</h1>
+
+<ConfigTabs ActiveTab="_activeTab"
+            ActiveTabChanged="OnTabChanged" />
+
+
+
+@switch (_activeTab)
+{
+    case PluginConfigTab.All:
+        <AllConfiguration />
+        break;
+
+    case PluginConfigTab.Create:
+        <CreateConfiguration />
+        break;
+}
+
+@code {
+    private PluginConfigTab _activeTab = PluginConfigTab.All;
+
+    private void OnTabChanged(PluginConfigTab tab)
+    {
+        _activeTab = tab;
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "BimManagerPortal.WebBlazorSite/1.0.0": {
+        "dependencies": {
+          "BimManagerPortal.Domain": "1.0.0"
+        },
+        "runtime": {
+          "BimManagerPortal.WebBlazorSite.dll": {}
+        }
+      },
+      "BimManagerPortal.Domain/1.0.0": {
+        "runtime": {
+          "BimManagerPortal.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BimManagerPortal.WebBlazorSite/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BimManagerPortal.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
