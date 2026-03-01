@@ -1,7 +1,19 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-
+@font-face {
+    font-family: 'YandexSans'; /* Любое имя шрифта, которым вы будете пользоваться в CSS */
+    src: url('./fonts/yandex-sans-2.woff2') format('woff2'),
+    url('./fonts/yandex-sans-2.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'YandexSans', sans-serif;
+}
+text {
+    font-family: 'YandexSans', sans-serif;
+}
 a, .btn-link {
     color: #006bb7;
 }
