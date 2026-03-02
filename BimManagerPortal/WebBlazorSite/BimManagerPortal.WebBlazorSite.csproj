@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="UIComponents\PluginConfigurations\Tabs\" />
+    <Folder Include="UIComponents\PluginReports\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,13 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\AllConfigurations\AllConfiguration.razor" />
+    <_ContentIncludedByDefault Remove="UIComponents\Layout\CheckBoxes\CheckBoxField.razor" />
+    <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\RestrictedAreaForm\CheckBoxes\CheckBoxField.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="11.0.0-preview.1.26104.118" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="11.0.0-preview.1.26104.118" />
   </ItemGroup>
 
 </Project>

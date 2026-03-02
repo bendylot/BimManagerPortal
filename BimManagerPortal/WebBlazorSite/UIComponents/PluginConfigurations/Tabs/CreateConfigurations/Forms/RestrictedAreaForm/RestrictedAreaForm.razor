@@ -1,21 +1,120 @@
-﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
-@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
-@* RestrictedAreaForm.razor *@
+﻿@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.CheckBoxes
+@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.EventModalWindow
+@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.ThreeOptionSelect
 
-<div class="plugin-form mt-3 p-4 border rounded bg-white shadow-sm fade-in">
-    <h4 class="mb-4 text-primary border-bottom pb-2">Настройки Restricted Area</h4>
-    <EditForm Model="@Config" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+<EditForm EditContext="@_editContext" 
+          OnSubmit="SendConfig">
+    <ObjectGraphDataAnnotationsValidator />
+    <EventModalWindow @ref="_eventModal" />
+    <div class="plugin-form mt-3 p-4 border rounded bg-white shadow-sm fade-in">
+        <h4 class="mt-4 text-primary border-bottom pb-2">Настройки Restricted Area</h4>
         
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label class="form-label">Имя объекта</label>
-                <InputText class="form-control" @bind-Value="Config.ObjectName" />
-                <ValidationMessage For="@(() => Config.ObjectName)" />
+        <div class="col-md-6 mb-4">
+            <h5 class="form-label">Имя конфигурации</h5>
+            <InputText type="text" class="form-control"
+                       @bind-Value="RestrictedAreaConfig.NameConfig"
+                       placeholder="Пример: SV2_AR_Vinogradov_RestrictedArea"/>
+            <ValidationMessage For="@(() => RestrictedAreaConfig.NameConfig)"/>
+        </div>
+        
+        <div class="card p-3 mb-3 shadow-sm">
+            
+            <h6 class="card-subtitle mb-2 text-muted">Режим построения</h6>
+            <div class="row g-2">
+                <!-- TemplatePath -->
+                <TreeOptionSelecter Label="Обработка старых зон"
+                                    Options="@ModelTypes"
+                                    @bind-Value="Config.BuildingMode.HandlerOldZones" />
+                <ValidationMessage For="@(() => Config.BuildingMode.HandlerOldZones)"/>
+                <CheckboxField Label="Построение новых зон"
+                               @bind-Value="Config.BuildingMode.BuilderNewZones" />
+                <CheckboxField Label="Создание файлов с запретными зонами"
+                               @bind-Value="Config.BuildingMode.CreateRestrictedZoneFile" />
+                
             </div>
         </div>
 
+        <div class="card p-3 mb-3 shadow-sm">
+            
+            <h6 class="card-subtitle mb-2 text-muted">Пути к моделям</h6>
+            <div class="row g-2">
+                <!-- TemplatePath -->
+                <div class="col-12">
+                    <label class="small">Имя обьекта</label>
+                    <InputText class="form-control form-control-sm"
+                               @bind-Value="Config.PathsToModels.ObjectName"/>
+                    <ValidationMessage For="@(() => Config.PathsToModels.ObjectName)"/>
+                </div>
+                <!-- TemplatePath -->
+                <div class="col-12">
+                    <label class="small">Путь к файлу с координатами</label>
+                    <InputText class="form-control form-control-sm"
+                               @bind-Value="Config.PathsToModels.TemplatePath"/>
+                    <ValidationMessage For="@(() => Config.PathsToModels.TemplatePath)"/>
+                </div>
+
+                <!-- PathForFilesWithOnlyRestrictedAreas -->
+                <div class="col-12">
+                    <label class="small">Путь куда выгрузить файл с запретными зонами</label>
+                    <InputText class="form-control form-control-sm"
+                               @bind-Value="Config.PathsToModels.PathForFilesWithOnlyRestrictedAreas"/>
+                    <ValidationMessage For="@(() => Config.PathsToModels.PathForFilesWithOnlyRestrictedAreas)"/>
+                </div>
+
+                <!-- Prefix -->
+                <div class="col-md-6">
+                    <label class="small">Префикс файла</label>
+                    <InputText class="form-control form-control-sm"
+                               @bind-Value="Config.PathsToModels.PrefixForFilesWithOnlyRestrictedAreas"/>
+                    <ValidationMessage For="@(() => Config.PathsToModels.PrefixForFilesWithOnlyRestrictedAreas)"/>
+                </div>
+
+                <!-- Suffix -->
+                <div class="col-md-6">
+                    <label class="small">Суффикс файла</label>
+                    <InputText class="form-control form-control-sm"
+                               @bind-Value="Config.PathsToModels.SuffixForFilesWithOnlyRestrictedAreas"/>
+                    <ValidationMessage For="@(() => Config.PathsToModels.SuffixForFilesWithOnlyRestrictedAreas)"/>
+                </div>
+
+
+                <!-- Models List -->
+                <div class="card p-3 shadow-sm mt-3">
+                    <h6 class="card-subtitle mb-3 text-muted">Список путей к моделям</h6>
+
+                    <div class="models-list">
+                        @for (int i = 0; i < Config.PathsToModels.Models.Count; i++)
+                        {
+                            var index = i;
+                            var model = Config.PathsToModels.Models[i];
+                            <div class="mb-2" @key="model.Id">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
+
+                                    <InputText class="form-control form-control-sm"
+                                               placeholder="Введите путь к модели..."
+                                               @bind-Value="Config.PathsToModels.Models[index].ModelPath"/>
+
+                                    <button class="btn btn-outline-danger btn-sm" type="button"
+                                            @onclick="() => RemoveModel(Config.PathsToModels, index)">
+                                        <i class="bi bi-dash-lg"></i> −
+                                    </button>
+                                </div>
+                                <ValidationMessage For="@(() => Config.PathsToModels.Models[index].ModelPath)"/>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-grid mt-2">
+                        <button class="btn btn-outline-success btn-sm" type="button"
+                                @onclick="() => AddModel(Config.PathsToModels)">
+                            <i class="bi bi-plus-lg"></i> + Добавить модель
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="accordion" id="disciplinesAccordion">
 
             <!-- Архитектурные решения -->
@@ -31,30 +130,15 @@
                             <h6 class="card-subtitle mb-2 text-muted">
                                 Настройка форм АР
                             </h6>
-                            
-                            @RenderCheckbox("Форма вокруг проема АР",
-                                    Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors,
-                                    v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors = v,
-                                    "arDoors")
-
-                            @RenderCheckbox("Форма потолка",
-                                    Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties,
-                                    v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties = v,
-                                    "arRooms")
-
-                            @RenderCheckbox("Форма Машиноместа",
-                                    Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking,
-                                    v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking = v,
-                                    "arParking")
-
-                            @RenderCheckbox("Форма вокруг проема КР",
-                                    Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete,
-                                    v => Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete = v,
-                                    "arDoorsRC")
+                            <CheckboxField Label="Форма вокруг проема АР"
+                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors" />
+                            <CheckboxField Label="Форма потолка"
+                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties" />
+                            <CheckboxField Label="Форма Машиноместа"
+                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking" />
+                            <CheckboxField Label="Форма вокруг проема КР"
+                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete" />
                         </div>
-
-                        @RenderPaths(Config.Razdels.ArDiscipline.PathsToModels, 
-                            nameof(Config.Razdels.ArDiscipline.PathsToModels))
                     </div>
                 </div>
             </div>
@@ -87,8 +171,6 @@
                             <CheckboxField Label="Форма в стене под колоннами"
                                            @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrUnderColumnInWalls" />
                         </div>
-                        @RenderPaths(Config.Razdels.KrDiscipline.PathsToModels, 
-                            nameof(Config.Razdels.KrDiscipline.PathsToModels))
                     </div>
                 </div>
             </div>
@@ -106,150 +188,35 @@
                             <h6 class="card-subtitle mb-2 text-muted">
                                 Настройка форм ВИС
                             </h6>
-                            @RenderCheckbox("Зона просвета для лотка СС",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray = v,
-                                    "rzSsCableTray")
-                            @RenderCheckbox("Зона просвета для лотка ЭОМ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray = v,
-                                    "rzEomCableTray")
-                            @RenderCheckbox("Зона просвета для воздуховода ЭОМ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle = v,
-                                    "rzEomDuctRectangle")
-                            @RenderCheckbox("Зона просвета для трубы ВК",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk = v,
-                                    "rzPipeVk")
-                            @RenderCheckbox("Зона просвета для трубы ПТ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt = v,
-                                    "rzPipePt")
-                            @RenderCheckbox("Зона просвета для трубы ОТ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt = v,
-                                    "rzPipeOt")
-                            @RenderCheckbox("Зона просвета для трубы КВ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv = v,
-                                    "rzPipeKv")
-                            @RenderCheckbox("Зона просвета для воздуховода ОВ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound = v,
-                                    "rzDuctVentRound")
-                            @RenderCheckbox("Зона просвета для воздуховода ОВ",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle = v,
-                                    "rzDuctVentRectangle")
-                            @RenderCheckbox("Зона просвета для воздуховода СС",
-                                    Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle,
-                                    v => Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle = v,
-                                    "rzDuctSsRectangle")
+                            <CheckboxField Label="Зона просвета для лотка СС"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray" />
+                            <CheckboxField Label="Зона просвета для лотка ЭОМ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray" />
+                            <CheckboxField Label="Зона просвета для воздуховода ЭОМ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle" />
+                            <CheckboxField Label="Зона просвета для трубы ВК"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk" />
+                            <CheckboxField Label="Зона просвета для трубы ПТ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt" />
+                            <CheckboxField Label="Зона просвета для трубы ОТ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt" />
+                            <CheckboxField Label="Зона просвета для трубы КВ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv" />
+                            <CheckboxField Label="Зона просвета для воздуховода ОВ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound" />
+                            <CheckboxField Label="Зона просвета для воздуховода ОВ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle" />
+                            <CheckboxField Label="Зона просвета для трубы КВ"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv" />
+                            <CheckboxField Label="Зона просвета для воздуховода СС"
+                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle" />
                         </div>
-                        @RenderPaths(Config.Razdels.VisDiscipline.PathsToModels, 
-                            nameof(Config.Razdels.VisDiscipline.PathsToModels))
                     </div>
                 </div>
             </div>
         </div>
-    </EditForm>
-</div>
-
-@code {
-    RenderFragment RenderPaths(PathsToModelsProxy paths, string fieldName) => __builder =>
-    {
-        <div class="card p-3 mt-3 shadow-sm">
-            <h6 class="card-subtitle mb-2 text-muted">Пути к моделям</h6>
-            <div class="row g-2">
-                <!-- TemplatePath -->
-                <div class="col-12">
-                    <label class="small">Путь к файлу с координатами</label>
-                    <InputText class="form-control form-control-sm" 
-                               @bind-Value="paths.TemplatePath" 
-                               @bind-Value:event="oninput" />
-                    <ValidationMessage For="@(() => paths.TemplatePath)" />
-                </div>
-                
-                <!-- PathForFilesWithOnlyRestrictedAreas -->
-                <div class="col-12">
-                    <label class="small">Путь куда выгрузить файл с запретными зонами</label>
-                    <InputText class="form-control form-control-sm" 
-                               @bind-Value="paths.PathForFilesWithOnlyRestrictedAreas"
-                               @bind-Value:event="oninput" />
-                    <ValidationMessage For="@(() => paths.PathForFilesWithOnlyRestrictedAreas)" />
-                </div>
-                
-                <!-- Prefix -->
-                <div class="col-md-6">
-                    <label class="small">Префикс файла</label>
-                    <InputText class="form-control form-control-sm" 
-                               @bind-Value="paths.PrefixForFilesWithOnlyRestrictedAreas"
-                               @bind-Value:event="oninput" />
-                    <ValidationMessage For="@(() => paths.PrefixForFilesWithOnlyRestrictedAreas)" />
-                </div>
-                
-                <!-- Suffix -->
-                <div class="col-md-6">
-                    <label class="small">Суффикс файла</label>
-                    <InputText class="form-control form-control-sm" 
-                               @bind-Value="paths.SuffixForFilesWithOnlyRestrictedAreas"
-                               @bind-Value:event="oninput" />
-                    <ValidationMessage For="@(() => paths.SuffixForFilesWithOnlyRestrictedAreas)" />
-                </div>
-                
-                <!-- ForcedRebuilding Checkbox -->
-                <div class="col-12 mt-2">
-                    <div class="form-check mb-2">
-                        @{
-                            var forcedRebuildingId = $"forcedRebuilding_{fieldName}";
-                        }
-                        <InputCheckbox id="@forcedRebuildingId"
-                                       class="form-check-input"
-                                       @bind-Value="paths.ForcedRebuilding" />
-                        <label class="form-check-label small" for="@forcedRebuildingId">
-                            Принудительная пересборка
-                        </label>
-                    </div>
-                </div>
-                
-                <!-- Models List -->
-                <div class="card p-3 shadow-sm mt-3">
-                    <h6 class="card-subtitle mb-3 text-muted">Список путей к моделям</h6>
-
-                    <div class="models-list">
-                        @for (int i = 0; i < paths.Models.Count; i++)
-                        {
-                            var index = i;
-                            var modelId = $"model_{fieldName}_{index}";
-                            
-                            <div class="mb-2">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
-                                    
-                                    <InputText class="form-control form-control-sm"
-                                               placeholder="Введите путь к модели..."
-                                               @bind-Value="paths.Models[index].ModelPath"
-                                               @bind-Value:event="oninput" />
-                                    
-                                    <button class="btn btn-outline-danger btn-sm" type="button"
-                                            @onclick="() => RemoveModel(paths, index)">
-                                        <i class="bi bi-dash-lg"></i> −
-                                    </button>
-                                </div>
-                                <ValidationMessage For="@(() => paths.Models[index].ModelPath)" />
-                            </div>
-                        }
-                    </div>
-
-                    <div class="d-grid mt-2">
-                        <button class="btn btn-outline-success btn-sm" type="button"
-                                @onclick="() => AddModel(paths)">
-                            <i class="bi bi-plus-lg"></i> + Добавить модель
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    };
-}
+    </div>
+    <div class="mt-4 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary px-5">Создать конфигурацию</button>
+    </div>
+</EditForm>

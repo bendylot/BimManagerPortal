@@ -214,3 +214,10 @@ obj/*
 /bin
 bin/
 bin/*
+/.vs
+.vs/
+.vs/*
+/.idea/
+/.idea
+.idea/
+.idea/*

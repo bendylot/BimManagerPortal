@@ -1,64 +1,28 @@
 {
-  "ObjectName": "UB2",
-  "Razdels": {
-    "Kr": {
-      "PathsToModels": {
-        "TemplatePath": "X:\\00_Проекты\\34_NAR34_Гранель\\02_Проектирование\\07_Стадия Р\\01_ИМ (информационные модели)\\00_Модели для подгрузки\\00_Запретные зоны\\NAR34_Coordinates.rte",
-        "PathForFilesWithOnlyRestrictedAreas": "C:\\Users\\Public\\Documents\\Plugins\\RestrictedAreas\\Выгрузка",
-        "PrefixForFilesWithOnlyRestrictedAreas": "",
-        "SuffixForFilesWithOnlyRestrictedAreas": "_Запретные зоны",
-        "ForcedRebuilding": true,
-        "Models": [
-          { "ModelPath": "C:\\Users\\Public\\Documents\\RevitFiles\\02\\NAR34\\NAR34_02_KR_INGP_RD_R22_S1_отсоединено.rvt" }
-        ]
-      },
-      "RzKrStructuralColumns": true,
-      "RzKrStructuralFraming": true,
-      "RzKrColumnHeads": false,
-      "RzKrDoors": true,
-      "RzKrWalls": true,
-      "RzKrFloors": false,
-      "RzKrAroundColumnsInFloor": true,
-      "RzKrAroundWallsInFloor": false,
-      "RzKrUnderColumnInWalls": true
+  "BuildingMode": {
+    "HandlerOldZones" : "SmartHandlerOldZones",
+    "BuilderNewZones" : true,
+    "CreateRestrictedZoneFile" : true
+  },
+  "PathsToModels": {
+    "ObjectName": "UB2",
+    "TemplatePath": "X:\\00_Проекты\\35_UB2_Верейская_МР-Групп\\02_Проектирование\\07_Стадия Р\\01_ИМ (информационные модели)\\00_Модели для подгрузки\\00_Запретные зоны\\UB2_Coordinates.rte",
+    "PathForFilesWithOnlyRestrictedAreas": "C:\\Users\\Public\\Documents\\Plugins\\RestrictedAreas\\Выгрузка",
+    "PrefixForFilesWithOnlyRestrictedAreas": "",
+    "SuffixForFilesWithOnlyRestrictedAreas": "_Запретные зоны",
+    "Models": [
+      { "ModelPath": "C:\\Users\\Public\\Documents\\RevitFiles\\01\\_AR_\\OBJECTS\\UB2\\UB2_01_AR_INGP_RD_R22_STLB+S4_отсоединено.rvt" }
+    ]
+  },
+  "DisciplineSettings": {
+    "KrDisciplineSetting": null,
+    "ArDisciplineSetting": {
+      "RoomProperties": null,
+      "ArDoors": true,
+      "ArParking": true,
+      "ArDoorsReinforcedConcrete": true,
+      "ArDoorOpenings": true
     },
-    "Ar": {
-      "PathsToModels": {
-        "TemplatePath": "X:\\00_Проекты\\35_UB2_Верейская_МР-Групп\\02_Проектирование\\07_Стадия Р\\01_ИМ (информационные модели)\\00_Модели для подгрузки\\00_Запретные зоны\\UB2_Coordinates.rte",
-        "PathForFilesWithOnlyRestrictedAreas": "C:\\Users\\Public\\Documents\\Plugins\\RestrictedAreas\\Выгрузка",
-        "PrefixForFilesWithOnlyRestrictedAreas": "",
-        "SuffixForFilesWithOnlyRestrictedAreas": "_Запретные зоны",
-        "ForcedRebuilding": false,
-        "Models": [
-          { "ModelPath": "C:\\Users\\Public\\Documents\\RevitFiles\\01\\_AR_\\OBJECTS\\UB2\\UB2_01_AR_INGP_RD_R22_STLB+S4_отсоединено.rvt" }
-        ]
-      },
-      "RzRoomProperties": null,
-      "RzArDoors": true,
-      "RzArParking": true,
-      "RzArDoorsReinforcedConcrete": true,
-      "RzArDoorOpenings": true
-    },
-    "Vis": {
-      "PathsToModels": {
-        "TemplatePath": "X:\\00_Проекты\\34_NAR34_Гранель\\02_Проектирование\\07_Стадия Р\\01_ИМ (информационные модели)\\00_Модели для подгрузки\\00_Запретные зоны\\NAR34_Coordinates.rte",
-        "PathForFilesWithOnlyRestrictedAreas": "C:\\Users\\Public\\Documents\\Plugins\\RestrictedAreas\\Выгрузка",
-        "PrefixForFilesWithOnlyRestrictedAreas": "",
-        "SuffixForFilesWithOnlyRestrictedAreas": "_Запретные зоны",
-        "Models": [
-          {	"ModelPath":"C:\\Users\\Public\\Documents\\RevitFiles\\05\\1112\\NAR34_05_VKK_ENGL_RD_R22_K2_отсоединено.rvt"	}
-        ]
-      },
-      "RzSsCableTray": true,
-      "RzEomCableTray": true,
-      "RzEomDuctRectangle": true,
-      "RzPipeVk": true,
-      "RzPipePt": true,
-      "RzPipeOt": true,
-      "RzPipeKv": true,
-      "RzDuctVentRound": true,
-      "RzDuctVentRectangle": true,
-      "RzDuctSsRectangle" : true
-      }
+    "VisDisciplineSetting": null
   }
 }

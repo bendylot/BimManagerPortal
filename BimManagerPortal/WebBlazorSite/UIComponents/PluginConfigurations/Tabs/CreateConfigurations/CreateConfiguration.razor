@@ -1,5 +1,4 @@
 ﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
-@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms
 @using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms.RestrictedAreaForm
 
 <div class="container-box p-3">
@@ -33,49 +32,21 @@
         <hr />
         @if (SelectedPlugin != null)
         {
-            <div class="form-container fade-in">
-                <div class="col-md-6">
-                    <h5 class="form-label">Имя конфигурации</h5>
-                    <input type="text" class="form-control" @bind="PluginConfigEntity.Name" placeholder="Пример: SV2_AR_Vinogradov_RestrictedArea" />
-                </div>
-                @if (SelectedPlugin.Name == "RestrictedArea")
-                {
-                    if (PluginConfigEntity.Data is RestrictedAreaConfigProxy config)
+                <div class="form-container fade-in">
+                    @if (SelectedPlugin.Name == "RestrictedArea")
                     {
-                        <RestrictedAreaForm Config="config" />
-                        
+                            <RestrictedAreaForm/>
                     }
-                }
-                else if (SelectedPlugin.Name == "ClashDefender")
-                {
-                    <p>Здесь будут поля для ClashDefender...</p>
-                }
-                else
-                {
-                    <p>Общие настройки для @SelectedPlugin.Company...</p>
-                }
-                <div class="mt-4 d-flex justify-content-end">
-                    <button class="btn btn-primary px-5" @onclick="SendConfig">Создать конфигурацию</button>
+                    else if (SelectedPlugin.Name == "ClashDefender")
+                    {
+                        <p>Здесь будут поля для ClashDefender...</p>
+                    }
+                    else
+                    {
+                        <p>Общие настройки для @SelectedPlugin.Company...</p>
+                    }
+                    
                 </div>
-            </div>
         }
     }
 </div>
-    @if (_isErrorOpen)
-    {
-        <div class="modal-overlay">
-            <div class="error-modal">
-                <div class="error-text">
-                    @_errorMessage
-                </div>
-
-                <button class="close-btn" @onclick="CloseError">
-                    OK
-                </button>
-            </div>
-        </div>
-    }
-
-@code{
-
-}

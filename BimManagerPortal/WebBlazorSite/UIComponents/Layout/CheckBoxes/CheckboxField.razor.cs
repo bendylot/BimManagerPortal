@@ -1,13 +1,9 @@
-<div class="form-check mb-2">
-    <InputCheckbox class="form-check-input"
-                   @bind-Value="Value"
-                   id="@Id" />
-    <label class="form-check-label ms-2" for="@Id">
-        @Label
-    </label>
-</div>
+using Microsoft.AspNetCore.Components;
 
-@code {
+namespace BimManagerPortal.WebBlazorSite.UIComponents.Layout.CheckBoxes;
+
+public partial class CheckboxField
+{
     [Parameter] public string Label { get; set; } = string.Empty;
     [Parameter] public bool Value { get; set; }
     [Parameter] public EventCallback<bool> ValueChanged { get; set; }

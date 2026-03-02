@@ -1,12 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BimManagerPortal.Domain.Entities.AppTypes;
-using BimManagerPortal.Domain.Entities.Dtos.Requests.PluginConfigs;
+﻿using BimManagerPortal.Domain.Entities.AppTypes;
 using BimManagerPortal.Domain.Entities.Plugins;
-using BimManagerPortal.Domain.Entities.PluginsConfigs;
-using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
-using BimManagerPortal.Domain.Services.Validations;
-using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
-using Microsoft.AspNetCore.Components;
 
 // [cite: 4]
 
@@ -21,7 +14,6 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         {
             _pluginMap = LoadDictionaryPlugins();
         }
-        [Parameter] public PluginConfigEntity PluginConfigEntity { get; set; } = new();
         protected List<AppType> AvailableApps = Enum.GetValues<AppType>().ToList();
         protected List<PluginEntity> AvailablePlugins = new();
 
@@ -42,14 +34,13 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
             SelectedPlugin = plugin;
             if (SelectedPlugin.Name=="RestrictedArea")
             {
-                PluginConfigEntity.Data = new RestrictedAreaConfigProxy();
+                //PluginConfigEntity.Data = new RestrictedAreaConfigProxy();
             }
         }
         #endregion
 
         #region private
-        [Inject]
-        protected IExternalApiService ExternalApiService { get; set; }
+        
         private IEnumerable<PluginEntity> _pluginEntities => LoadPlugins();
         private Dictionary<AppType, List<PluginEntity>> _pluginMap = new();
         private IEnumerable<PluginEntity> LoadPlugins()
@@ -74,59 +65,6 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
                 dict.Add(plugin, revitPlugins);
             }
             return dict;
-        }
-        private async Task SendConfig()
-        {
-            var dto = new PluginConfigRequestDto()
-            {
-                Name = PluginConfigEntity.Name,
-                Configuration = PluginConfigEntity.Data,
-            };
-            ValidateConfig(dto);
-            try
-            {
-                await ExternalApiService.SendPluginConfigAsync(dto);
-                // Можно добавить уведомление об успехе
-            }
-            catch (Exception ex)
-            {
-                // Обработка ошибки (например, вывод в консоль или UI)
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        private async Task ValidateConfig(PluginConfigRequestDto dto)
-        {
-            // Валидация перед отправкой
-            var validationErrors = ValidationService.ValidateObjectRecursive(dto);
-        
-            if (validationErrors.Any())
-            {
-                // Показываем ошибки
-                await CreatedValidationError(validationErrors);
-                return;
-            }
-        }
-
-        private string? _errorMessage;
-        private bool _isErrorOpen;
-
-        private async Task CreatedValidationError(List<ValidationResult> validationErrors)
-        {
-            var firstError = validationErrors
-                .FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.ErrorMessage));
-
-            if (firstError is null)
-                return;
-
-            _errorMessage = firstError.ErrorMessage;
-            _isErrorOpen = true;
-
-            await InvokeAsync(StateHasChanged);
-        }
-        private void CloseError()
-        {
-            _isErrorOpen = false;
         }
         #endregion
     }

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace BimManagerPortal.Domain.Entities.PluginsConfigs
 {
     [JsonDerivedType(typeof(RestrictedAreaConfigProxy))]
-    public abstract class PluginConfigData
+    public interface IPluginConfigData
     {
         
     }

@@ -1,0 +1,973 @@
+﻿@page "/plugin-reports"
+@attribute [StreamRendering]
+@using System.ComponentModel
+
+<PageTitle>Отчеты плагинов | BimManagerPortal</PageTitle>
+
+<div class="reports-container">
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="bi bi-bar-chart-fill me-2"></span>
+            Панель мониторинга плагинов
+        </h1>
+        <p class="text-muted">Великая статистика использования плагинов и производительности</p>
+    </div>
+
+    <!-- Карточки с основными метриками (KPI) -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary-subtle">
+                <span class="bi bi-plug-fill text-primary"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Активных плагинов</div>
+                <div class="stat-value">24</div>
+                <div class="stat-change positive">
+                    <span class="bi bi-arrow-up-short"></span> +3 за неделю
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-success-subtle">
+                <span class="bi bi-download text-success"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Всего загрузок</div>
+                <div class="stat-value">12.5K</div>
+                <div class="stat-change positive">
+                    <span class="bi bi-arrow-up-short"></span> +24% за месяц
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-warning-subtle">
+                <span class="bi bi-star-fill text-warning"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Средний рейтинг</div>
+                <div class="stat-value">4.8</div>
+                <div class="stat-change">из 5 (125 отзывов)</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-info-subtle">
+                <span class="bi bi-people-fill text-info"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Активных пользователей</div>
+                <div class="stat-value">342</div>
+                <div class="stat-change positive">
+                    <span class="bi bi-arrow-up-short"></span> +12 сегодня
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-danger-subtle">
+                <span class="bi bi-clock-history text-danger"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Время работы</div>
+                <div class="stat-value">99.9%</div>
+                <div class="stat-change">Аптайм за 30 дней</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon bg-purple-subtle">
+                <span class="bi bi-speedometer2 text-purple"></span>
+            </div>
+            <div class="stat-content">
+                <div class="stat-label">Ср. время отклика</div>
+                <div class="stat-value">124 мс</div>
+                <div class="stat-change negative">
+                    <span class="bi bi-arrow-down-short"></span> -5 мс
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- График популярности плагинов -->
+    <div class="chart-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>
+                    <span class="bi bi-graph-up me-2"></span>
+                    Популярность плагинов (загрузки)
+                </h3>
+                <div class="chart-legend">
+                    <span class="legend-item">
+                        <span class="legend-dot" style="background: #0d6efd;"></span> Текущий месяц
+                    </span>
+                    <span class="legend-item">
+                        <span class="legend-dot" style="background: #6c757d;"></span> Прошлый месяц
+                    </span>
+                </div>
+            </div>
+            <div class="chart-body">
+                <!-- Стилизованный бар-чарт -->
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar-label">AutoCAD Export</div>
+                        <div class="bar-container">
+                            <div class="bar current" style="width: 90%;">4.5K</div>
+                            <div class="bar previous" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Revit Import</div>
+                        <div class="bar-container">
+                            <div class="bar current" style="width: 75%;">3.8K</div>
+                            <div class="bar previous" style="width: 65%;"></div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">BIM Validator</div>
+                        <div class="bar-container">
+                            <div class="bar current" style="width: 60%;">3.0K</div>
+                            <div class="bar previous" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">IFC Converter</div>
+                        <div class="bar-container">
+                            <div class="bar current" style="width: 55%;">2.8K</div>
+                            <div class="bar previous" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-label">Clash Detection</div>
+                        <div class="bar-container">
+                            <div class="bar current" style="width: 45%;">2.3K</div>
+                            <div class="bar previous" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Круговая диаграмма распределения -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>
+                    <span class="bi bi-pie-chart-fill me-2"></span>
+                    Типы используемых плагинов
+                </h3>
+            </div>
+            <div class="chart-body d-flex justify-content-center">
+                <div class="pie-chart">
+                    <svg viewBox="0 0 100 100" class="pie-svg">
+                        <circle r="25" cx="50" cy="50" class="pie-bg" />
+                        <!-- Сегменты круговой диаграммы -->
+                        <path d="M50,50 L50,25 A25,25 0 0,1 70.5,35.5 Z" fill="#0d6efd" />
+                        <path d="M50,50 L70.5,35.5 A25,25 0 0,1 75,50 Z" fill="#198754" />
+                        <path d="M50,50 L75,50 A25,25 0 0,1 62.5,71.5 Z" fill="#ffc107" />
+                        <path d="M50,50 L62.5,71.5 A25,25 0 0,1 37.5,71.5 Z" fill="#dc3545" />
+                        <path d="M50,50 L37.5,71.5 A25,25 0 0,1 25,50 Z" fill="#6f42c1" />
+                        <text x="50" y="55" text-anchor="middle" fill="white" font-size="12">24</text>
+                    </svg>
+                </div>
+                <div class="pie-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #0d6efd;"></span> Экспорт (8)
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #198754;"></span> Импорт (6)
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #ffc107;"></span> Валидация (4)
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #dc3545;"></span> Анализ (3)
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background: #6f42c1;"></span> Интеграция (3)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица топ плагинов -->
+    <div class="table-card">
+        <div class="table-header">
+            <h3>
+                <span class="bi bi-trophy-fill text-warning me-2"></span>
+                Топ 5 самых популярных плагинов
+            </h3>
+            <div class="table-actions">
+                <button class="btn btn-sm btn-outline-secondary">
+                    <span class="bi bi-download"></span> Экспорт
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Плагин</th>
+                        <th>Категория</th>
+                        <th>Загрузки</th>
+                        <th>Рейтинг</th>
+                        <th>Тренд</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge bg-warning text-dark">1</span></td>
+                        <td>
+                            <div class="plugin-info">
+                                <span class="bi bi-cube-fill text-primary me-2"></span>
+                                AutoCAD Export Pro
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">Экспорт</span></td>
+                        <td><strong>4,523</strong></td>
+                        <td>
+                            <span class="rating">
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                5.0
+                            </span>
+                        </td>
+                        <td><span class="trend up">↑ +24%</span></td>
+                        <td><span class="status-badge success">Стабильный</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge bg-secondary">2</span></td>
+                        <td>
+                            <div class="plugin-info">
+                                <span class="bi bi-boxes text-success me-2"></span>
+                                Revit Family Manager
+                            </div>
+                        </td>
+                        <td><span class="badge bg-success">Импорт</span></td>
+                        <td><strong>3,892</strong></td>
+                        <td>
+                            <span class="rating">
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-half text-warning"></span>
+                                4.5
+                            </span>
+                        </td>
+                        <td><span class="trend up">↑ +18%</span></td>
+                        <td><span class="status-badge success">Стабильный</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge bg-secondary">3</span></td>
+                        <td>
+                            <div class="plugin-info">
+                                <span class="bi bi-check-circle-fill text-warning me-2"></span>
+                                BIM Validator
+                            </div>
+                        </td>
+                        <td><span class="badge bg-warning text-dark">Валидация</span></td>
+                        <td><strong>3,124</strong></td>
+                        <td>
+                            <span class="rating">
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star text-warning"></span>
+                                4.0
+                            </span>
+                        </td>
+                        <td><span class="trend up">↑ +32%</span></td>
+                        <td><span class="status-badge warning">Бета</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge bg-secondary">4</span></td>
+                        <td>
+                            <div class="plugin-info">
+                                <span class="bi bi-arrow-left-right text-danger me-2"></span>
+                                IFC Converter
+                            </div>
+                        </td>
+                        <td><span class="badge bg-danger">Конвертация</span></td>
+                        <td><strong>2,856</strong></td>
+                        <td>
+                            <span class="rating">
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                5.0
+                            </span>
+                        </td>
+                        <td><span class="trend up">↑ +15%</span></td>
+                        <td><span class="status-badge success">Стабильный</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge bg-secondary">5</span></td>
+                        <td>
+                            <div class="plugin-info">
+                                <span class="bi bi-exclamation-triangle-fill text-warning me-2"></span>
+                                Clash Detection
+                            </div>
+                        </td>
+                        <td><span class="badge bg-info text-dark">Анализ</span></td>
+                        <td><strong>2,301</strong></td>
+                        <td>
+                            <span class="rating">
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-fill text-warning"></span>
+                                <span class="bi bi-star-half text-warning"></span>
+                                4.5
+                            </span>
+                        </td>
+                        <td><span class="trend down">↓ -5%</span></td>
+                        <td><span class="status-badge success">Стабильный</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Карточки последних активностей -->
+    <div class="activity-grid">
+        <div class="activity-card">
+            <div class="activity-header">
+                <span class="bi bi-clock-history me-2"></span>
+                <h4>Последние загрузки</h4>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon bg-primary-subtle">
+                        <span class="bi bi-download text-primary"></span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">AutoCAD Export Pro</div>
+                        <div class="activity-meta">Пользователь: Ivan Petrov · 5 мин назад</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-success-subtle">
+                        <span class="bi bi-upload text-success"></span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Revit Family Manager</div>
+                        <div class="activity-meta">Пользователь: Elena Sidorova · 15 мин назад</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-warning-subtle">
+                        <span class="bi bi-star-fill text-warning"></span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Новый отзыв на BIM Validator</div>
+                        <div class="activity-meta">5 звезд от Nikolay · 1 час назад</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon bg-danger-subtle">
+                        <span class="bi bi-exclamation-triangle-fill text-danger"></span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">Обновление Clash Detection</div>
+                        <div class="activity-meta">Версия 2.1.0 · 2 часа назад</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <div class="activity-header">
+                <span class="bi bi-calendar-check me-2"></span>
+                <h4>События недели</h4>
+            </div>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-date">ПН</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Релиз нового плагина</div>
+                        <div class="activity-meta">IFC 4.0 Converter</div>
+                    </div>
+                    <span class="badge bg-success">NEW</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-date">СР</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Вебинар по BIM плагинам</div>
+                        <div class="activity-meta">Регистрация: 45 участников</div>
+                    </div>
+                    <span class="badge bg-primary">Скоро</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-date">ПТ</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Техническое обслуживание</div>
+                        <div class="activity-meta">02:00 - 04:00 UTC</div>
+                    </div>
+                    <span class="badge bg-warning text-dark">План</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-date">СБ</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Хакатон BIM плагинов</div>
+                        <div class="activity-meta">12 команд участвуют</div>
+                    </div>
+                    <span class="badge bg-info text-dark">Актив</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="activity-card">
+            <div class="activity-header">
+                <span class="bi bi-bar-chart-steps me-2"></span>
+                <h4>Прогресс целей</h4>
+            </div>
+            <div class="progress-list">
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Цель по загрузкам</span>
+                        <span>8.5K / 10K</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 85%;">85%</div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Активные пользователи</span>
+                        <span>342 / 500</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" style="width: 68.4%;">68%</div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Покрытие тестами</span>
+                        <span>76% / 90%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" style="width: 84%;">84%</div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-label">
+                        <span>Документация</span>
+                        <span>42% / 100%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" style="width: 42%;">42%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Бейджи и чипсы -->
+    <div class="badges-section">
+        <div class="badge-chip-group">
+            <span class="badge-chip bg-primary">#AutoCAD</span>
+            <span class="badge-chip bg-success">#Revit</span>
+            <span class="badge-chip bg-warning text-dark">#IFC</span>
+            <span class="badge-chip bg-danger">#BIM</span>
+            <span class="badge-chip bg-info text-dark">#3D</span>
+            <span class="badge-chip bg-secondary">#Плагины</span>
+            <span class="badge-chip bg-primary">#Архитектура</span>
+            <span class="badge-chip bg-success">#Строительство</span>
+            <span class="badge-chip chip-outline">+8 тегов</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Основные переменные */
+    .reports-container {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Сетка статистики */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .bg-primary-subtle { background: #e7f1ff; }
+    .bg-success-subtle { background: #e2f0e8; }
+    .bg-warning-subtle { background: #fff3d6; }
+    .bg-info-subtle { background: #d6f0f5; }
+    .bg-danger-subtle { background: #fce3e5; }
+    .bg-purple-subtle { background: #e9e2f9; }
+
+    .text-purple { color: #6f42c1; }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        line-height: 1.2;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-change {
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+
+    .stat-change.positive {
+        color: #10b981;
+    }
+
+    .stat-change.negative {
+        color: #ef4444;
+    }
+
+    /* Сетка графиков */
+    .chart-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .chart-card, .table-card, .activity-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-header, .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .chart-header h3, .table-header h3, .activity-header h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .chart-legend {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    /* Бар чарт */
+    .bar-chart {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .bar-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .bar-label {
+        width: 140px;
+        font-size: 0.875rem;
+        color: #1e293b;
+    }
+
+    .bar-container {
+        flex: 1;
+        height: 40px;
+        background: #f1f5f9;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bar {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: white;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .bar.current {
+        background: linear-gradient(90deg, #0d6efd, #0b5ed7);
+        z-index: 2;
+    }
+
+    .bar.previous {
+        background: #adb5bd;
+        opacity: 0.3;
+        z-index: 1;
+    }
+
+    /* Круговая диаграмма */
+    .pie-chart {
+        width: 180px;
+        height: 180px;
+    }
+
+    .pie-svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pie-bg {
+        fill: none;
+        stroke: #e9ecef;
+        stroke-width: 25;
+    }
+
+    .pie-legend {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    /* Таблица */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th {
+        text-align: left;
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .table td {
+        padding: 1rem 0.75rem;
+        border-bottom: 1px solid #e2e8f0;
+        color: #1e293b;
+    }
+
+    .plugin-info {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .trend {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .trend.up {
+        color: #10b981;
+    }
+
+    .trend.down {
+        color: #ef4444;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .status-badge.success {
+        background: #d1fae5;
+        color: #059669;
+    }
+
+    .status-badge.warning {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .badge {
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge.bg-primary { background: #0d6efd; color: white; }
+    .badge.bg-success { background: #198754; color: white; }
+    .badge.bg-warning { background: #ffc107; color: black; }
+    .badge.bg-danger { background: #dc3545; color: white; }
+    .badge.bg-info { background: #0dcaf0; color: black; }
+
+    /* Сетка активностей */
+    .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .activity-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        transition: background 0.2s;
+    }
+
+    .activity-item:hover {
+        background: #f8fafc;
+    }
+
+    .activity-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .activity-date {
+        width: 36px;
+        height: 36px;
+        background: #e9ecef;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: #495057;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        font-weight: 500;
+        color: #1e293b;
+        font-size: 0.9375rem;
+    }
+
+    .activity-meta {
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    /* Прогресс бары */
+    .progress-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .progress-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.875rem;
+        color: #1e293b;
+    }
+
+    .progress {
+        height: 10px;
+        background: #e9ecef;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.625rem;
+        color: white;
+    }
+
+    /* Бейджи и чипсы */
+    .badges-section {
+        margin-top: 1rem;
+    }
+
+    .badge-chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .badge-chip {
+        padding: 0.375rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: white;
+    }
+
+    .badge-chip.bg-primary { background: #0d6efd; }
+    .badge-chip.bg-success { background: #198754; }
+    .badge-chip.bg-warning { background: #ffc107; color: black; }
+    .badge-chip.bg-danger { background: #dc3545; }
+    .badge-chip.bg-info { background: #0dcaf0; color: black; }
+    .badge-chip.bg-secondary { background: #6c757d; }
+
+    .badge-chip.chip-outline {
+        background: transparent;
+        border: 1px solid #dee2e6;
+        color: #6c757d;
+    }
+
+    /* Адаптивность */
+    @@media (max-width: 992px) {
+        .chart-grid,
+        .activity-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .reports-container {
+            padding: 1rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .chart-body {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    /* Иконки Bootstrap (если не подключены) */
+    .bi {
+        display: inline-block;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        vertical-align: middle;
+    }
+</style>

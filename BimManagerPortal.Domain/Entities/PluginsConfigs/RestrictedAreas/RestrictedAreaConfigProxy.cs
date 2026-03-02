@@ -1,37 +1,51 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
+namespace BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
+
+public class RestrictedAreaConfigProxy
 {
-    public class RestrictedAreaConfigProxy
+    [ValidateComplexType]
+    public BuildingMode BuildingMode { get; set; } = new();
+    
+    [ValidateComplexType]
+    public PathsToModelsProxy PathsToModels { get; set; } = new();
+    
+    [ValidateComplexType]
+    public DisciplinesProxy Razdels { get; set; } = new();
+}
+public class BuildingMode
     {
-        [Required(ErrorMessage = "Имя объекта обязательно")]
-        [StringLength(20, ErrorMessage = "Имя не должно превышать 20 символов")]
-        public string ObjectName { get; set; } = "";
-        public DisciplinesProxy Razdels { get; set; } = new();
+        public string HandlerOldZones { get; set; } = "";
+        public bool BuilderNewZones { get; set; } = true;
+        public bool CreateRestrictedZoneFile { get; set; } = true;
     }
-
     public class DisciplinesProxy
     {
+        [ValidateComplexType]
         public ArDisciplineProxy ArDiscipline { get; set; } = new();
+        
+        [ValidateComplexType]
         public KrDisciplineProxy KrDiscipline { get; set; } = new();
+        
+        [ValidateComplexType]
         public VisDisciplineProxy VisDiscipline { get; set; } = new();
     }
 
     #region disciplines
     public class ArDisciplineProxy
     {
+        [ValidateComplexType]
         public ArEnableFormSettings ArEnableFormSettings { get; set; } = new();
-        public PathsToModelsProxy PathsToModels { get; set; } = new();
     }
     public class KrDisciplineProxy
     {
+        [ValidateComplexType]
         public KrEnableFormSettings KrEnableFormSettings { get; set; } = new();
-        public PathsToModelsProxy PathsToModels { get; set; } = new();
     }
     public class VisDisciplineProxy
     {
+        [ValidateComplexType]
         public VisEnableFormSettings VisEnableFormSettings { get; set; } = new();
-        public PathsToModelsProxy PathsToModels { get; set; } = new();
     }
     #endregion
     public class ArEnableFormSettings
@@ -69,21 +83,30 @@ namespace BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
     }
     public class PathsToModelsProxy
     {
-        [Required(ErrorMessage = "TemplatePath обязательно")]
-        [StringLength(120, ErrorMessage = "TemplatePath не должно превышать 120 символов")]
+        [StringLength(10, MinimumLength = 1,ErrorMessage = "Длина от 1 до 10 символов")]
+        public string ObjectName { get; set; } = "";
+        
+        [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$",ErrorMessage = "Некорректный путь Windows")]
+        [StringLength(100, MinimumLength = 1,ErrorMessage = "Длина от 1 до 100 символов")]
         public string TemplatePath { get; set; } = "";
-        [Required(ErrorMessage = "PathForFilesWithOnlyRestrictedAreas обязательно")]
-        [StringLength(120, ErrorMessage = "PathForFilesWithOnlyRestrictedAreas не должно превышать 120 символов")]
+        
+        [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$",ErrorMessage = "Некорректный путь Windows")]
+        [StringLength(100, MinimumLength = 1,ErrorMessage = "Длина от 1 до 100 символов")]
         public string PathForFilesWithOnlyRestrictedAreas { get; set; } = "";
-        [StringLength(20, ErrorMessage = "PrefixForFilesWithOnlyRestrictedAreas не должно превышать 20 символов")]
+        
+        [StringLength(20, MinimumLength = 0,ErrorMessage = "Длина от 0 до 20 символов")]
         public string PrefixForFilesWithOnlyRestrictedAreas { get; set; } = "";
-        [StringLength(20, ErrorMessage = "SuffixForFilesWithOnlyRestrictedAreas не должно превышать 20 символов")]
-        public string SuffixForFilesWithOnlyRestrictedAreas { get; set; } = "";
-        public bool ForcedRebuilding { get; set; } = false;
+        
+        [StringLength(20, MinimumLength = 0,ErrorMessage = "Длина от 0 до 20 символов")]
+        public string SuffixForFilesWithOnlyRestrictedAreas { get; set; } = "_Запретные зоны";
+        
         public List<Model> Models { get; set; } = new();
     }
     public class Model
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        
+        [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$",ErrorMessage = "Некорректный путь Windows")]
+        [StringLength(100, MinimumLength = 1,ErrorMessage = "Длина от 1 до 100 символов")]
         public string ModelPath { get; set; }
     }
-}

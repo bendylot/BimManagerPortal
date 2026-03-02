@@ -1,0 +1,37 @@
+@inherits InputBase<string>
+
+<div class="mb-2">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="form-label small">@Label</label>
+    }
+
+    <select class="form-select form-select-sm @CssClass"
+            @bind="CurrentValue">
+        @foreach (var option in Options)
+        {
+            <option value="@option">@option</option>
+        }
+    </select>
+
+    <ValidationMessage For="ValueExpression" />
+</div>
+
+@code {
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter, EditorRequired]
+    public IEnumerable<string> Options { get; set; } = Enumerable.Empty<string>();
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out string result,
+        out string? validationErrorMessage)
+    {
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
+    }
+}
