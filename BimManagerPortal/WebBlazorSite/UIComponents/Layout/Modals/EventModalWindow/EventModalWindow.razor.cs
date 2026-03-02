@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace BimManagerPortal.WebBlazorSite.UIComponents.Layout.EventModalWindow;
+namespace BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow;
 public partial class EventModalWindow
 {
     private bool _isVisible;

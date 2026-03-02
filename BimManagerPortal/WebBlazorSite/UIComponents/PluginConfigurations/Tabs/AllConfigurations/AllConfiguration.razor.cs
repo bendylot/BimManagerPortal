@@ -1,4 +1,5 @@
-﻿using BimManagerPortal.Domain.Entities.PluginsConfigs;
+﻿using System.Text.Json;
+using BimManagerPortal.Domain.Entities.PluginsConfigs;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
 using Microsoft.AspNetCore.Components;
 
@@ -14,6 +15,8 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         #endregion
         
         #region properties
+        private PluginConfigEntity? SelectedConfiguration => 
+            Configurations?.FirstOrDefault(c => c.Id == _selectedId);
         protected IEnumerable<PluginConfigEntity>? Configurations { get; set; } = new List<PluginConfigEntity>();
         [Inject]
         protected IExternalApiService ExternalApiService { get; set; } = default!;
@@ -26,6 +29,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         {
             Configurations = await LoadConfigurations();
         }
+        
         private void SelectRow(int? id)
         {
             _selectedId = id;
@@ -112,6 +116,39 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
                 _sortAscending = true;
             }
         }
+        #endregion
+        
+        #region action methods
+
+        private void EditConfiguration()
+        {
+            if (SelectedConfiguration == null) return;
+    
+            // Логика перехода к редактированию
+            // Например: NavigationManager.NavigateTo($"/edit/{SelectedConfiguration.Id}");
+            Console.WriteLine($"Редактирование: {SelectedConfiguration.Name}");
+        }
+
+        private void OpenJsonModal()
+        {
+            if (SelectedConfiguration?.Data is null)
+                return;
+
+            var json = JsonSerializer.Serialize(
+                SelectedConfiguration.Data,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+            JsonModalService.Show(json);
+        }
+
+        private async Task DeleteConfiguration()
+        {
+            
+        }
+        
         #endregion
         
     }

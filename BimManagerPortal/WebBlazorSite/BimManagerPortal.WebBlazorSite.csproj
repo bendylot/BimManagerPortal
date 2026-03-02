@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="UIComponents\Layout\Modals\EventModalWindow\EventModalWindow.razor" />
     <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\AllConfigurations\AllConfiguration.razor" />
     <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\CreateConfiguration.razor" />
     <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\RestrictedAreaForm\RestrictedAreaForm.razor" />

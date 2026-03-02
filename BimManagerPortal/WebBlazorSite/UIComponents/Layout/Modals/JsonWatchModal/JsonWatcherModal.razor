@@ -1,0 +1,19 @@
+@using BimManagerPortal.WebBlazorSite.UIComponents.UiServices.ModalForm.JsonWatcher
+@inject JsonWatcherModalService JsonModalService
+@if (_showJsonModal)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">JSON Конфигурации</h5>
+                    <button type="button" class="btn-close" @onclick="() => _showJsonModal = false"></button>
+                </div>
+                <div class="modal-body">
+                    <pre class="bg-dark text-light p-3 rounded"><code>@_jsonContent</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+}

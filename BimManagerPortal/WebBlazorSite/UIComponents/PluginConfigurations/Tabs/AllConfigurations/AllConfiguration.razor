@@ -1,5 +1,8 @@
-﻿<div class="container-box p-3">
-    <div class="row mb-4">
+﻿@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.JsonWatchModal
+@using BimManagerPortal.WebBlazorSite.UIComponents.UiServices.ModalForm.JsonWatcher
+@inject JsonWatcherModalService JsonModalService
+<div class="container-box p-3">
+    <div class="row mb-4 align-items-center">
         <div class="col-md-4">
             <input type="text"
                    class="form-control search-input"
@@ -7,6 +10,31 @@
                    @bind="_searchTerm"
                    @bind:event="oninput" />
         </div>
+    
+        @if (_selectedId != null)
+        {
+            <div class="col-md-8">
+                <div class="d-flex gap-2 justify-content-md-start p-2">
+                    <div class="btn btn-outline-primary d-flex align-items-center btn-sm" 
+                         style="cursor: pointer;" 
+                         @onclick="EditConfiguration">
+                        <i class="bi bi-pencil-square me-1"></i> Изменить
+                    </div>
+
+                    <div class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
+                         style="cursor: pointer;" 
+                         @onclick="OpenJsonModal">
+                        <i class="bi bi-code-slash me-1"></i> JSON
+                    </div>
+
+                    <div class="btn btn-outline-danger d-flex align-items-center btn-sm" 
+                         style="cursor: pointer;" 
+                         @onclick="DeleteConfiguration">
+                        <i class="bi bi-trash me-1"></i> Удалить
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 
     @if (!FilteredData.Any())
@@ -45,3 +73,4 @@
         </div>
     }
 </div>
+<JsonWatcherModal />

@@ -3,7 +3,7 @@ using BimManagerPortal.Domain.Entities.PluginsConfigs;
 using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
 using BimManagerPortal.WebBlazorSite.Exceptions;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
-using BimManagerPortal.WebBlazorSite.UIComponents.Layout.EventModalWindow;
+using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 

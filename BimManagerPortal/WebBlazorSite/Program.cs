@@ -1,5 +1,6 @@
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
 using BimManagerPortal.WebBlazorSite.UIComponents;
+using BimManagerPortal.WebBlazorSite.UIComponents.UiServices.ModalForm.JsonWatcher;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddHttpClient<IExternalApiService, ExternalApiService>(client =
     // Убедитесь, что адрес заканчивается на слеш /
     client.BaseAddress = new Uri("http://37.230.113.96:5001/");
 });
+builder.Services.AddScoped<JsonWatcherModalService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
