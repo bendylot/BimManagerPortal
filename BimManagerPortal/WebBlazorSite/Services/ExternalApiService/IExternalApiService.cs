@@ -5,7 +5,9 @@ namespace BimManagerPortal.WebBlazorSite.Services.ExternalApiService
 {
     public interface IExternalApiService
     {
+        Task DeletePluginConfigAsync(int id);
         Task SendPluginConfigAsync(PluginConfigRequestDto dto);
+        Task UpdateExistPluginConfigAsync(PluginConfigRequestDto dto, int id);
         Task<PluginConfigsResponseDto> GetPluginConfigAsync();
     }
 }

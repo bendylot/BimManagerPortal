@@ -1,6 +1,9 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 using BimManagerPortal.Domain.Entities.PluginsConfigs;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
+using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow;
 using Microsoft.AspNetCore.Components;
 
 namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.AllConfigurations
@@ -12,6 +15,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         private string _searchTerm = string.Empty;
         private string? _currentSortColumn;
         private bool _sortAscending = true;
+        private EventModalWindow _eventModal;
         #endregion
         
         #region properties
@@ -22,9 +26,12 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         protected IExternalApiService ExternalApiService { get; set; } = default!;
         private IEnumerable<PluginConfigEntity> FilteredData =>
             ApplySorting(ApplyFiltering(Configurations ?? Enumerable.Empty<PluginConfigEntity>()));
+        [Parameter]
+        public EventCallback<PluginConfigEntity> OnEditRequested { get; set; }
         #endregion
         
         #region events-methods
+        
         protected override async Task OnInitializedAsync()
         {
             Configurations = await LoadConfigurations();
@@ -37,6 +44,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         #endregion
         
         #region private methods
+        
         private MarkupString SortIcon(string column)
         {
             if (_currentSortColumn != column)
@@ -106,6 +114,10 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         #endregion
         
         #region razor methods
+        private async Task RequestCreate()
+        {
+            await OnEditRequested.InvokeAsync(SelectedConfiguration);
+        }
         private void SortBy(string column)
         {
             if (_currentSortColumn == column)
@@ -123,7 +135,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
         private void EditConfiguration()
         {
             if (SelectedConfiguration == null) return;
-    
+            RequestCreate();
             // Логика перехода к редактированию
             // Например: NavigationManager.NavigateTo($"/edit/{SelectedConfiguration.Id}");
             Console.WriteLine($"Редактирование: {SelectedConfiguration.Name}");
@@ -138,6 +150,7 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
                 SelectedConfiguration.Data,
                 new JsonSerializerOptions
                 {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
                     WriteIndented = true
                 });
 
@@ -146,9 +159,44 @@ namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.
 
         private async Task DeleteConfiguration()
         {
-            
+            if (SelectedConfiguration?.Id == null) return;
+            var id = SelectedConfiguration.Id.Value;
+            try
+            {
+                await ExternalApiService.DeletePluginConfigAsync(id);
+                // 1. Обновляем локальный список (удаляем элемент из памяти)
+                if (Configurations != null)
+                {
+                    Configurations = Configurations.Where(c => c.Id != id).ToList();
+                }
+
+                // 2. Сбрасываем выделение, чтобы кнопки действий исчезли
+                _selectedId = null;
+                TestSuccess("Конфигурация удалена");
+                // Можно добавить уведомление об успехе
+            }
+            catch (Exception ex)
+            {
+                // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
+                var _errorMessage = "Критическая ошибка приложения.";
+                Console.WriteLine(ex.Message);
+            }
         }
-        
+        private void TestSuccess(string message)
+        {
+            _eventModal.Show(
+                "Операция выполнена",
+                message,
+                true);
+        }
+
+        private void TestError(string message)
+        {
+            _eventModal.Show(
+                "Ошибка",
+                message,
+                false);
+        }
         #endregion
         
     }

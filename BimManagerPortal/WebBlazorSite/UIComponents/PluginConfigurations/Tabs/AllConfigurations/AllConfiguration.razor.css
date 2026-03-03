@@ -85,8 +85,8 @@
 
 /* Индикатор сбоку для выбранной строки */
 .minimal-table tbody tr.selected td:first-child {
-    border-left: 3px solid #4facfe;
-    padding-left: 13px; /* Компенсируем границу */
+    box-shadow: inset 3px 0 0 #4facfe; /* Внутренняя тень слева */
+    border-left: none;
 }
 
 /* Изменение курсора и плавность */

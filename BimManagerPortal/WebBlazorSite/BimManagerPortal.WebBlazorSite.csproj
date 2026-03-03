@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UIComponents\PluginConfigurations\Tabs\" />
     <Folder Include="UIComponents\PluginReports\" />
   </ItemGroup>
 
@@ -20,13 +19,14 @@
     <AdditionalFiles Include="UIComponents\Layout\Modals\EventModalWindow\EventModalWindow.razor" />
     <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\AllConfigurations\AllConfiguration.razor" />
     <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\CreateConfiguration.razor" />
-    <AdditionalFiles Include="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\RestrictedAreaForm\RestrictedAreaForm.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\AllConfigurations\AllConfiguration.razor" />
     <_ContentIncludedByDefault Remove="UIComponents\Layout\CheckBoxes\CheckBoxField.razor" />
     <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\Forms\RestrictedAreaForm\CheckBoxes\CheckBoxField.razor" />
+    <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\PluginConfigurationForms\jsons_template\restricted_area.json" />
+    <_ContentIncludedByDefault Remove="UIComponents\PluginConfigurations\Tabs\CreateConfigurations\PluginConfigurationForms\RestrictedAreaForm\RestrictedAreaForm.razor" />
   </ItemGroup>
 
   <ItemGroup>

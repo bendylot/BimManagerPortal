@@ -1,5 +1,6 @@
-﻿@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
-@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms.RestrictedAreaForm
+﻿@using BimManagerPortal.Domain.Entities.Enums
+@using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.PluginConfigurationForms.RestrictedAreaForm
 
 <div class="container-box p-3">
     <h5 class="mb-3">Выберите приложение</h5>
@@ -35,7 +36,7 @@
                 <div class="form-container fade-in">
                     @if (SelectedPlugin.Name == "RestrictedArea")
                     {
-                            <RestrictedAreaForm/>
+                            <RestrictedAreaForm PluginConfigTab="PluginConfigTab.Create"/>
                     }
                     else if (SelectedPlugin.Name == "ClashDefender")
                     {

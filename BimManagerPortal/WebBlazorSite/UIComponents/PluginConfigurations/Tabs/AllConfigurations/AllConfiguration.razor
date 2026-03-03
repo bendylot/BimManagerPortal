@@ -1,40 +1,38 @@
-﻿@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.JsonWatchModal
+﻿@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow
+@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.JsonWatchModal
 @using BimManagerPortal.WebBlazorSite.UIComponents.UiServices.ModalForm.JsonWatcher
 @inject JsonWatcherModalService JsonModalService
 <div class="container-box p-3">
-    <div class="row mb-4 align-items-center">
-        <div class="col-md-4">
+    <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
             <input type="text"
-                   class="form-control search-input"
+                   class="form-control" 
+                   style="height: 31px;" 
                    placeholder="Search by name..."
                    @bind="_searchTerm"
                    @bind:event="oninput" />
         </div>
     
-        @if (_selectedId != null)
-        {
-            <div class="col-md-8">
-                <div class="d-flex gap-2 justify-content-md-start p-2">
-                    <div class="btn btn-outline-primary d-flex align-items-center btn-sm" 
-                         style="cursor: pointer;" 
-                         @onclick="EditConfiguration">
+        <div class="col-md-8" style="min-height: 31px;"> 
+            @if (_selectedId != null)
+            {
+                <div class="d-flex gap-2 justify-content-md-start">
+                    <button class="btn btn-outline-primary d-flex align-items-center btn-sm" 
+                            @onclick="EditConfiguration">
                         <i class="bi bi-pencil-square me-1"></i> Изменить
-                    </div>
+                    </button>
 
-                    <div class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
-                         style="cursor: pointer;" 
-                         @onclick="OpenJsonModal">
+                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
+                            @onclick="OpenJsonModal">
                         <i class="bi bi-code-slash me-1"></i> JSON
-                    </div>
+                    </button>
 
-                    <div class="btn btn-outline-danger d-flex align-items-center btn-sm" 
-                         style="cursor: pointer;" 
-                         @onclick="DeleteConfiguration">
+                    <button class="btn btn-outline-danger d-flex align-items-center btn-sm" 
+                            @onclick="DeleteConfiguration">
                         <i class="bi bi-trash me-1"></i> Удалить
-                    </div>
+                    </button>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 
     @if (!FilteredData.Any())
@@ -73,4 +71,5 @@
         </div>
     }
 </div>
+<EventModalWindow @ref="_eventModal" />
 <JsonWatcherModal />

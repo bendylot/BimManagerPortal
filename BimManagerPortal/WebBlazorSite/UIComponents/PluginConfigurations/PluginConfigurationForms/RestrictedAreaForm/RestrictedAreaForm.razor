@@ -1,9 +1,10 @@
-﻿@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.CheckBoxes
+﻿@using BimManagerPortal.Domain.Entities.Enums
+@using BimManagerPortal.WebBlazorSite.UIComponents.Layout.CheckBoxes
 @using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow
 @using BimManagerPortal.WebBlazorSite.UIComponents.Layout.ThreeOptionSelect
 
 <EditForm EditContext="@_editContext" 
-          OnSubmit="SendConfig">
+          OnSubmit="CreateConfig">
     <ObjectGraphDataAnnotationsValidator />
     <EventModalWindow @ref="_eventModal" />
     <div class="plugin-form mt-3 p-4 border rounded bg-white shadow-sm fade-in">
@@ -131,13 +132,13 @@
                                 Настройка форм АР
                             </h6>
                             <CheckboxField Label="Форма вокруг проема АР"
-                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoors" />
+                                           @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArDoors" />
                             <CheckboxField Label="Форма потолка"
-                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzRoomProperties" />
+                                           @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArRoomProperties" />
                             <CheckboxField Label="Форма Машиноместа"
-                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArParking" />
+                                           @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArParking" />
                             <CheckboxField Label="Форма вокруг проема КР"
-                                           @bind-Value="Config.Razdels.ArDiscipline.ArEnableFormSettings.RzArDoorsReinforcedConcrete" />
+                                           @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArDoorsReinforcedConcrete" />
                         </div>
                     </div>
                 </div>
@@ -155,21 +156,21 @@
                         <div class="card p-3 shadow-sm">
                             <h6 class="card-subtitle mb-2 text-muted">Настройка форм КР</h6>
                             <CheckboxField Label="Форма из колонн"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrStructuralColumns" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrStructuralColumns" />
                             <CheckboxField Label="Форма из капителей"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrColumnHeads" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrColumnHeads" />
                             <CheckboxField Label="Форма вокруг проема КР"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrDoors" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrDoors" />
                             <CheckboxField Label="RzKrWalls"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrWalls" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrWalls" />
                             <CheckboxField Label="Форма по краю перекрытий"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrFloors" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrFloors" />
                             <CheckboxField Label="Форма по торцам стен"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundColumnsInFloor" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrAroundColumnsInFloor" />
                             <CheckboxField Label="Форма в перекрытии в торцах стен"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrAroundWallsInFloor" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrAroundWallsInFloor" />
                             <CheckboxField Label="Форма в стене под колоннами"
-                                           @bind-Value="Config.Razdels.KrDiscipline.KrEnableFormSettings.RzKrUnderColumnInWalls" />
+                                           @bind-Value="Config.DisciplineSettings.KrDisciplineSetting.KrUnderColumnInWalls" />
                         </div>
                     </div>
                 </div>
@@ -189,34 +190,49 @@
                                 Настройка форм ВИС
                             </h6>
                             <CheckboxField Label="Зона просвета для лотка СС"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzSsCableTray" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.SsCableTray" />
                             <CheckboxField Label="Зона просвета для лотка ЭОМ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomCableTray" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.EomCableTray" />
                             <CheckboxField Label="Зона просвета для воздуховода ЭОМ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzEomDuctRectangle" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.EomDuctRectangle" />
                             <CheckboxField Label="Зона просвета для трубы ВК"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeVk" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.PipeVk" />
                             <CheckboxField Label="Зона просвета для трубы ПТ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipePt" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.PipePt" />
                             <CheckboxField Label="Зона просвета для трубы ОТ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeOt" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.PipeOt" />
                             <CheckboxField Label="Зона просвета для трубы КВ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.PipeKv" />
                             <CheckboxField Label="Зона просвета для воздуховода ОВ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRound" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.DuctVentRound" />
                             <CheckboxField Label="Зона просвета для воздуховода ОВ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctVentRectangle" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.DuctVentRectangle" />
                             <CheckboxField Label="Зона просвета для трубы КВ"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzPipeKv" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.PipeKv" />
                             <CheckboxField Label="Зона просвета для воздуховода СС"
-                                           @bind-Value="Config.Razdels.VisDiscipline.VisEnableFormSettings.RzDuctSsRectangle" />
+                                           @bind-Value="Config.DisciplineSettings.VisDisciplineSetting.DuctSsRectangle" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mt-4 d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary px-5">Создать конфигурацию</button>
-    </div>
+    @if (PluginConfigTab == PluginConfigTab.Create)
+    {
+        <div class="mt-4 d-flex justify-content-end">
+            <button class="btn btn-primary px-5"
+                    @onclick="() => CreateConfig()">>
+                Отправить конфигурацию
+            </button>
+        </div>
+    }
+    else if (PluginConfigTab == PluginConfigTab.Edit)
+    {
+        <div class="mt-4 d-flex justify-content-end">
+            <button class="btn btn-primary px-5"
+                    @onclick="() => UpdateConfig()">
+                Отправить конфигурацию
+            </button>
+        </div>
+    }
 </EditForm>

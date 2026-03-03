@@ -11,7 +11,7 @@ public class RestrictedAreaConfigProxy
     public PathsToModelsProxy PathsToModels { get; set; } = new();
     
     [ValidateComplexType]
-    public DisciplinesProxy Razdels { get; set; } = new();
+    public DisciplinesProxy DisciplineSettings { get; set; } = new();
 }
 public class BuildingMode
     {
@@ -22,65 +22,50 @@ public class BuildingMode
     public class DisciplinesProxy
     {
         [ValidateComplexType]
-        public ArDisciplineProxy ArDiscipline { get; set; } = new();
+        public ArDisciplineProxy ArDisciplineSetting { get; set; } = new();
         
         [ValidateComplexType]
-        public KrDisciplineProxy KrDiscipline { get; set; } = new();
+        public KrDisciplineProxy KrDisciplineSetting { get; set; } = new();
         
         [ValidateComplexType]
-        public VisDisciplineProxy VisDiscipline { get; set; } = new();
+        public VisDisciplineProxy VisDisciplineSetting { get; set; } = new();
     }
 
     #region disciplines
     public class ArDisciplineProxy
     {
-        [ValidateComplexType]
-        public ArEnableFormSettings ArEnableFormSettings { get; set; } = new();
+        public bool ArDoors { get; set; } = false;
+        public bool ArRoomProperties { get; set; } = false;
+        public bool ArParking { get; set; } = false;
+        public bool ArDoorsReinforcedConcrete { get; set; } = false;
+        public bool ArDoorOpenings { get; set; } = false;
     }
     public class KrDisciplineProxy
     {
-        [ValidateComplexType]
-        public KrEnableFormSettings KrEnableFormSettings { get; set; } = new();
+        public bool KrStructuralColumns { get; set; } = false;
+        public bool KrStructuralFraming { get; set; } = false;
+        public bool KrColumnHeads { get; set; } = false;
+        public bool KrDoors { get; set; } = false;
+        public bool KrWalls { get; set; } = false;
+        public bool KrFloors { get; set; } = false;
+        public bool KrAroundColumnsInFloor { get; set; } = false;
+        public bool KrAroundWallsInFloor { get; set; } = false;
+        public bool KrUnderColumnInWalls { get; set; } = false;
     }
     public class VisDisciplineProxy
     {
-        [ValidateComplexType]
-        public VisEnableFormSettings VisEnableFormSettings { get; set; } = new();
+        public bool SsCableTray { get; set; } = false;
+        public bool EomCableTray { get; set; } = false;
+        public bool EomDuctRectangle { get; set; } = false;
+        public bool PipeVk { get; set; } = false;
+        public bool PipePt { get; set; } = false;
+        public bool PipeOt { get; set; } = false;
+        public bool PipeKv { get; set; } = false;
+        public bool DuctVentRound { get; set; } = false;
+        public bool DuctVentRectangle { get; set; } = false;
+        public bool DuctSsRectangle { get; set; } = false;
     }
     #endregion
-    public class ArEnableFormSettings
-    {
-        public bool RzArDoors { get; set; } = false;
-        public bool RzRoomProperties { get; set; } = false;
-        public bool RzArParking { get; set; } = false;
-        public bool RzArDoorsReinforcedConcrete { get; set; } = false;
-        public bool RzArDoorOpenings { get; set; } = false;
-    }
-    public class KrEnableFormSettings
-    {
-        public bool RzKrStructuralColumns { get; set; } = false;
-        public bool RzKrStructuralFraming { get; set; } = false;
-        public bool RzKrColumnHeads { get; set; } = false;
-        public bool RzKrDoors { get; set; } = false;
-        public bool RzKrWalls { get; set; } = false;
-        public bool RzKrFloors { get; set; } = false;
-        public bool RzKrAroundColumnsInFloor { get; set; } = false;
-        public bool RzKrAroundWallsInFloor { get; set; } = false;
-        public bool RzKrUnderColumnInWalls { get; set; } = false;
-    }
-    public class VisEnableFormSettings
-    {
-        public bool RzSsCableTray { get; set; } = false;
-        public bool RzEomCableTray { get; set; } = false;
-        public bool RzEomDuctRectangle { get; set; } = false;
-        public bool RzPipeVk { get; set; } = false;
-        public bool RzPipePt { get; set; } = false;
-        public bool RzPipeOt { get; set; } = false;
-        public bool RzPipeKv { get; set; } = false;
-        public bool RzDuctVentRound { get; set; } = false;
-        public bool RzDuctVentRectangle { get; set; } = false;
-        public bool RzDuctSsRectangle { get; set; } = false;
-    }
     public class PathsToModelsProxy
     {
         [StringLength(10, MinimumLength = 1,ErrorMessage = "Длина от 1 до 10 символов")]

@@ -1,5 +1,5 @@
 using BimManagerPortal.Domain.Entities.Dtos.Requests.PluginConfigs;
-using BimManagerPortal.Domain.Entities.PluginsConfigs;
+using BimManagerPortal.Domain.Entities.Enums;
 using BimManagerPortal.Domain.Entities.PluginsConfigs.RestrictedAreas;
 using BimManagerPortal.WebBlazorSite.Exceptions;
 using BimManagerPortal.WebBlazorSite.Services.ExternalApiService;
@@ -7,14 +7,20 @@ using BimManagerPortal.WebBlazorSite.UIComponents.Layout.Modals.EventModalWindow
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations.Forms.RestrictedAreaForm;
+namespace BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.PluginConfigurationForms.RestrictedAreaForm;
 
 public partial class RestrictedAreaForm
 {
     private EventModalWindow _eventModal;
+    private RestrictedAreaConfigEntity _model = new ();
     [Parameter] 
-    public RestrictedAreaConfigEntity RestrictedAreaConfig { get; set; } = new();
-    public RestrictedAreaConfigProxy Config { get; set; } = new();
+    public PluginConfigTab PluginConfigTab { get; set; }
+    [Parameter] 
+    public RestrictedAreaConfigEntity RestrictedAreaConfig { get; set; }
+    public RestrictedAreaConfigProxy Config {
+        get => RestrictedAreaConfig.Data;
+        set => RestrictedAreaConfig.Data = value;
+}
     //public EditContext EditContext { get; set; } = default!;
     
     #region private
@@ -22,10 +28,10 @@ public partial class RestrictedAreaForm
     [Inject]
     protected IExternalApiService ExternalApiService { get; set; }
 
-    protected override void OnInitialized()
+    /*protected override void OnInitialized()
     {
         _editContext = new EditContext(RestrictedAreaConfig);
-    }
+    }*/
     private List<string> ModelTypes = new()
     {
         "Умная обработка старых зон",
@@ -47,6 +53,10 @@ public partial class RestrictedAreaForm
     }
     protected override void OnParametersSet()
     {
+        if (RestrictedAreaConfig == null)
+        {
+            RestrictedAreaConfig = new RestrictedAreaConfigEntity();
+        }
         Config = RestrictedAreaConfig.Data;
 
         // Если вы создаете свой EditContext внутри этого компонента:
@@ -54,8 +64,9 @@ public partial class RestrictedAreaForm
         {
             _editContext = new EditContext(RestrictedAreaConfig);
         }
+        
     }
-    private async Task SendConfig()
+    private async Task CreateConfig()
     {
         var isValid = _editContext.Validate();
 
@@ -71,7 +82,7 @@ public partial class RestrictedAreaForm
         try
         {
             await ExternalApiService.SendPluginConfigAsync(dto);
-            TestSuccess();
+            TestSuccess("Конфигурация создана");
             // Можно добавить уведомление об успехе
         }
         catch (SendPluginConfigException ex)
@@ -87,11 +98,43 @@ public partial class RestrictedAreaForm
             Console.WriteLine(ex.Message);
         }
     }
-    private void TestSuccess()
+    private async Task UpdateConfig()
+    {
+        var isValid = _editContext.Validate();
+
+        if (!isValid)
+        {
+            return;
+        }
+        var dto = new PluginConfigRequestDto()
+        {
+            Name = RestrictedAreaConfig.NameConfig,
+            Configuration = RestrictedAreaConfig.Data,
+        };
+        try
+        {
+            await ExternalApiService.UpdateExistPluginConfigAsync(dto, RestrictedAreaConfig.Id.Value);
+            TestSuccess("Конфигурация обновлена");
+            // Можно добавить уведомление об успехе
+        }
+        catch (SendPluginConfigException ex)
+        {
+            // Выводим конкретно то, что мы подготовили для пользователя
+            var _errorMessage = ex.UserFriendlyMessage; 
+            TestError(_errorMessage);
+        }
+        catch (Exception ex)
+        {
+            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
+            var _errorMessage = "Критическая ошибка приложения.";
+            Console.WriteLine(ex.Message);
+        }
+    }
+    private void TestSuccess(string message)
     {
         _eventModal.Show(
             "Операция выполнена",
-            "Данные успешно сохранены",
+            message,
             true);
     }
 
