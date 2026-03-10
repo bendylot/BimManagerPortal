@@ -1,0 +1,11 @@
+@using BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas
+@using BimManagerPortal.Domain.Enums
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.PluginConfigurationForms.RestrictedAreaForm
+
+<RestrictedAreaForm RestrictedAreaConfig="RestrictedAreaConfigEntity"
+                    PluginConfigTab="PluginConfigTab.Edit"/>
+
+@code {
+    [Parameter] 
+    public RestrictedAreaConfigEntity RestrictedAreaConfigEntity { get; set; } = default!;
+}

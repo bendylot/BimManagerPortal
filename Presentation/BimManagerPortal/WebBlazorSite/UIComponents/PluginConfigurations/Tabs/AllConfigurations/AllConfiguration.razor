@@ -1,0 +1,69 @@
+﻿<div class="container-box p-3">
+    <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
+            <input type="text"
+                   class="form-control" 
+                   style="height: 31px;" 
+                   placeholder="Search by name..."
+                   @bind="_searchTerm"
+                   @bind:event="oninput" />
+        </div>
+    
+        <div class="col-md-8" style="min-height: 31px;"> 
+            @if (_selectedId != null)
+            {
+                <div class="d-flex gap-2 justify-content-md-start">
+                    <button class="btn btn-outline-primary d-flex align-items-center btn-sm" 
+                            @onclick="EditConfiguration">
+                        <i class="bi bi-pencil-square me-1"></i> Изменить
+                    </button>
+
+                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
+                            @onclick="OpenJsonModal">
+                        <i class="bi bi-code-slash me-1"></i> JSON
+                    </button>
+
+                    <button class="btn btn-outline-danger d-flex align-items-center btn-sm" 
+                            @onclick="DeleteConfiguration">
+                        <i class="bi bi-trash me-1"></i> Удалить
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (!FilteredData.Any())
+    {
+        <div class="alert alert-light text-muted border-dashed" style="border: 2px dashed #eee;">
+            No configurations found.
+        </div>
+    }
+    else
+    {
+        <div class="minimal-table-container">
+            <div class="table-wrapper">
+                <table class="minimal-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px; cursor:pointer" @onclick='() => SortBy("Id")'>
+                            ID @SortIcon("Id")
+                        </th>
+                        <th style="cursor:pointer" @onclick='() => SortBy("Name")'>
+                            Name @SortIcon("Name")
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var config in FilteredData)
+                    {
+                        <tr @onclick="() => SelectRow(config.Id)" 
+                            class="@( _selectedId == config.Id ? "selected" : "" )">
+                            <td class="text-secondary">#@config.Id</td>
+                            <td style="font-weight: 500;">@config.Name</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

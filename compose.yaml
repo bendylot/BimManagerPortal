@@ -1,0 +1,7 @@
+﻿services:
+  bimmanagerportal.webapi:
+    image: bimmanagerportal.webapi
+    build:
+      context: .
+      dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
+

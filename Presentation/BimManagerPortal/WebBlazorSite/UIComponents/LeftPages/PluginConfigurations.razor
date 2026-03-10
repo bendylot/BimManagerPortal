@@ -1,0 +1,76 @@
+﻿@page "/plugin-configurations"
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using BimManagerPortal.Application.Other.PluginsConfigs
+@using BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas
+@using BimManagerPortal.Domain.Enums
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.ConfigTabs
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.AllConfigurations
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.CreateConfigurations
+@using BimManagerPortal.WebBlazorSite.UIComponents.PluginConfigurations.Tabs.EditConfigurations
+@rendermode InteractiveServer
+
+<PageTitle>Конфигурации плагинов</PageTitle>
+
+<h1>Конфигурации плагинов</h1>
+
+<ConfigTabs ActiveTab="_activeTab"
+            ActiveTabChanged="OnTabChanged" />
+
+
+
+@switch (_activeTab)
+{
+    case PluginConfigTab.All:
+        <AllConfiguration OnEditRequested="CreateEditTab"/>
+        break;
+
+    case PluginConfigTab.Create:
+        <CreateConfiguration />
+        break;
+    case PluginConfigTab.Edit:
+        <EditerConfiguration RestrictedAreaConfigEntity="_restrictedAreaConfigEntity"/>
+        break;
+}
+
+@code {
+    private PluginConfigTab _activeTab = PluginConfigTab.All;
+    private RestrictedAreaConfigEntity _restrictedAreaConfigEntity;
+    private void OnTabChanged(PluginConfigTab tab)
+    {
+        _activeTab = tab;
+    }
+
+    private void CreateEditTab(PluginConfigEntity config)
+    {
+        try
+        {
+            var options = new JsonSerializerOptions
+            {
+                // Выдаст ошибку, если в JSON есть поля, которых нет в классе
+                UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow
+            };
+
+            var json = config.Data.ToString();
+            var myConfig = JsonSerializer.Deserialize<RestrictedAreaConfigProxy>(json, options);
+
+            // Дополнительная проверка: убедимся, что важные вложенные объекты не null
+            if (myConfig?.PathsToModels != null && !string.IsNullOrEmpty(myConfig.PathsToModels.ObjectName))
+            {
+                Console.WriteLine("Создать вкладку!");
+                var cfg = new RestrictedAreaConfigEntity()
+                {
+                    NameConfig = config.Name,
+                    Id = config.Id,
+                    Data = myConfig
+                };
+                _restrictedAreaConfigEntity = cfg;
+                _activeTab = PluginConfigTab.Edit;
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}

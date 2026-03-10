@@ -1,0 +1,32 @@
+﻿@using BimManagerPortal.Domain.Enums
+<div class="tab-bar">
+    <button class="@GetClass(PluginConfigTab.All)"
+            @onclick="() => SelectTab(PluginConfigTab.All)">
+        Все конфигурации
+    </button>
+
+    <button class="@GetClass(PluginConfigTab.Create)"
+            @onclick="() => SelectTab(PluginConfigTab.Create)">
+        Создать конфигурацию
+    </button>
+    @if (ActiveTab == PluginConfigTab.Edit)
+    {
+        <button class="@GetClass(PluginConfigTab.Edit)"
+                @onclick="() => SelectTab(PluginConfigTab.Edit)">
+            Изменить конфигурацию
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter] public PluginConfigTab ActiveTab { get; set; }
+    [Parameter] public EventCallback<PluginConfigTab> ActiveTabChanged { get; set; }
+
+    private async Task SelectTab(PluginConfigTab tab)
+    {
+        await ActiveTabChanged.InvokeAsync(tab);
+    }
+
+    private string GetClass(PluginConfigTab tab)=> 
+        tab == ActiveTab ? "tab active" : "tab";
+}
