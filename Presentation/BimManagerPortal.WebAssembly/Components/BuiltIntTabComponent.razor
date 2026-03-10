@@ -1,0 +1,27 @@
+﻿@using BimManagerPortal.WebAssembly.Models.BuiltIntTab
+<div class="tab-bar">
+    <button class="@GetClass(BuiltIntTabModel.AllReportsPlugins)"
+            @onclick="() => SelectTab(BuiltIntTabModel.AllReportsPlugins)">
+        Все отчеты плагинов
+    </button>
+    @if (ActiveTabModel == BuiltIntTabModel.WatchPluginReport)
+    {
+        <button class="@GetClass(BuiltIntTabModel.WatchPluginReport)"
+                @onclick="() => SelectTab(BuiltIntTabModel.WatchPluginReport)">
+            Просмотр отчета плагина
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter] public BuiltIntTabModel ActiveTabModel { get; set; }
+    [Parameter] public EventCallback<BuiltIntTabModel> ActiveTabChanged { get; set; }
+
+    private async Task SelectTab(BuiltIntTabModel tabModel)
+    {
+        await ActiveTabChanged.InvokeAsync(tabModel);
+    }
+
+    private string GetClass(BuiltIntTabModel tabModel)=> 
+        tabModel == ActiveTabModel ? "tab active" : "tab";
+}

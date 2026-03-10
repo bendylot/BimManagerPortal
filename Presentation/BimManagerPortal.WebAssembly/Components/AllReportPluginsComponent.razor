@@ -1,0 +1,92 @@
+﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher
+@using BimManagerPortal.WebAssembly.Layout.Modals.JsonWatchModal
+@inject JsonWatcherModalService JsonModalService
+<div class="container-box p-3">
+    <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
+            <input type="text"
+                   class="form-control" 
+                   style="height: 31px;" 
+                   placeholder="Search by name..."
+                   @bind="_searchTerm"
+                   @bind:event="oninput" />
+        </div>
+    
+        <div class="col-md-8" style="min-height: 31px;"> 
+            @if (_selectedId != null)
+            {
+                <div class="d-flex gap-2 justify-content-md-start">
+                    <button class="btn btn-outline-primary d-flex align-items-center btn-sm" 
+                            @onclick="ReadPluginReport">
+                        <i class="bi bi-pencil-square me-1"></i> Прочитать отчет
+                    </button>
+
+                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
+                            @onclick="OpenPluginReportJson">
+                        <i class="bi bi-code-slash me-1"></i> Открыть JSON отчета
+                    </button>
+
+                    <button class="btn btn-outline-danger d-flex align-items-center btn-sm" 
+                            @onclick="DeletePluginReport">
+                        <i class="bi bi-trash me-1"></i> Удалить отчет
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (!FilteredData.Any())
+    {
+        <div class="alert alert-light text-muted border-dashed" style="border: 2px dashed #eee;">
+            No configurations found.
+        </div>
+    }
+    else
+    {
+        <div class="minimal-table-container">
+            <div class="table-wrapper">
+                <table class="minimal-table">
+                    <thead>
+                    <tr>
+                        <th 
+                            style="cursor:pointer" 
+                            @onclick='() => SortBy("PluginName")'>
+                            PluginName @SortIcon("PluginName")
+                        </th>
+                        <th 
+                            style="cursor:pointer" 
+                            @onclick='() => SortBy("CreatedAt")'>
+                            CreatedAt @SortIcon("CreatedAt")
+                        </th>
+                        <th 
+                            style="cursor:pointer" 
+                            @onclick='() => SortBy("UserCreater")'>
+                            UserCreater @SortIcon("UserCreater")
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var config in FilteredData)
+                    {
+                        <tr @onclick="() => SelectRow(config.Id)" 
+                            class="@( _selectedId == config.Id ? "selected" : "" )">
+                            <td
+                                style="font-weight: 500;">
+                                @config.PluginName
+                            </td>
+                            <td
+                                style="font-weight: 500;">
+                                @config.CreatedAt
+                            </td>
+                            <td
+                                style="font-weight: 500;">
+                                @config.UserCreater
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<JsonWatcherModal />

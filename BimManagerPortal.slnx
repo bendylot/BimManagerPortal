@@ -1,4 +1,12 @@
 <Solution>
-  <Project Path="BimManagerPortal.Domain/BimManagerPortal.Domain.csproj" Id="d9728f1f-7e83-4503-8bcf-8e7f0f1e5db5" />
-  <Project Path="BimManagerPortal/WebBlazorSite/BimManagerPortal.WebBlazorSite.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="compose.yaml" />
+  </Folder>
+  <Project Path="Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj" />
+  <Project Path="Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj" />
+  <Project Path="Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj" />
+  <Project Path="Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" />
+  <Project Path="Presentation/BimManagerPortal.WebAssembly/BimManagerPortal.WebAssembly.csproj" />
+  <Project Path="Presentation/BimManagerPortal/WebBlazorSite/BimManagerPortal.WebBlazorSite.csproj" />
+  <Project Path="Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj" />
 </Solution>
