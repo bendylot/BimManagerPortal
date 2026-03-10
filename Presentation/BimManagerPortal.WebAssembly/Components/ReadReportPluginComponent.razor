@@ -1,0 +1,14 @@
+﻿@using System.Reflection
+@using BimManagerPortal.WebAssembly.Components.Forms
+
+@if (PluginReport != null)
+{
+    <PluginReportViewer Value="PluginReport" Name="@RootName" Level="0"/>
+}
+
+@code {
+    [Parameter] 
+    public object? PluginReport { get; set; }
+    [Parameter] 
+    public string RootName { get; set; } = "RestrictedArea";
+}

@@ -1,6 +1,7 @@
 ﻿@page "/plugin-reports"
 @using BimManagerPortal.WebAssembly.Components
 @using BimManagerPortal.WebAssembly.Models.BuiltIntTab
+@using BimManagerPortal.WebAssembly.Models.Results
 
 <PageTitle>Отчеты плагинов</PageTitle>
 
@@ -12,17 +13,23 @@
 @switch (_activeTab)
 {
     case BuiltIntTabModel.AllReportsPlugins:
-        <AllReportPluginsComponent />
+        <AllReportPluginsComponent ActiveTabChanged="OnReadTabChanged"/>
         break;
-    case BuiltIntTabModel.WatchPluginReport:
-        @*<EditerReportPlugin RestrictedAreaConfigEntity="_restrictedAreaConfigEntity"/>*@
+    case BuiltIntTabModel.ReadPluginReport:
+        <ReadReportPluginComponent PluginReport="_pluginReport"/>
         break;
 }
 
 
 @code {
     private BuiltIntTabModel _activeTab = BuiltIntTabModel.AllReportsPlugins;
-    
+    private object? _pluginReport { get; set; }
+
+    private void OnReadTabChanged(ReadPluginReportResult result)
+    {
+        _pluginReport = result.PluginReportModel;
+        OnTabChanged(BuiltIntTabModel.ReadPluginReport);
+    }
     private void OnTabChanged(BuiltIntTabModel tab)
     {
         _activeTab = tab;

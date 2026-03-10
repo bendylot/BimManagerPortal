@@ -4,18 +4,21 @@
             @onclick="() => SelectTab(BuiltIntTabModel.AllReportsPlugins)">
         Все отчеты плагинов
     </button>
-    @if (ActiveTabModel == BuiltIntTabModel.WatchPluginReport)
+    @if (ActiveTabModel == BuiltIntTabModel.ReadPluginReport)
     {
-        <button class="@GetClass(BuiltIntTabModel.WatchPluginReport)"
-                @onclick="() => SelectTab(BuiltIntTabModel.WatchPluginReport)">
+        <button class="@GetClass(BuiltIntTabModel.ReadPluginReport)"
+                @onclick="() => SelectTab(BuiltIntTabModel.ReadPluginReport)">
             Просмотр отчета плагина
         </button>
     }
+    
 </div>
 
 @code {
-    [Parameter] public BuiltIntTabModel ActiveTabModel { get; set; }
-    [Parameter] public EventCallback<BuiltIntTabModel> ActiveTabChanged { get; set; }
+    [Parameter] 
+    public BuiltIntTabModel ActiveTabModel { get; set; }
+    [Parameter] 
+    public EventCallback<BuiltIntTabModel> ActiveTabChanged { get; set; }
 
     private async Task SelectTab(BuiltIntTabModel tabModel)
     {

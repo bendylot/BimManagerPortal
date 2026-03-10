@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+        <BlazorWebAssemblyEnableDebugging>true</BlazorWebAssemblyEnableDebugging>
     </PropertyGroup>
 
     <ItemGroup>

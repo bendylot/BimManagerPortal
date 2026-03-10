@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using BimManagerPortal.WebAssembly;
 using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

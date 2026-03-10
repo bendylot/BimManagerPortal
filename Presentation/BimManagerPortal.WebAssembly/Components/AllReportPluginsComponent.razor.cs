@@ -1,6 +1,9 @@
 ﻿using System.Text.Json;
 using BimManagerPortal.Shared.Dtos;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
+using BimManagerPortal.Shared.Model;
+using BimManagerPortal.WebAssembly.Models.BuiltIntTab;
+using BimManagerPortal.WebAssembly.Models.Results;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
 using Microsoft.AspNetCore.Components;
 
@@ -13,6 +16,8 @@ public partial class AllReportPluginsComponent : ComponentBase
     private string _searchTerm = string.Empty;
     private string? _currentSortColumn;
     private bool _sortAscending = true;
+    [Parameter] 
+    public EventCallback<ReadPluginReportResult> ActiveTabChanged { get; set; }
     #endregion
     
     #region properties
@@ -37,6 +42,7 @@ public partial class AllReportPluginsComponent : ComponentBase
         _selectedId = id;
     }
     #endregion
+    
     #region private methods
     
     private MarkupString SortIcon(string column)
@@ -108,8 +114,22 @@ public partial class AllReportPluginsComponent : ComponentBase
         var id = SelectedConfiguration.Id;
         try
         {
-            
-        }
+            // взять джсон элемент из апи по id
+            var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
+            var jsonString = dto.Json;
+            if (SelectedConfiguration.PluginName == "Запретные зоны" ||
+                SelectedConfiguration.PluginName == "RestrictedArea")
+            {
+                // конвертируем джсон в обьект конкретного типа  BigDataBuilding
+                var obj = jsonString.Deserialize<BigDataBuilding>(new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                
+                // Превращаем обьект в форму отчета запретных зон
+                ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(obj));
+            }
+    }
         catch (Exception ex)
         {
             // На случай непредвиденных ошибок (проблемы с сетью и т.д.)

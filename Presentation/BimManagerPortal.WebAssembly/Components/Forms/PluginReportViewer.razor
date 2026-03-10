@@ -1,0 +1,31 @@
+﻿@using System.Collections
+@using System.Reflection
+
+<div style="margin-left:@(Level * 16)px">
+
+    @if (IsComplex)
+    {
+        <div @onclick="Toggle" style="cursor:pointer">
+            <b>@(expanded ? "▼" : "▶") @Name</b>
+            <span style="color:gray">(@Value?.GetType().Name)</span>
+        </div>
+
+        @if (expanded)
+        {
+            @foreach (var child in GetChildren())
+            {
+                <PluginReportViewer Value="child.Value"
+                            Name="child.Name"
+                            Level="@(Level + 1)" />
+            }
+        }
+    }
+    else
+    {
+        <div>
+            <b>@Name</b> :
+            <span style="color:#2b6">@FormatValue(Value)</span>
+        </div>
+    }
+
+</div>
