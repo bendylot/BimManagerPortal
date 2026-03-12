@@ -76,6 +76,8 @@ jobs:
             git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git .
           fi
           
+          git pull
+          
           # Обновляем образы
           docker compose pull
           
