@@ -56,6 +56,7 @@ jobs:
         command_timeout: 20m
         script: |
           # Создаем директорию, если её нет
+          set -e
           mkdir -p ~/BimManagerPortal
           
           # Переходим в директорию
