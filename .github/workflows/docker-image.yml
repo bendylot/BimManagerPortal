@@ -59,7 +59,9 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
+        command_timeout: 20m  # Устанавливаем лимит в 20 минут
         script: |
           cd ~/BimManagerPortal
           docker compose pull
           docker compose up -d
+          docker image prune -f
