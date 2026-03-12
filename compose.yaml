@@ -15,14 +15,14 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
     ports:
-      - "5002:5002"
+      - "5002:8080"
     depends_on:
       - postgres
 
   webassembly:
     image: bendylot/bimmanagerportal-web:latest
     ports:
-      - "5502:5502"
+      - "5502:8080"
 
 volumes:
   postgres_data:
