@@ -25,12 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Core\BimManagerPortal.Application\BimManagerPortal.Application.csproj" />
       <ProjectReference Include="..\..\Infrastructure\BimManagerPortal.Persistance\BimManagerPortal.Persistance.csproj" />
     </ItemGroup>

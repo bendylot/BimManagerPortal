@@ -5,3 +5,15 @@
       context: .
       dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
 
+  bimmanagerportal.webapi-1:
+    image: bimmanagerportal.webapi-1
+    build:
+      context: .
+      dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
+
+  bimmanagerportal.webassembly:
+    image: bimmanagerportal.webassembly
+    build:
+      context: .
+      dockerfile: Presentation/BimManagerPortal.WebAssembly/Dockerfile
+

@@ -8,6 +8,10 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj", "Presentation/BimManagerPortal.WebApi/"]
+COPY ["Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj", "Core/BimManagerPortal.Application/"]
+COPY ["Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj", "Shared/BimManagerPortal.Shared/"]
+COPY ["Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj", "Core/BimManagerPortal.Domain/"]
+COPY ["Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj", "Infrastructure/BimManagerPortal.Persistance/"]
 RUN dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj"
 COPY . .
 WORKDIR "/src/Presentation/BimManagerPortal.WebApi"
