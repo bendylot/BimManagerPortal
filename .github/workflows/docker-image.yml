@@ -46,7 +46,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+    - name: Test network
+      run: |
+        ping -c 4 37.230.113.96
+        nc -zv 37.230.113.96 22
+        
     - name: Deploy to server
       uses: appleboy/ssh-action@v1
       with:
