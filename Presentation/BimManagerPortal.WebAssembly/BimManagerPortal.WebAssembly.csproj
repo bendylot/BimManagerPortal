@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
-        <BlazorWebAssemblyEnableDebugging>true</BlazorWebAssemblyEnableDebugging>
+        <BlazorWebAssemblyEnableDebugging>false</BlazorWebAssemblyEnableDebugging>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
