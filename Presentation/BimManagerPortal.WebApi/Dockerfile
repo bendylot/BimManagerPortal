@@ -8,24 +8,22 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Очистка NuGet кэша и настройка источников
+# Очистка NuGet кэша
 RUN dotnet nuget locals all --clear
 
-# Копируем solution file и все csproj файлы
-COPY ["BimManagerPortal.sln", "./"]
+# Копируем ТОЛЬКО csproj файлы (без .sln)
 COPY ["Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj", "Presentation/BimManagerPortal.WebApi/"]
 COPY ["Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj", "Core/BimManagerPortal.Application/"]
 COPY ["Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj", "Shared/BimManagerPortal.Shared/"]
 COPY ["Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj", "Core/BimManagerPortal.Domain/"]
 COPY ["Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj", "Infrastructure/BimManagerPortal.Persistance/"]
 
-# Восстанавливаем с таймаутом и retry логикой
-RUN dotnet restore "BimManagerPortal.sln" \
+# Восстанавливаем через основной проект
+RUN dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" \
     --timeout 600 \
-    --disable-parallel \
     || (echo "First restore failed, retrying..." && \
         dotnet nuget locals http-cache --clear && \
-        dotnet restore "BimManagerPortal.sln" --timeout 600)
+        dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" --timeout 600)
 
 # Копируем остальной код
 COPY . .
