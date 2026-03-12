@@ -11,19 +11,26 @@ WORKDIR /src
 # Очистка NuGet кэша
 RUN dotnet nuget locals all --clear
 
-# Копируем ТОЛЬКО csproj файлы (без .sln)
+# Копируем только csproj файлы
 COPY ["Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj", "Presentation/BimManagerPortal.WebApi/"]
 COPY ["Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj", "Core/BimManagerPortal.Application/"]
 COPY ["Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj", "Shared/BimManagerPortal.Shared/"]
 COPY ["Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj", "Core/BimManagerPortal.Domain/"]
 COPY ["Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj", "Infrastructure/BimManagerPortal.Persistance/"]
 
-# Восстанавливаем через основной проект
-RUN dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" \
-    --timeout 600 \
-    || (echo "First restore failed, retrying..." && \
-        dotnet nuget locals http-cache --clear && \
-        dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" --timeout 600)
+# Создаем NuGet.config для настройки таймаута (альтернативный способ)
+RUN echo '<?xml version="1.0" encoding="utf-8"?> \
+<configuration> \
+  <config> \
+    <add key="http_proxy.timeout" value="600" /> \
+  </config> \
+</configuration>' > NuGet.config
+
+# Восстанавливаем без --timeout, но с retry логикой
+RUN dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" --disable-parallel || \
+    (echo "First restore failed, retrying with cleared cache..." && \
+     dotnet nuget locals http-cache --clear && \
+     dotnet restore "Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" --disable-parallel)
 
 # Копируем остальной код
 COPY . .
