@@ -46,7 +46,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+    - name: Test network
+      run: |
+        ping -c 4 37.230.113.96
+        nc -zv 37.230.113.96 22
+        
     - name: Deploy to server
       uses: appleboy/ssh-action@v1
       with:
@@ -56,6 +60,7 @@ jobs:
         command_timeout: 20m
         script: |
           # Создаем директорию, если её нет
+          set -e
           mkdir -p ~/BimManagerPortal
           
           # Переходим в директорию
@@ -70,6 +75,8 @@ jobs:
             # Клонируем репозиторий (нужно добавить секрет с токеном)
             git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git .
           fi
+          
+          git pull
           
           # Обновляем образы
           docker compose pull
