@@ -15,13 +15,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-
     - name: Login to DockerHub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-
 
     - name: Build WebAPI image
       run: |
@@ -29,21 +27,17 @@ jobs:
         -f Presentation/BimManagerPortal.WebApi/Dockerfile \
         -t ${{ secrets.DOCKER_USER }}/bimmanagerportal-api:latest .
 
-
     - name: Build WebAssembly image
       run: |
         docker build \
         -f Presentation/BimManagerPortal.WebAssembly/Dockerfile \
         -t ${{ secrets.DOCKER_USER }}/bimmanagerportal-web:latest .
 
-
     - name: Push WebAPI image
       run: docker push ${{ secrets.DOCKER_USER }}/bimmanagerportal-api:latest
 
-
     - name: Push WebAssembly image
       run: docker push ${{ secrets.DOCKER_USER }}/bimmanagerportal-web:latest
-
 
   deploy:
 
@@ -59,7 +53,29 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_SSH_KEY }}
+        command_timeout: 20m
         script: |
+          # Создаем директорию, если её нет
+          mkdir -p ~/BimManagerPortal
+          
+          # Переходим в директорию
           cd ~/BimManagerPortal
+          
+          # Проверяем, есть ли уже git репозиторий
+          if [ -d ".git" ]; then
+            echo "Git repository exists, pulling latest changes..."
+            git pull
+          else
+            echo "Git repository not found, cloning..."
+            # Клонируем репозиторий (нужно добавить секрет с токеном)
+            git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git .
+          fi
+          
+          # Обновляем образы
           docker compose pull
-          docker compose up -d
+          
+          # Останавливаем старые контейнеры и запускаем новые
+          docker compose up -d --remove-orphans
+          
+          # Очищаем старые образы
+          docker image prune -f
