@@ -22,7 +22,6 @@ public static class DependencyInjection
                     .AllowAnyHeader();
             });
         });
-
         // Swagger / OpenAPI
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

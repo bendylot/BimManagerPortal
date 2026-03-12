@@ -1,18 +1,16 @@
 ﻿services:
   bimmanagerportal.webapi:
     image: bimmanagerportal.webapi
-    build:
-      context: .
-      dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
-
-  bimmanagerportal.webapi-1:
-    image: bimmanagerportal.webapi-1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
     build:
       context: .
       dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
 
   bimmanagerportal.webassembly:
     image: bimmanagerportal.webassembly
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
     build:
       context: .
       dockerfile: Presentation/BimManagerPortal.WebAssembly/Dockerfile
