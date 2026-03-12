@@ -1,11 +1,32 @@
 ﻿services:
+
+  postgres:
+    image: postgres:16
+    container_name: bimmanagerportal_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgre_db
+      POSTGRES_USER: postgre_user
+      POSTGRES_PASSWORD: postgre_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   bimmanagerportal.webapi:
     image: bimmanagerportal.webapi
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+      - DOTNET_CLI_TELEMETRY_OPTOUT=1
+      - NUGET_XMLDOC_MODE=skip
+    # Добавляем volume для кэша
+    volumes:
+      - nuget_cache:/root/.nuget/packages
     build:
       context: .
       dockerfile: Presentation/BimManagerPortal.WebApi/Dockerfile
+    depends_on:
+      - postgres
 
   bimmanagerportal.webassembly:
     image: bimmanagerportal.webassembly
@@ -15,3 +36,5 @@
       context: .
       dockerfile: Presentation/BimManagerPortal.WebAssembly/Dockerfile
 
+volumes:
+  postgres_data:
