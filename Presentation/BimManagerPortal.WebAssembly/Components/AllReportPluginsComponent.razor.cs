@@ -117,19 +117,10 @@ public partial class AllReportPluginsComponent : ComponentBase
             // взять джсон элемент из апи по id
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
             var jsonString = dto.Json;
-            if (SelectedConfiguration.PluginName == "Запретные зоны" ||
-                SelectedConfiguration.PluginName == "RestrictedArea")
-            {
-                // конвертируем джсон в обьект конкретного типа  BigDataBuilding
-                var obj = jsonString.Deserialize<BigDataBuilding>(new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-                
-                // Превращаем обьект в форму отчета запретных зон
-                ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(obj));
-            }
-    }
+            
+            // Превращаем обьект в форму отчета запретных зон
+            ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString,SelectedConfiguration.PluginName ));
+        }
         catch (Exception ex)
         {
             // На случай непредвиденных ошибок (проблемы с сетью и т.д.)

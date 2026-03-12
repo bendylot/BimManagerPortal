@@ -16,18 +16,18 @@
         <AllReportPluginsComponent ActiveTabChanged="OnReadTabChanged"/>
         break;
     case BuiltIntTabModel.ReadPluginReport:
-        <ReadReportPluginComponent PluginReport="_pluginReport"/>
+        <ReadReportPluginComponent PluginReportResult="_pluginReport"/>
         break;
 }
 
 
 @code {
     private BuiltIntTabModel _activeTab = BuiltIntTabModel.AllReportsPlugins;
-    private object? _pluginReport { get; set; }
+    private ReadPluginReportResult? _pluginReport { get; set; }
 
     private void OnReadTabChanged(ReadPluginReportResult result)
     {
-        _pluginReport = result.PluginReportModel;
+        _pluginReport = result;
         OnTabChanged(BuiltIntTabModel.ReadPluginReport);
     }
     private void OnTabChanged(BuiltIntTabModel tab)

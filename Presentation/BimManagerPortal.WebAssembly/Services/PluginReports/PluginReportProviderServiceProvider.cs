@@ -22,9 +22,9 @@ public class PluginReportProviderServiceProvider : IPluginReportProviderServiceP
         return result ?? new List<GetAllPluginBigDatasDto>();
     }
 
-    public async Task<GetPluginBigDataDto?> GetConfiguration(string id)
+    public async Task<GetPluginBigDataResponseDto?> GetConfiguration(string id)
     {
-        return await _httpClient.GetFromJsonAsync<GetPluginBigDataDto>($"api/v1/public/plugin-big-data/{id}");
+        return await _httpClient.GetFromJsonAsync<GetPluginBigDataResponseDto>($"api/v1/public/plugin-big-data/{id}");
     }
     
 }

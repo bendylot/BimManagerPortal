@@ -2,9 +2,9 @@
 
 namespace BimManagerPortal.Shared.Dtos.PluginBigDatas;
 
-public class GetPluginBigDataDto
+public class GetPluginBigDataResponseDto
 {
-    public GetPluginBigDataDto(JsonElement Json)
+    public GetPluginBigDataResponseDto(JsonElement Json)
     {
         this.Json = Json;
     }

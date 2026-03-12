@@ -1,0 +1,203 @@
+﻿@using BimManagerPortal.Shared.Model
+<div class="report-container">
+    <!-- Header с градиентом -->
+    <div class="report-header">
+        <h3 class="report-title">Отчет по обработке Запретных зон</h3>
+        <div class="header-gradient"></div>
+    </div>
+
+    <!-- Основная информация -->
+    <div class="info-card">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Пользователь</span>
+                <span class="info-value">@RestrictedAreaReportModel.CommonInformationBuilding?.UserName</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Версия плагина</span>
+                <span class="info-value">@RestrictedAreaReportModel.CommonInformationBuilding?.PluginVersion</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Начало обработки</span>
+                <span class="info-value">@FormatDate(RestrictedAreaReportModel.CommonInformationBuilding?.DateStartProcess)</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Окончание обработки</span>
+                <span class="info-value">@FormatDate(RestrictedAreaReportModel.CommonInformationBuilding?.DateEndProcess)</span>
+            </div>
+            <div class="info-item highlight">
+                <span class="info-label">Общее время</span>
+                <span class="info-value">@FormatTimeSpan(RestrictedAreaReportModel.CommonInformationBuilding?.ComputeProcessTime)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Объекты конфигуратора -->
+    @if (RestrictedAreaReportModel.ObjectConiguratorData?.Any() == true)
+    {
+        <div class="objects-container">
+            @foreach (var objectData in RestrictedAreaReportModel.ObjectConiguratorData)
+            {
+                <div class="object-card">
+                    <div class="object-header">
+                        <h4 class="object-title">@objectData.ObjectName</h4>
+                        <div class="object-time-badge">
+                            <span>@FormatTimeSpan(objectData.ComputeProcessTime)</span>
+                        </div>
+                    </div>
+
+                    <!-- Секции -->
+                    @if (objectData.SectionsBuildingData?.Any() == true)
+                    {
+                        <div class="sections-container">
+                            @foreach (var section1 in objectData.SectionsBuildingData)
+                            {
+                                <div class="section-card">
+                                    <div class="section-header">
+                                        <h5 class="section-title">@section1.SectionBuildingDataName</h5>
+                                        <span class="section-time">@FormatTimeSpan(section1.ComputeProcessTime)</span>
+                                    </div>
+
+                                    <!-- Документы -->
+                                    @if (section1.DocumentsBuildingData?.Any() == true)
+                                    {
+                                        <div class="documents-container">
+                                            @foreach (var document in section1.DocumentsBuildingData)
+                                            {
+                                                <div class="document-card">
+                                                    <div class="document-header">
+                                                        <div class="document-title-wrapper">
+                                                            <span class="document-name">@document.DocumentTitle</span>
+                                                            <span class="document-section-badge">@document.DocumentSection</span>
+                                                        </div>
+                                                        <span class="document-time">@FormatTimeSpan(document.ComputeProcessTime)</span>
+                                                    </div>
+
+                                                    <!-- Сущности -->
+                                                    @if (document.EntityBuildingData?.Any() == true)
+                                                    {
+                                                        <div class="entities-container">
+                                                            @foreach (var entity in document.EntityBuildingData)
+                                                            {
+                                                                <div class="entity-card">
+                                                                    <div class="entity-header">
+                                                                        <span class="entity-name">@entity.EntityName</span>
+                                                                        <span class="entity-time">@FormatTimeSpan(entity.ComputeProcessTime)</span>
+                                                                    </div>
+
+                                                                    <!-- Статистика по элементам -->
+                                                                    <div class="stats-grid">
+                                                                        @if (entity.HostElements?.Any() == true)
+                                                                        {
+                                                                            <div class="stat-item">
+                                                                                <span class="stat-label">Хост элементы</span>
+                                                                                <span class="stat-value">@entity.HostElements.Count</span>
+                                                                            </div>
+                                                                        }
+                                                                        
+                                                                        @if (entity.CreatedElements?.Any() == true)
+                                                                        {
+                                                                            <div class="stat-item">
+                                                                                <span class="stat-label">Созданные элементы</span>
+                                                                                <span class="stat-value">@entity.CreatedElements.Count</span>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+
+                                                                    <!-- Ошибки создания -->
+                                                                    @if (entity.NotCreatedElementsData != null)
+                                                                    {
+                                                                        <div class="errors-container">
+                                                                            @if (entity.NotCreatedElementsData.GoodNotCreatedElements?.Any() == true)
+                                                                            {
+                                                                                <div class="error-group good">
+                                                                                    <div class="error-group-header">
+                                                                                        <span class="error-group-title">Не созданы (допустимо)</span>
+                                                                                        <span class="error-count">@entity.NotCreatedElementsData.GoodNotCreatedElements.Count</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                            
+                                                                            @if (entity.NotCreatedElementsData.BadNotCreatedElements?.Any() == true)
+                                                                            {
+                                                                                <div class="error-group bad">
+                                                                                    <div class="error-group-header">
+                                                                                        <span class="error-group-title">Не созданы (ошибки)</span>
+                                                                                        <span class="error-count">@entity.NotCreatedElementsData.BadNotCreatedElements.Count</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+
+                                                    <!-- Результаты анализа зон -->
+                                                    @if (document.AnalyzeZonesResult != null)
+                                                    {
+                                                        <div class="zones-result">
+                                                            <div class="zones-grid">
+                                                                @if (document.AnalyzeZonesResult.SavedOldZones?.Any() == true)
+                                                                {
+                                                                    <div class="zone-stat">
+                                                                        <span class="zone-label">Сохранено старых</span>
+                                                                        <span class="zone-value saved">@document.AnalyzeZonesResult.SavedOldZones.Count</span>
+                                                                    </div>
+                                                                }
+                                                                
+                                                                @if (document.AnalyzeZonesResult.DeletedOldZones != 0)
+                                                                {
+                                                                    <div class="zone-stat">
+                                                                        <span class="zone-label">Удалено старых</span>
+                                                                        <span class="zone-value deleted">@document.AnalyzeZonesResult.DeletedOldZones</span>
+                                                                    </div>
+                                                                }
+                                                                
+                                                                @if (document.AnalyzeZonesResult.NotDeletedBusyOldZones?.Any() == true)
+                                                                {
+                                                                    <div class="zone-stat">
+                                                                        <span class="zone-label">Не удалено (занято)</span>
+                                                                        <span class="zone-value busy">@document.AnalyzeZonesResult.NotDeletedBusyOldZones.Count</span>
+                                                                    </div>
+                                                                }
+                                                                
+                                                                @if (document.AnalyzeZonesResult.CreatedNewZones?.Any() == true)
+                                                                {
+                                                                    <div class="zone-stat">
+                                                                        <span class="zone-label">Создано новых</span>
+                                                                        <span class="zone-value created">@document.AnalyzeZonesResult.CreatedNewZones.Count</span>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Ошибки обработки документов -->
+                    @if (objectData.ErrorDocumentHandler?.Any() == true)
+                    {
+                        <div class="errors-section">
+                            <div class="errors-header">
+                                <span class="errors-title">Ошибки обработки документов</span>
+                                <span class="errors-count">@objectData.ErrorDocumentHandler.Count</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    
+}

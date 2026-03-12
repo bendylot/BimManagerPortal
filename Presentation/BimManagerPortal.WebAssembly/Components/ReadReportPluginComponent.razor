@@ -1,14 +1,43 @@
-﻿@using System.Reflection
-@using BimManagerPortal.WebAssembly.Components.Forms
-
-@if (PluginReport != null)
-{
-    <PluginReportViewer Value="PluginReport" Name="@RootName" Level="0"/>
-}
-
+﻿@using System.Text.Json
+@using BimManagerPortal.Shared.Model
+@using BimManagerPortal.WebAssembly.Components.Forms.Reports
+@using BimManagerPortal.WebAssembly.Models.Results
+<div class="container-box p-3">
+    @if (PluginReportResult != null)
+    {
+    @switch (_rootName)
+    {
+        case "Запретные зоны":
+            <RestrictedAreaReportComponent 
+                RestrictedAreaReportModel="_restrictedAreaReportModel"/>
+            break;
+        case "Другой плагин":
+            <OtherPluginComponent />
+            break;
+        default:
+            <h3>Неизвестный плагин" </h3>
+            break;
+    }
+    }
+</div>
 @code {
     [Parameter] 
-    public object? PluginReport { get; set; }
-    [Parameter] 
-    public string RootName { get; set; } = "RestrictedArea";
+    public ReadPluginReportResult? PluginReportResult { get; set; }
+    private string _rootName { get; set; }
+    private RestrictedAreaReportModel _restrictedAreaReportModel { get; set; }
+    #region event method
+
+    protected override async Task OnInitializedAsync()
+    {
+        _rootName = PluginReportResult.PluginName;
+        if (_rootName == "Запретные зоны")
+        {
+            _restrictedAreaReportModel = JsonSerializer.Deserialize<RestrictedAreaReportModel>(PluginReportResult.PluginReportModel);
+        }
+        else
+        {
+            // заголовок - неизвестный плагин
+        }
+    }
+    #endregion
 }

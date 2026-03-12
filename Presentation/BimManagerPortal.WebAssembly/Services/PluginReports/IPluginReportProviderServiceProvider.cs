@@ -8,5 +8,5 @@ public interface IPluginReportProviderServiceProvider
 {
     Task<List<GetAllPluginBigDatasDto>> GetConfigurations();
 
-    Task<GetPluginBigDataDto?> GetConfiguration(string id);
+    Task<GetPluginBigDataResponseDto?> GetConfiguration(string id);
 }

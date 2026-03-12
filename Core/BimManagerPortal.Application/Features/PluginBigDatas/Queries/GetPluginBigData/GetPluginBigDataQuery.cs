@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigData;
 
-public record GetPluginBigDataQuery(GetPluginBigDataRequestDto getPluginBigDataRequestDto) : IRequest<GetPluginBigDataDto>;
+public record GetPluginBigDataQuery(GetPluginBigDataRequestDto getPluginBigDataRequestDto) : IRequest<GetPluginBigDataResponseDto>;
 
 public class GetPluginBigDataQueryHandler 
-    : IRequestHandler<GetPluginBigDataQuery, GetPluginBigDataDto>
+    : IRequestHandler<GetPluginBigDataQuery, GetPluginBigDataResponseDto>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICompressionService _compression;
@@ -25,7 +25,7 @@ public class GetPluginBigDataQueryHandler
         _compression = compression;
     }
 
-    public async Task<GetPluginBigDataDto> Handle(GetPluginBigDataQuery query,CancellationToken cancellationToken)
+    public async Task<GetPluginBigDataResponseDto> Handle(GetPluginBigDataQuery query,CancellationToken cancellationToken)
     {
         var entity = await _unitOfWork.Repository<PluginBigData>()
             .GetByIdAsync(query.getPluginBigDataRequestDto.Id);
@@ -36,7 +36,7 @@ public class GetPluginBigDataQueryHandler
 
             var json = JsonSerializer.Deserialize<JsonElement>(jsonBytes);
 
-            var entityDto = new GetPluginBigDataDto(json);
+            var entityDto = new GetPluginBigDataResponseDto(json);
             return entityDto;
         }
         catch (Exception exception)

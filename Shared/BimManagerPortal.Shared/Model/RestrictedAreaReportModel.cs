@@ -1,17 +1,20 @@
 namespace BimManagerPortal.Shared.Model;
 
-public class BigDataBuilding
+public class RestrictedAreaReportModel
 {
-    public BigDataBuilding(CommonInformationBuilding CommonInformationBuilding, List<ObjectConiguratorData>  UserConfiguratorData)
+    public RestrictedAreaReportModel() { }
+    public RestrictedAreaReportModel(CommonInformationBuilding CommonInformationBuilding, List<ObjectConiguratorData>  UserConfiguratorData)
     {
         this.CommonInformationBuilding = CommonInformationBuilding;
         this.ObjectConiguratorData = UserConfiguratorData;
     }
     public CommonInformationBuilding CommonInformationBuilding { get; set; }
     public List<ObjectConiguratorData>  ObjectConiguratorData { get; set; }
+    
 }
 public abstract class MeasuringTime
 {
+    public MeasuringTime() { }
     public MeasuringTime(DateTime DateStartProcess, DateTime DateEndProcess)
     {
         this.DateStartProcess = DateStartProcess;
@@ -23,6 +26,7 @@ public abstract class MeasuringTime
 }
 public class CommonInformationBuilding : MeasuringTime
 {
+    public CommonInformationBuilding() { }
     public CommonInformationBuilding(DateTime DateStartProcess, DateTime DateEndProcess, string userName,string PluginVersion) : base(DateStartProcess, DateEndProcess)
     {
         this.UserName = userName;
@@ -33,9 +37,9 @@ public class CommonInformationBuilding : MeasuringTime
 }
 public class ObjectConiguratorData : MeasuringTime
 {
+    public ObjectConiguratorData() { }
     public ObjectConiguratorData(DateTime DateStartProcess, 
         DateTime DateEndProcess, 
-        //string ObjectConiguratorName,
         string ObjectName,
         List<SectionBuildingData> ArBuildingData,
         List<DocumentNotHandledError> ErrorDocumentHandler) : base(DateStartProcess, DateEndProcess)
@@ -49,10 +53,12 @@ public class ObjectConiguratorData : MeasuringTime
     public string ObjectName { get; set; }
     public List<SectionBuildingData> SectionsBuildingData { get; set; }
     public List<DocumentNotHandledError> ErrorDocumentHandler { get; private set; }
+    //public int NumberErrorsSectionObjectConigurator => SectionsBuildingData.Sum(x=>x.NumberErrorsDocumentsSection);
 }
 
 public class SectionBuildingData : MeasuringTime
 {
+    public SectionBuildingData() { }
     public SectionBuildingData(DateTime DateStartProcess, 
         DateTime DateEndProcess, 
         string SectionBuildingDataName, 
@@ -63,10 +69,12 @@ public class SectionBuildingData : MeasuringTime
     }
     public string SectionBuildingDataName { get; set; }
     public List<DocumentBuildingData> DocumentsBuildingData { get; set; }
+    //public int NumberErrorsDocumentsSection => DocumentsBuildingData.Sum(x=>x.NumberErrorsEntitiesDocument);
 }
 
 public class DocumentBuildingData : MeasuringTime
 {
+    public DocumentBuildingData() { }
     public DocumentBuildingData(DateTime DateStartProcess, 
         DateTime DateEndProcess, 
         string DocumentTitle,
@@ -83,11 +91,13 @@ public class DocumentBuildingData : MeasuringTime
     public string DocumentSection { get; set; }
     public List<EntityBuildingData> EntityBuildingData { get; set; }
     public DeletingZonesResult AnalyzeZonesResult { get; set; }
+    //public int NumberErrorsEntitiesDocument => EntityBuildingData.Sum(x=> x.NotCreatedElementsData.BadNotCreatedElements.Count);
 }
 
 #region EntityBuildingData
 public class EntityBuildingData : MeasuringTime
 {
+    public EntityBuildingData() { }
     public EntityBuildingData(DateTime DateStartProcess, 
         DateTime DateEndProcess, 
         string EntityName, 
@@ -108,6 +118,7 @@ public class EntityBuildingData : MeasuringTime
 
 public class NotCreatedElementsData
 {
+    public NotCreatedElementsData() { }
     public NotCreatedElementsData(List<NotCreatedElementError> GoodNotCreatedElements,
         List<NotCreatedElementError> BadNotCreatedElements)
     {
@@ -119,6 +130,7 @@ public class NotCreatedElementsData
 }
 public class NotCreatedElementError : ElementError
 {
+    public NotCreatedElementError() { }
     public NotCreatedElementError(string BadElementId, 
         string ReasonNotCreated) : base(BadElementId)
     {
@@ -130,6 +142,7 @@ public class NotCreatedElementError : ElementError
 }
 public class DocumentNotHandledError :  ElementError
 {
+    public DocumentNotHandledError() { }
     public DocumentNotHandledError(string ReasonNotCreated, string modelPath) : base(ReasonNotCreated)
     {
         this.ReasonNotCreated = ReasonNotCreated;
@@ -140,6 +153,7 @@ public class DocumentNotHandledError :  ElementError
 }
 public abstract class ElementError
 {
+    public ElementError() { }
     public ElementError(string ReasonNotCreated)
     {
         this.ReasonNotCreated = ReasonNotCreated;
@@ -152,8 +166,9 @@ public abstract class ElementError
 
 public class DeletingZonesResult
 {
+    public DeletingZonesResult() { }
     public DeletingZonesResult(List<ElementEntity> SavedOldZones, 
-        List<ElementEntity> DeletedOldZones, 
+        int DeletedOldZones, 
         List<ElementEntity> NotDeletedBusyOldZones, 
         List<ElementEntity> CreatedNewZones)
     {
@@ -163,13 +178,14 @@ public class DeletingZonesResult
         this.SavedOldZones = SavedOldZones;
     }
     public List<ElementEntity> SavedOldZones { get; set; }
-    public List<ElementEntity> DeletedOldZones { get; set; }
+    public int DeletedOldZones { get; set; }
     public List<ElementEntity> NotDeletedBusyOldZones { get; set; }
     public List<ElementEntity> CreatedNewZones { get; set; }
 }
 
 public class ElementEntity
 {
+    public ElementEntity() { }
     public ElementEntity(string ElementId)
     {
         this.ElementId = ElementId;
