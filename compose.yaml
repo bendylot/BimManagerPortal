@@ -22,7 +22,7 @@
   webassembly:
     image: bendylot/bimmanagerportal-web:latest
     ports:
-      - "5502:8080"
+      - "5502:80"
 
 volumes:
   postgres_data:
