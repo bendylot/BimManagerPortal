@@ -26,11 +26,13 @@ jobs:
           # Если используете пароль вместо ключа, замените key на password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             # 1. Переходим в папку с проектом
-            cd ~/bim-portal 
+            cd BimManagerPortal
 
             # 2. Авторизуемся в Docker Hub (если репозиторий приватный)
-            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+            # echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
+            git pull
+            
             # 3. Обновляем образы
             docker compose pull web api
 
