@@ -18,13 +18,14 @@
       - "5002:8080"
     depends_on:
       - postgres
-  
-  webassembly:
-    build:
-      context: ./Presentation/BimManagerPortal.WebAssembly
-      dockerfile: Dockerfile
+  web:
+    image: bendylot/bimmanagerportal-web:latest
+    container_name: bimmanagerportal-web
+    restart: always
     ports:
-      - "5259:80"
+      - "80:80"
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
