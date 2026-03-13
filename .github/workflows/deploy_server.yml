@@ -22,7 +22,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           # Если используете пароль вместо ключа, замените key на password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             # 1. Переходим в папку с проектом
