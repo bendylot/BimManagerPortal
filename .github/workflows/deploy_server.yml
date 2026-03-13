@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   # Запускается автоматически после успешного завершения основного воркфлоу билда
   workflow_run:
-    workflows: ["Build and Deploy"] # Имя вашего основного файла сборки
+    workflows: ["Build docker image"] # Имя вашего основного файла сборки
     types:
       - completed
     branches: ["master"]
@@ -20,7 +20,7 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}
+          host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # Если используете пароль вместо ключа, замените key на password: ${{ secrets.SERVER_PASSWORD }}
