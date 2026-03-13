@@ -1,0 +1,42 @@
+name: Deploy to Server
+
+on:
+  # Запускается автоматически после успешного завершения основного воркфлоу билда
+  workflow_run:
+    workflows: ["Build and Deploy"] # Имя вашего основного файла сборки
+    types:
+      - completed
+    branches: ["master"]
+  # Позволяет запустить деплой вручную из вкладки Actions
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Запускаем деплой только если билд прошел успешно (для workflow_run)
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Если используете пароль вместо ключа, замените key на password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            # 1. Переходим в папку с проектом
+            cd ~/bim-portal 
+
+            # 2. Авторизуемся в Docker Hub (если репозиторий приватный)
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
+            # 3. Обновляем образы
+            docker compose pull web api
+
+            # 4. Перезапускаем контейнеры
+            # --force-recreate гарантирует, что контейнеры обновятся до новых версий
+            docker compose up -d --force-recreate
+
+            # 5. Чистим старые образы ("висючие" слои), чтобы не забивать диск сервера
+            docker image prune -f
