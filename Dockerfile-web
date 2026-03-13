@@ -2,10 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# копируем всё решение
 COPY . .
-
-# публикуем Blazor WASM
 WORKDIR /src/Presentation/BimManagerPortal.WebAssembly
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
@@ -14,6 +11,11 @@ RUN dotnet publish -c Release -o /app/publish
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 
+# Очищаем стандартные файлы nginx
+RUN rm -rf ./*
+
+# Копируем результат публикации (именно папку wwwroot)
 COPY --from=build /app/publish/wwwroot .
 
-EXPOSE 80
+# ЯВНО указываем команду запуска Nginx, чтобы переопределить любые старые метаданные
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
