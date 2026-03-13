@@ -12,6 +12,5 @@ RUN dotnet publish "BimManagerPortal.WebAssembly.csproj" -c Release -o /app/publ
 # Финальный образ с nginx
 FROM nginx:alpine
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80

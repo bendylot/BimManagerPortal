@@ -27,6 +27,7 @@
       <_ContentIncludedByDefault Remove="Pages\PluginConfigurations\Tabs\AllConfigurations\AllConfiguration.razor" />
       <_ContentIncludedByDefault Remove="Pages\PluginConfigurations\Tabs\CreateConfigurations\CreateConfiguration.razor" />
       <_ContentIncludedByDefault Remove="Pages\PluginConfigurations\Tabs\EditConfigurations\EditerConfiguration.razor" />
+      <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
     </ItemGroup>
 
     <ItemGroup>
