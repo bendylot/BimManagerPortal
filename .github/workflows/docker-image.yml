@@ -28,7 +28,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: Presentation/BimManagerPortal.WebApi/Dockerfile
+        file: ./Dockerfile-api
         push: true
         tags: ${{ secrets.DOCKER_USER }}/bimmanagerportal-api:latest
 
@@ -36,37 +36,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: Presentation/BimManagerPortal.WebAssembly/Dockerfile
+        file: ./Dockerfile-web
         push: true
         tags: ${{ secrets.DOCKER_USER }}/bimmanagerportal-web:latest
-
-  deploy:
-
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v1
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        command_timeout: 20m
-        script: |
-          set -e
-
-          mkdir -p ~/BimManagerPortal
-          cd ~/BimManagerPortal
-
-          if [ -d ".git" ]; then
-            git pull
-          else
-            git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git .
-          fi
-
-          docker compose pull
-          docker compose up -d --remove-orphans
-
-          docker image prune -f
