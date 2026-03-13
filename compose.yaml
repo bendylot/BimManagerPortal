@@ -10,7 +10,7 @@
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  webapi:
+  api:
     image: bendylot/bimmanagerportal-api:latest
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
