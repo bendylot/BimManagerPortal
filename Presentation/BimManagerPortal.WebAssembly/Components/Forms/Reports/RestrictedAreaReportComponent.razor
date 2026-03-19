@@ -50,19 +50,19 @@
                     @if (objectData.SectionsBuildingData?.Any() == true)
                     {
                         <div class="sections-container">
-                            @foreach (var section1 in objectData.SectionsBuildingData)
+                            @foreach (var section in objectData.SectionsBuildingData)
                             {
                                 <div class="section-card">
                                     <div class="section-header">
-                                        <h5 class="section-title">@section1.SectionBuildingDataName</h5>
-                                        <span class="section-time">@FormatTimeSpan(section1.ComputeProcessTime)</span>
+                                        <h5 class="section-title">@(section.SectionBuildingDataName)</h5>
+                                        <span class="section-time">@FormatTimeSpan(section.ComputeProcessTime)</span>
                                     </div>
 
                                     <!-- Документы -->
-                                    @if (section1.DocumentsBuildingData?.Any() == true)
+                                    @if (section.DocumentsBuildingData?.Any() == true)
                                     {
                                         <div class="documents-container">
-                                            @foreach (var document in section1.DocumentsBuildingData)
+                                            @foreach (var document in section.DocumentsBuildingData)
                                             {
                                                 <div class="document-card">
                                                     <div class="document-header">
@@ -94,7 +94,7 @@
                                                                                 <span class="stat-value">@entity.HostElements.Count</span>
                                                                             </div>
                                                                         }
-                                                                        
+
                                                                         @if (entity.CreatedElements?.Any() == true)
                                                                         {
                                                                             <div class="stat-item">
@@ -117,7 +117,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             }
-                                                                            
+
                                                                             @if (entity.NotCreatedElementsData.BadNotCreatedElements?.Any() == true)
                                                                             {
                                                                                 <div class="error-group bad">
@@ -129,45 +129,42 @@
                                                                             }
                                                                         </div>
                                                                     }
+
+                                                                    <!-- Сохранённые зоны на уровне сущности -->
+                                                                    @if (entity.DeletingZonesEntityResult?.SavedOldZones?.Any() == true)
+                                                                    {
+                                                                        <div class="zones-result">
+                                                                            <div class="zones-grid">
+                                                                                <div class="zone-stat">
+                                                                                    <span class="zone-label">Сохранено старых зон</span>
+                                                                                    <span class="zone-value saved">@entity.DeletingZonesEntityResult.SavedOldZones.Count</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
                                                                 </div>
                                                             }
                                                         </div>
                                                     }
 
-                                                    <!-- Результаты анализа зон -->
-                                                    @if (document.AnalyzeZonesResult != null)
+                                                    <!-- Результаты удаления зон на уровне документа -->
+                                                    @if (document.DocumentDeletingZonesResult != null)
                                                     {
                                                         <div class="zones-result">
                                                             <div class="zones-grid">
-                                                                @if (document.AnalyzeZonesResult.SavedOldZones?.Any() == true)
-                                                                {
-                                                                    <div class="zone-stat">
-                                                                        <span class="zone-label">Сохранено старых</span>
-                                                                        <span class="zone-value saved">@document.AnalyzeZonesResult.SavedOldZones.Count</span>
-                                                                    </div>
-                                                                }
-                                                                
-                                                                @if (document.AnalyzeZonesResult.DeletedOldZones != 0)
+                                                                @if (document.DocumentDeletingZonesResult.DeletedOldZones?.Any() == true)
                                                                 {
                                                                     <div class="zone-stat">
                                                                         <span class="zone-label">Удалено старых</span>
-                                                                        <span class="zone-value deleted">@document.AnalyzeZonesResult.DeletedOldZones</span>
+                                                                        <span class="zone-value deleted">@document.DocumentDeletingZonesResult.DeletedOldZones.Count</span>
                                                                     </div>
                                                                 }
-                                                                
-                                                                @if (document.AnalyzeZonesResult.NotDeletedBusyOldZones?.Any() == true)
+
+                                                                @if (document.DocumentDeletingZonesResult.NotDeletedBusyOldZones?.Any() == true)
                                                                 {
                                                                     <div class="zone-stat">
                                                                         <span class="zone-label">Не удалено (занято)</span>
-                                                                        <span class="zone-value busy">@document.AnalyzeZonesResult.NotDeletedBusyOldZones.Count</span>
-                                                                    </div>
-                                                                }
-                                                                
-                                                                @if (document.AnalyzeZonesResult.CreatedNewZones?.Any() == true)
-                                                                {
-                                                                    <div class="zone-stat">
-                                                                        <span class="zone-label">Создано новых</span>
-                                                                        <span class="zone-value created">@document.AnalyzeZonesResult.CreatedNewZones.Count</span>
+                                                                        <span class="zone-value busy">@document.DocumentDeletingZonesResult.NotDeletedBusyOldZones.Count</span>
                                                                     </div>
                                                                 }
                                                             </div>
@@ -199,5 +196,4 @@
 </div>
 
 @code {
-    
 }

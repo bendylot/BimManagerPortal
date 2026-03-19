@@ -1,195 +1,208 @@
 namespace BimManagerPortal.Shared.Model;
 
+// ==================== ROOT ====================
 public class RestrictedAreaReportModel
 {
-    public RestrictedAreaReportModel() { }
-    public RestrictedAreaReportModel(CommonInformationBuilding CommonInformationBuilding, List<ObjectConiguratorData>  UserConfiguratorData)
+    public RestrictedAreaReportModel(
+        CommonInformationBuilding commonInformationBuilding,
+        List<ObjectConiguratorData> userConfiguratorData)
     {
-        this.CommonInformationBuilding = CommonInformationBuilding;
-        this.ObjectConiguratorData = UserConfiguratorData;
+        this.CommonInformationBuilding = commonInformationBuilding;
+        this.ObjectConiguratorData = userConfiguratorData;
     }
     public CommonInformationBuilding CommonInformationBuilding { get; set; }
-    public List<ObjectConiguratorData>  ObjectConiguratorData { get; set; }
-    
+    public List<ObjectConiguratorData> ObjectConiguratorData { get; set; }
 }
+
+// ==================== MEASURING TIME ====================
 public abstract class MeasuringTime
 {
-    public MeasuringTime() { }
-    public MeasuringTime(DateTime DateStartProcess, DateTime DateEndProcess)
+    public MeasuringTime(DateTime dateStartProcess, DateTime dateEndProcess)
     {
-        this.DateStartProcess = DateStartProcess;
-        this.DateEndProcess = DateEndProcess;
+        this.DateStartProcess = dateStartProcess;
+        this.DateEndProcess = dateEndProcess;
     }
     public DateTime DateStartProcess { get; set; }
     public DateTime DateEndProcess { get; set; }
     public TimeSpan ComputeProcessTime => DateEndProcess - DateStartProcess;
 }
+
+// ==================== COMMON INFO ====================
 public class CommonInformationBuilding : MeasuringTime
 {
-    public CommonInformationBuilding() { }
-    public CommonInformationBuilding(DateTime DateStartProcess, DateTime DateEndProcess, string userName,string PluginVersion) : base(DateStartProcess, DateEndProcess)
+    public CommonInformationBuilding(
+        DateTime dateStartProcess,
+        DateTime dateEndProcess,
+        string userName,
+        string pluginVersion) : base(dateStartProcess, dateEndProcess)
     {
         this.UserName = userName;
-        this.PluginVersion = PluginVersion;
+        this.PluginVersion = pluginVersion;
     }
     public string UserName { get; set; }
     public string PluginVersion { get; set; }
 }
+
+// ==================== OBJECT CONFIGURATOR ====================
 public class ObjectConiguratorData : MeasuringTime
 {
-    public ObjectConiguratorData() { }
-    public ObjectConiguratorData(DateTime DateStartProcess, 
-        DateTime DateEndProcess, 
-        string ObjectName,
-        List<SectionBuildingData> ArBuildingData,
-        List<DocumentNotHandledError> ErrorDocumentHandler) : base(DateStartProcess, DateEndProcess)
+    public ObjectConiguratorData(
+        DateTime dateStartProcess,
+        DateTime dateEndProcess,
+        string objectName,
+        List<SectionBuildingData> arBuildingData,
+        List<DocumentNotHandledError> errorDocumentHandler) : base(dateStartProcess, dateEndProcess)
     {
-        this.ObjectName = ObjectName;
-        //this.ObjectConiguratorName = ObjectConiguratorName;
-        this.SectionsBuildingData = ArBuildingData;
-        this.ErrorDocumentHandler = ErrorDocumentHandler;
+        this.ObjectName = objectName;
+        this.SectionsBuildingData = arBuildingData;
+        this.ErrorDocumentHandler = errorDocumentHandler;
     }
-    //public string ObjectConiguratorName { get; set; }
     public string ObjectName { get; set; }
     public List<SectionBuildingData> SectionsBuildingData { get; set; }
     public List<DocumentNotHandledError> ErrorDocumentHandler { get; private set; }
-    //public int NumberErrorsSectionObjectConigurator => SectionsBuildingData.Sum(x=>x.NumberErrorsDocumentsSection);
 }
 
+// ==================== SECTION ====================
 public class SectionBuildingData : MeasuringTime
 {
-    public SectionBuildingData() { }
-    public SectionBuildingData(DateTime DateStartProcess, 
-        DateTime DateEndProcess, 
-        string SectionBuildingDataName, 
-        List<DocumentBuildingData> DocumentsBuildingData) : base(DateStartProcess, DateEndProcess)
+    public SectionBuildingData(
+        DateTime dateStartProcess,
+        DateTime dateEndProcess,
+        string sectionBuildingDataName,
+        List<DocumentBuildingData> documentsBuildingData) : base(dateStartProcess, dateEndProcess)
     {
-        this.SectionBuildingDataName = SectionBuildingDataName;
-        this.DocumentsBuildingData = DocumentsBuildingData;
+        this.SectionBuildingDataName = sectionBuildingDataName;
+        this.DocumentsBuildingData = documentsBuildingData;
     }
     public string SectionBuildingDataName { get; set; }
     public List<DocumentBuildingData> DocumentsBuildingData { get; set; }
-    //public int NumberErrorsDocumentsSection => DocumentsBuildingData.Sum(x=>x.NumberErrorsEntitiesDocument);
 }
 
+// ==================== DOCUMENT ====================
 public class DocumentBuildingData : MeasuringTime
 {
-    public DocumentBuildingData() { }
-    public DocumentBuildingData(DateTime DateStartProcess, 
-        DateTime DateEndProcess, 
-        string DocumentTitle,
-        string DocumentSection,
-        List<EntityBuildingData> EntityBuildingData,
-        DeletingZonesResult analyzeZonesResult) : base(DateStartProcess, DateEndProcess)
+    public DocumentBuildingData(
+        DateTime dateStartProcess,
+        DateTime dateEndProcess,
+        string documentTitle,
+        string documentSection,
+        List<EntityBuildingData> entityBuildingData,
+        DocumentDeletingZonesResult documentDeletingZonesResult) : base(dateStartProcess, dateEndProcess)
     {
-        this.DocumentTitle = DocumentTitle;
-        this.DocumentSection = DocumentSection;
-        this.EntityBuildingData = EntityBuildingData;
-        this.AnalyzeZonesResult = analyzeZonesResult;
+        this.DocumentTitle = documentTitle;
+        this.DocumentSection = documentSection;
+        this.EntityBuildingData = entityBuildingData;
+        this.DocumentDeletingZonesResult = documentDeletingZonesResult;
     }
     public string DocumentTitle { get; set; }
     public string DocumentSection { get; set; }
     public List<EntityBuildingData> EntityBuildingData { get; set; }
-    public DeletingZonesResult AnalyzeZonesResult { get; set; }
-    //public int NumberErrorsEntitiesDocument => EntityBuildingData.Sum(x=> x.NotCreatedElementsData.BadNotCreatedElements.Count);
+    public DocumentDeletingZonesResult DocumentDeletingZonesResult { get; set; }
 }
 
-#region EntityBuildingData
+// ==================== ENTITY ====================
 public class EntityBuildingData : MeasuringTime
 {
-    public EntityBuildingData() { }
-    public EntityBuildingData(DateTime DateStartProcess, 
-        DateTime DateEndProcess, 
-        string EntityName, 
-        List<ElementEntity> HostElements,
-        List<ElementEntity> CreatedElements,
-        NotCreatedElementsData  NotCreatedElementsData) : base(DateStartProcess, DateEndProcess)
+    public EntityBuildingData(
+        DateTime dateStartProcess,
+        DateTime dateEndProcess,
+        string entityName,
+        List<ElementEntity> hostElements,
+        List<ElementEntity> createdElements,
+        NotCreatedElementsData notCreatedElementsData,
+        DeletingZonesEntityResult deletingZonesEntityResult) : base(dateStartProcess, dateEndProcess)
     {
-        this.EntityName = EntityName;
-        this.HostElements = HostElements;
-        this.CreatedElements = CreatedElements;
-        this.NotCreatedElementsData = NotCreatedElementsData;
+        this.EntityName = entityName;
+        this.HostElements = hostElements;
+        this.CreatedElements = createdElements;
+        this.NotCreatedElementsData = notCreatedElementsData;
+        this.DeletingZonesEntityResult = deletingZonesEntityResult;
     }
     public string EntityName { get; set; }
     public List<ElementEntity> HostElements { get; set; }
     public List<ElementEntity> CreatedElements { get; set; }
-    public NotCreatedElementsData  NotCreatedElementsData { get; set; }
+    public NotCreatedElementsData NotCreatedElementsData { get; set; }
+    public DeletingZonesEntityResult DeletingZonesEntityResult { get; set; }
 }
 
+// ==================== NOT CREATED ====================
 public class NotCreatedElementsData
 {
-    public NotCreatedElementsData() { }
-    public NotCreatedElementsData(List<NotCreatedElementError> GoodNotCreatedElements,
-        List<NotCreatedElementError> BadNotCreatedElements)
+    public NotCreatedElementsData(
+        List<NotCreatedElementError> goodNotCreatedElements,
+        List<NotCreatedElementError> badNotCreatedElements)
     {
-        this.BadNotCreatedElements = BadNotCreatedElements;
-        this.GoodNotCreatedElements = GoodNotCreatedElements;
+        this.GoodNotCreatedElements = goodNotCreatedElements;
+        this.BadNotCreatedElements = badNotCreatedElements;
     }
     public List<NotCreatedElementError> GoodNotCreatedElements { get; set; }
     public List<NotCreatedElementError> BadNotCreatedElements { get; set; }
 }
+
+// ==================== ERRORS ====================
+public abstract class ElementError
+{
+    public ElementError(string reasonNotCreated)
+    {
+        this.ReasonNotCreated = reasonNotCreated;
+    }
+    public string ReasonNotCreated { get; set; }
+}
+
 public class NotCreatedElementError : ElementError
 {
-    public NotCreatedElementError() { }
-    public NotCreatedElementError(string BadElementId, 
-        string ReasonNotCreated) : base(BadElementId)
+    public NotCreatedElementError(
+        string badElementId,
+        string reasonNotCreated) : base(badElementId)
     {
-        this.BadElementId  = BadElementId;
-        this.ReasonNotCreated = ReasonNotCreated;
+        this.BadElementId = badElementId;
+        this.ReasonNotCreated = reasonNotCreated;
     }
     public string BadElementId { get; set; }
     public string ReasonNotCreated { get; set; }
 }
-public class DocumentNotHandledError :  ElementError
+
+public class DocumentNotHandledError : ElementError
 {
-    public DocumentNotHandledError() { }
-    public DocumentNotHandledError(string ReasonNotCreated, string modelPath) : base(ReasonNotCreated)
+    public DocumentNotHandledError(
+        string reasonNotCreated,
+        string modelPath) : base(reasonNotCreated)
     {
-        this.ReasonNotCreated = ReasonNotCreated;
+        this.ReasonNotCreated = reasonNotCreated;
         this.ModelPath = modelPath;
     }
     public string ReasonNotCreated { get; set; }
     public string ModelPath { get; set; }
 }
-public abstract class ElementError
-{
-    public ElementError() { }
-    public ElementError(string ReasonNotCreated)
-    {
-        this.ReasonNotCreated = ReasonNotCreated;
-    }
-    public string ReasonNotCreated { get; set; }
-}
-#endregion
 
-#region DeletingZones
-
-public class DeletingZonesResult
+// ==================== DELETING ZONES ====================
+public class DeletingZonesEntityResult
 {
-    public DeletingZonesResult() { }
-    public DeletingZonesResult(List<ElementEntity> SavedOldZones, 
-        int DeletedOldZones, 
-        List<ElementEntity> NotDeletedBusyOldZones, 
-        List<ElementEntity> CreatedNewZones)
+    public DeletingZonesEntityResult(List<ElementEntity> savedOldZones)
     {
-        this.CreatedNewZones = CreatedNewZones;
-        this.DeletedOldZones = DeletedOldZones;
-        this.NotDeletedBusyOldZones = NotDeletedBusyOldZones;
-        this.SavedOldZones = SavedOldZones;
+        this.SavedOldZones = savedOldZones;
     }
     public List<ElementEntity> SavedOldZones { get; set; }
-    public int DeletedOldZones { get; set; }
+}
+
+public class DocumentDeletingZonesResult
+{
+    public DocumentDeletingZonesResult(
+        List<string> deletedOldZones,
+        List<ElementEntity> notDeletedBusyOldZones)
+    {
+        this.DeletedOldZones = deletedOldZones;
+        this.NotDeletedBusyOldZones = notDeletedBusyOldZones;
+    }
+    public List<string> DeletedOldZones { get; set; }
     public List<ElementEntity> NotDeletedBusyOldZones { get; set; }
-    public List<ElementEntity> CreatedNewZones { get; set; }
 }
 
 public class ElementEntity
 {
-    public ElementEntity() { }
-    public ElementEntity(string ElementId)
+    public ElementEntity(string elementId)
     {
-        this.ElementId = ElementId;
+        this.ElementId = elementId;
     }
     public string ElementId { get; private set; }
 }
-#endregion
