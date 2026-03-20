@@ -26,7 +26,7 @@ RUN dotnet restore Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.
 # копируем весь код
 COPY . .
 
-WORKDIR /src/Presentation/BimManagerPortal.WebApi
+WORKDIR /src/src/Presentation/BimManagerPortal.WebApi
 
 # build
 RUN dotnet build BimManagerPortal.WebApi.csproj \
