@@ -1,0 +1,256 @@
+﻿@using BimManagerPortal.Shared.Model
+
+<div class="report-container">
+    <!-- Header с градиентом -->
+    <div class="report-header">
+        <h3 class="report-title">Отчет по обработке Запретных зон</h3>
+        <div class="header-gradient"></div>
+    </div>
+
+    <!-- Основная информация -->
+    <div class="info-card">
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Пользователь</span>
+                <span class="info-value">@RestrictedAreaReportModel.CommonInformationBuilding?.UserName</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Версия плагина</span>
+                <span class="info-value">@RestrictedAreaReportModel.CommonInformationBuilding?.PluginVersion</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Начало обработки</span>
+                <span class="info-value">@FormatDate(RestrictedAreaReportModel.CommonInformationBuilding?.DateStartProcess)</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Окончание обработки</span>
+                <span class="info-value">@FormatDate(RestrictedAreaReportModel.CommonInformationBuilding?.DateEndProcess)</span>
+            </div>
+            <div class="info-item highlight">
+                <span class="info-label">Общее время</span>
+                <span class="info-value">@FormatTimeSpan(RestrictedAreaReportModel.CommonInformationBuilding?.ComputeProcessTime)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Объекты конфигуратора -->
+    @if (RestrictedAreaReportModel.ObjectConiguratorData?.Any() == true)
+    {
+        <div class="objects-container">
+            @foreach (var (objectData, objIndex) in RestrictedAreaReportModel.ObjectConiguratorData.Select((o, i) => (o, i)))
+            {
+                var objExpanded = _expandedObjects.Contains(objIndex);
+
+                <div class="object-card">
+                    <!-- Кликабельный заголовок объекта -->
+                    <div class="object-header collapsible" @onclick="() => ToggleSet(_expandedObjects, objIndex)">
+                        <span class="collapse-arrow">@(objExpanded ? "▼" : "▶")</span>
+                        <h4 class="object-title">@objectData.ObjectName</h4>
+                        <div class="object-time-badge">
+                            <span>@FormatTimeSpan(objectData.ComputeProcessTime)</span>
+                        </div>
+                    </div>
+
+                    @if (objExpanded)
+                    {
+                        <!-- Секции -->
+                        @if (objectData.SectionsBuildingData?.Any() == true)
+                        {
+                            <div class="sections-container">
+                                @foreach (var (section, secIndex) in objectData.SectionsBuildingData.Select((s, i) => (s, i)))
+                                {
+                                    var secKey = objIndex * 10000 + secIndex;
+                                    var secExpanded = _expandedSections.Contains(secKey);
+
+                                    <div class="section-card">
+                                        <!-- Кликабельный заголовок раздела -->
+                                        <div class="section-header collapsible" @onclick="() => ToggleSet(_expandedSections, secKey)">
+                                            <span class="collapse-arrow">@(secExpanded ? "▼" : "▶")</span>
+                                            <h5 class="section-title">@(section.SectionBuildingDataName)</h5>
+                                            <span class="section-time">@FormatTimeSpan(section.ComputeProcessTime)</span>
+                                        </div>
+
+                                        @if (secExpanded)
+                                        {
+                                            <!-- Документы -->
+                                            @if (section.DocumentsBuildingData?.Any() == true)
+                                            {
+                                                <div class="documents-container">
+                                                    @foreach (var (document, docIndex) in section.DocumentsBuildingData.Select((d, i) => (d, i)))
+                                                    {
+                                                        var docKey = secKey * 10000 + docIndex;
+                                                        var docExpanded = _expandedDocuments.Contains(docKey);
+
+                                                        <div class="document-card">
+                                                            <!-- Кликабельный заголовок документа -->
+                                                            <div class="document-header collapsible" @onclick="() => ToggleSet(_expandedDocuments, docKey)">
+                                                                <span class="collapse-arrow">@(docExpanded ? "▼" : "▶")</span>
+                                                                <div class="document-title-wrapper">
+                                                                    <span class="document-name">@document.DocumentTitle</span>
+                                                                    <span class="document-section-badge">@document.DocumentSection</span>
+                                                                </div>
+                                                                <span class="document-time">@FormatTimeSpan(document.ComputeProcessTime)</span>
+                                                            </div>
+
+                                                            @if (docExpanded)
+                                                            {
+                                                                <!-- Сущности -->
+                                                                @if (document.EntityBuildingData?.Any() == true)
+                                                                {
+                                                                    <div class="entities-container">
+                                                                        @foreach (var (entity, entIndex) in document.EntityBuildingData.Select((e, i) => (e, i)))
+                                                                        {
+                                                                            var badErrKey = docKey * 10000 + entIndex;
+                                                                            var badErrExpanded = _expandedBadErrors.Contains(badErrKey);
+
+                                                                            <div class="entity-card">
+                                                                                <div class="entity-header">
+                                                                                    <span class="entity-name">@entity.EntityName</span>
+                                                                                    <span class="entity-time">@FormatTimeSpan(entity.ComputeProcessTime)</span>
+                                                                                </div>
+
+                                                                                <!-- Статистика по элементам -->
+                                                                                <div class="stats-grid">
+                                                                                    @if (entity.HostElements?.Any() == true)
+                                                                                    {
+                                                                                        <div class="stat-item">
+                                                                                            <span class="stat-label">Хост элементы</span>
+                                                                                            <span class="stat-value">@entity.HostElements.Count</span>
+                                                                                        </div>
+                                                                                    }
+                                                                                    @if (entity.CreatedElements?.Any() == true)
+                                                                                    {
+                                                                                        <div class="stat-item">
+                                                                                            <span class="stat-label">Созданные элементы</span>
+                                                                                            <span class="stat-value">@entity.CreatedElements.Count</span>
+                                                                                        </div>
+                                                                                    }
+                                                                                </div>
+
+                                                                                <!-- Ошибки создания -->
+                                                                                @if (entity.NotCreatedElementsData != null)
+                                                                                {
+                                                                                    <div class="errors-container">
+                                                                                        @if (entity.NotCreatedElementsData.GoodNotCreatedElements?.Any() == true)
+                                                                                        {
+                                                                                            <div class="error-group good">
+                                                                                                <div class="error-group-header">
+                                                                                                    <span class="error-group-title">Не созданы (допустимо)</span>
+                                                                                                    <span class="error-count">@entity.NotCreatedElementsData.GoodNotCreatedElements.Count</span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+
+                                                                                        @if (entity.NotCreatedElementsData.BadNotCreatedElements?.Any() == true)
+                                                                                        {
+                                                                                            <div class="error-group bad">
+                                                                                                <div class="error-group-header">
+                                                                                                    <span class="error-group-title">Не созданы (ошибки)</span>
+                                                                                                    <span class="error-count">@entity.NotCreatedElementsData.BadNotCreatedElements.Count</span>
+                                                                                                    <!-- Кнопка показа ID ошибочных элементов -->
+                                                                                                    <button class="btn-toggle-ids" @onclick:stopPropagation="true"
+                                                                                                            @onclick="() => ToggleSet(_expandedBadErrors, badErrKey)">
+                                                                                                        @(_expandedBadErrors.Contains(badErrKey) ? "Скрыть ID" : "Показать ID")
+                                                                                                    </button>
+                                                                                                </div>
+
+                                                                                                @if (_expandedBadErrors.Contains(badErrKey))
+                                                                                                {
+                                                                                                    <div class="ids-list">
+                                                                                                        @foreach (var elem in entity.NotCreatedElementsData.BadNotCreatedElements)
+                                                                                                        {
+                                                                                                            <div class="id-row">
+                                                                                                                <span class="id-badge">@elem.BadElementId</span>
+                                                                                                                <span class="id-reason">@elem.ReasonNotCreated</span>
+                                                                                                            </div>
+                                                                                                        }
+                                                                                                    </div>
+                                                                                                }
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                }
+
+                                                                                <!-- Сохранённые зоны на уровне сущности -->
+                                                                                @if (entity.SavedOldZones?.Any() == true)
+                                                                                {
+                                                                                    <div class="zones-result">
+                                                                                        <div class="zones-grid">
+                                                                                            <div class="zone-stat">
+                                                                                                <span class="zone-label">Сохранено старых зон</span>
+                                                                                                <span class="zone-value saved">@entity.SavedOldZones.Count</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+                                                                }
+
+                                                                <!-- Результаты удаления зон на уровне документа -->
+                                                                @if (document.DocumentDeletingZonesResult != null)
+                                                                {
+                                                                    <div class="zones-result">
+                                                                        <div class="zones-grid">
+                                                                            @if (document.DocumentDeletingZonesResult.DeletedOldZones?.Any() == true)
+                                                                            {
+                                                                                <div class="zone-stat">
+                                                                                    <span class="zone-label">Удалено старых</span>
+                                                                                    <span class="zone-value deleted">@document.DocumentDeletingZonesResult.DeletedOldZones.Count</span>
+                                                                                </div>
+                                                                            }
+                                                                            @if (document.DocumentDeletingZonesResult.NotDeletedBusyOldZones?.Any() == true)
+                                                                            {
+                                                                                <div class="zone-stat">
+                                                                                    <span class="zone-label">Не удалено (занято)</span>
+                                                                                    <span class="zone-value busy">@document.DocumentDeletingZonesResult.NotDeletedBusyOldZones.Count</span>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        <!-- Ошибки обработки документов -->
+                        @if (objectData.ErrorDocumentHandler?.Any() == true)
+                        {
+                            <div class="errors-section">
+                                <div class="errors-header">
+                                    <span class="errors-title">Ошибки обработки документов</span>
+                                    <span class="errors-count">@objectData.ErrorDocumentHandler.Count</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+
+
+    // Состояние раскрытия для каждого уровня
+    private readonly HashSet<int> _expandedObjects   = new();
+    private readonly HashSet<int> _expandedSections  = new();
+    private readonly HashSet<int> _expandedDocuments = new();
+    private readonly HashSet<int> _expandedBadErrors = new();
+
+    private void ToggleSet(HashSet<int> set, int key)
+    {
+        if (!set.Add(key))
+            set.Remove(key);
+    }
+
+}

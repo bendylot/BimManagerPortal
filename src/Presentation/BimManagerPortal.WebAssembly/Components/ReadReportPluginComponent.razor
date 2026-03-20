@@ -29,14 +29,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _rootName = PluginReportResult.PluginName;
-        if (_rootName == "Запретные зоны")
+        try
         {
-            _restrictedAreaReportModel = JsonSerializer.Deserialize<RestrictedAreaReportModel>(PluginReportResult.PluginReportModel);
+            _rootName = PluginReportResult.PluginName;
+            if (_rootName == "Запретные зоны")
+            {
+                _restrictedAreaReportModel = JsonSerializer.Deserialize<RestrictedAreaReportModel>(PluginReportResult.PluginReportModel);
+            }
+            else
+            {
+                // заголовок - неизвестный плагин
+            }
         }
-        else
+        catch (Exception e)
         {
-            // заголовок - неизвестный плагин
+            Console.WriteLine(e);
+            throw;
         }
     }
     #endregion

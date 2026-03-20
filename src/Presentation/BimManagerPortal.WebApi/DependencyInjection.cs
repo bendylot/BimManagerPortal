@@ -21,12 +21,6 @@ public static class DependencyInjection
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
-            options.AddDefaultPolicy(policy =>
-            {
-                policy.WithOrigins("http://37.230.113.96") // IP вашего сервера (где висит фронт)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
         });
         // Swagger / OpenAPI
         services.AddEndpointsApiExplorer();

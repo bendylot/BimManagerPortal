@@ -87,12 +87,10 @@
 }
 
 .object-header {
-    padding: 16px 20px;
-    background: linear-gradient(to right, rgba(74, 144, 226, 0.05), rgba(155, 89, 182, 0.05));
-    border-bottom: 1px solid #eaeef2;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
+    justify-content: flex-start; /* добавь */
 }
 
 .object-title {
@@ -110,6 +108,7 @@
     font-weight: 500;
     color: #4a90e2;
     border: 1px solid #4a90e2;
+    margin-left: auto;
 }
 
 /* Секции */
@@ -129,9 +128,9 @@
 
 .section-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    gap: 8px;
+    justify-content: flex-start; /* добавь */
 }
 
 .section-title {
@@ -145,6 +144,7 @@
     font-size: 14px;
     color: #6b7280;
     font-family: monospace;
+    margin-left: auto;
 }
 
 /* Документы */
@@ -161,9 +161,9 @@
 
 .document-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    gap: 8px;
+    justify-content: flex-start; /* добавь */
 }
 
 .document-title-wrapper {
@@ -190,6 +190,7 @@
     font-size: 13px;
     color: #6b7280;
     font-family: monospace;
+    margin-left: auto;
 }
 
 /* Сущности */
@@ -221,6 +222,7 @@
     font-size: 12px;
     color: #6b7280;
     font-family: monospace;
+    margin-left: auto;
 }
 
 /* Статистика */
@@ -371,4 +373,89 @@
         flex-direction: column;
         gap: 8px;
     }
+}
+/* Коллапсируемый заголовок */
+.collapsible {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.collapsible:hover {
+    opacity: 0.85;
+}
+
+.collapse-arrow {
+    font-size: 10px;
+    color: #888;
+    width: 12px;
+    flex-shrink: 0;
+}
+
+/* Кнопка показа ID */
+.btn-toggle-ids {
+    margin-left: auto;
+    padding: 2px 10px;
+    font-size: 12px;
+    border: 1px solid #e57373;
+    border-radius: 4px;
+    background: transparent;
+    color: #e57373;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-toggle-ids:hover {
+    background: #e57373;
+    color: #fff;
+}
+
+/* Список ID ошибочных элементов */
+.ids-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 4px 4px;
+}
+
+.id-badge {
+    background: #fff3f3;
+    border: 1px solid #e57373;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-family: monospace;
+    color: #c62828;
+}
+.ids-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 4px 4px;
+}
+
+.id-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.id-badge {
+    min-width: 80px;
+    text-align: center;
+    background: #fff3f3;
+    border: 1px solid #e57373;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-family: monospace;
+    color: #c62828;
+    flex-shrink: 0;
+}
+
+.id-reason {
+    font-size: 12px;
+    color: #555;
 }
