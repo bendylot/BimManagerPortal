@@ -14,11 +14,11 @@ WORKDIR /src
 RUN dotnet nuget locals all --clear
 
 # копируем csproj (для Docker cache)
-COPY Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj Presentation/BimManagerPortal.WebApi/
-COPY Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj Core/BimManagerPortal.Application/
-COPY Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj Core/BimManagerPortal.Domain/
-COPY Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj Infrastructure/BimManagerPortal.Persistance/
-COPY Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj Shared/BimManagerPortal.Shared/
+COPY src/Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj Presentation/BimManagerPortal.WebApi/
+COPY src/Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj Core/BimManagerPortal.Application/
+COPY src/Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj Core/BimManagerPortal.Domain/
+COPY src/Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj Infrastructure/BimManagerPortal.Persistance/
+COPY src/Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj Shared/BimManagerPortal.Shared/
 
 # restore
 RUN dotnet restore Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj
