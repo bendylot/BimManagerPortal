@@ -19,9 +19,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration
-    .AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
-    //.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
 builder.Services.AddApplication();
 builder.Services.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);
