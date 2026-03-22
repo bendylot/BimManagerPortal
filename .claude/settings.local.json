@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /e/Programmiing/BimManagerPortal -type f -name *Test* -o -name *test*)",
+      "Bash(dotnet sln:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet test:*)"
+    ]
+  }
+}

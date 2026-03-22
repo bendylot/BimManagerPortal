@@ -1,0 +1,52 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "WebApi",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj",
+        "--launch-profile",
+        "http"
+      ],
+      "port": 5189
+    },
+    {
+      "name": "WebBlazorSite",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/Presentation/BimManagerPortal/WebBlazorSite/BimManagerPortal.WebBlazorSite.csproj",
+        "--launch-profile",
+        "http"
+      ],
+      "port": 5151
+    },
+    {
+      "name": "WebAssembly",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/Presentation/BimManagerPortal.WebAssembly/BimManagerPortal.WebAssembly.csproj",
+        "--launch-profile",
+        "http"
+      ],
+      "port": 5259
+    },
+    {
+      "name": "Docker (Full Stack)",
+      "runtimeExecutable": "docker",
+      "runtimeArgs": [
+        "compose",
+        "up"
+      ],
+      "port": 80,
+      "autoPort": false
+    }
+  ],
+  "autoVerify": true
+}

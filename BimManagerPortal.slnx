@@ -2,6 +2,13 @@
   <Folder Name="/Solution Items/">
     <File Path="compose.yaml" />
   </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/" />
+  <Folder Name="/src/Infrastructure/" />
+  <Folder Name="/src/Shared/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/BimManagerPortal.Tests/BimManagerPortal.Tests.csproj" />
+  </Folder>
   <Project Path="src/Core/BimManagerPortal.Application/BimManagerPortal.Application.csproj" />
   <Project Path="src/Core/BimManagerPortal.Domain/BimManagerPortal.Domain.csproj" />
   <Project Path="src/Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj" />
