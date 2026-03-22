@@ -5,12 +5,6 @@
     <div class="report-header">
         <div class="report-title-row">
             <h3 class="report-title">Отчёт: Запретные зоны</h3>
-            @if (RestrictedAreaReportModel.ObjectConiguratorData?.Any() == true)
-            {
-                <button class="btn-expand-all" @onclick="ToggleExpandAll">
-                    @(_allExpanded ? "Свернуть всё" : "Развернуть всё")
-                </button>
-            }
         </div>
         <div class="header-gradient"></div>
     </div>
@@ -45,7 +39,7 @@
     @{
         var summary = ComputeSummary();
     }
-    @if (summary.TotalEntities > 0)
+    @if (summary.TotalDocuments > 0)
     {
         <div class="summary-card">
             <div class="summary-title">Сводная статистика</div>
@@ -57,10 +51,6 @@
                 <div class="summary-item">
                     <span class="summary-value">@summary.TotalDocuments</span>
                     <span class="summary-label">Документов</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-value">@summary.TotalEntities</span>
-                    <span class="summary-label">Типов сущностей</span>
                 </div>
                 <div class="summary-item success">
                     <span class="summary-value">@summary.TotalCreated</span>
@@ -123,6 +113,7 @@
                             <div class="sections-container">
                                 @foreach (var (section, secIndex) in objectData.SectionsBuildingData.Select((s, i) => (s, i)))
                                 {
+                                    var secStats = ComputeSecStats(section);
                                     var secKey = objIndex * 10000 + secIndex;
                                     var secExpanded = _expandedSections.Contains(secKey);
 
@@ -130,6 +121,20 @@
                                         <div class="section-header collapsible" @onclick="() => ToggleSet(_expandedSections, secKey)">
                                             <span class="collapse-arrow">@(secExpanded ? "▼" : "▶")</span>
                                             <h5 class="section-title">@(section.SectionBuildingDataName)</h5>
+                                            <div class="section-badges">
+                                                @if (secStats.Created > 0)
+                                                {
+                                                    <span class="badge badge-success">✓ @secStats.Created</span>
+                                                }
+                                                @if (secStats.BadErrors > 0)
+                                                {
+                                                    <span class="badge badge-danger">✗ @secStats.BadErrors</span>
+                                                }
+                                                @if (secStats.DocErrors > 0)
+                                                {
+                                                    <span class="badge badge-warning">⚠ @secStats.DocErrors</span>
+                                                }
+                                            </div>
                                             <span class="section-doc-count">@(section.DocumentsBuildingData?.Count ?? 0) докум.</span>
                                             <span class="section-time">@FormatTimeSpan(section.ComputeProcessTime)</span>
                                         </div>
@@ -257,7 +262,7 @@
                                                                                                     <span class="error-count">@entity.NotCreatedElementsData.GoodNotCreatedElements.Count</span>
                                                                                                     <button class="btn-toggle-ids good" @onclick:stopPropagation="true"
                                                                                                             @onclick="() => ToggleSet(_expandedGoodErrors, entKey)">
-                                                                                                        @(_expandedGoodErrors.Contains(entKey) ? "Скрыть" : "Показать ID")
+                                                                                                        @(_expandedGoodErrors.Contains(entKey) ? "▲" : "▼")
                                                                                                     </button>
                                                                                                 </div>
                                                                                                 @if (_expandedGoodErrors.Contains(entKey))
@@ -283,7 +288,7 @@
                                                                                                     <span class="error-count">@entity.NotCreatedElementsData.BadNotCreatedElements.Count</span>
                                                                                                     <button class="btn-toggle-ids" @onclick:stopPropagation="true"
                                                                                                             @onclick="() => ToggleSet(_expandedBadErrors, entKey)">
-                                                                                                        @(_expandedBadErrors.Contains(entKey) ? "Скрыть" : "Показать ID")
+                                                                                                        @(_expandedBadErrors.Contains(entKey) ? "▲" : "▼")
                                                                                                     </button>
                                                                                                 </div>
                                                                                                 @if (_expandedBadErrors.Contains(entKey))
