@@ -4,6 +4,7 @@ using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
 using BimManagerPortal.Tests.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace BimManagerPortal.Tests.Handlers;
 
@@ -12,6 +13,7 @@ public class GetPluginBigDatasQueryHandlerTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<ICompressionService> _compressionMock = new();
     private readonly Mock<IGenericRepository<PluginBigData>> _repoMock = new();
+    private readonly Mock<ILogger<GetPluginBigDatasQueryHandler>> _loggerMock = new();
 
     private readonly GetPluginBigDatasQueryHandler _sut;
 
@@ -23,7 +25,7 @@ public class GetPluginBigDatasQueryHandlerTests
 
         _sut = new GetPluginBigDatasQueryHandler(
             _unitOfWorkMock.Object,
-            _compressionMock.Object);
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -40,10 +42,6 @@ public class GetPluginBigDatasQueryHandlerTests
         _repoMock
             .Setup(r => r.Entities)
             .Returns(entities.AsAsyncQueryable());
-
-        _compressionMock
-            .Setup(c => c.Decompress(jsonBytes))
-            .Returns(jsonBytes);
 
         var result = await _sut.Handle(new GetPluginBigDatasQuery(), CancellationToken.None);
 
@@ -67,32 +65,6 @@ public class GetPluginBigDatasQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_WhenDecompressThrows_ShouldSkipFailedEntity()
-    {
-        var goodBytes = Encoding.UTF8.GetBytes("{\"ok\":true}");
-        var badBytes = new byte[] { 0x00, 0x01 };
-
-        var entities = new List<PluginBigData>
-        {
-            new("user1", "GoodPlugin", goodBytes),
-            new("user2", "BadPlugin", badBytes),
-        };
-
-        _repoMock
-            .Setup(r => r.Entities)
-            .Returns(entities.AsAsyncQueryable());
-
-        _compressionMock.Setup(c => c.Decompress(goodBytes)).Returns(goodBytes);
-        _compressionMock.Setup(c => c.Decompress(badBytes)).Throws<InvalidDataException>();
-
-        var result = await _sut.Handle(new GetPluginBigDatasQuery(), CancellationToken.None);
-
-        // Bad entity is swallowed by catch, only good one is in result
-        result.Should().HaveCount(1);
-        result[0].PluginName.Should().Be("GoodPlugin");
-    }
-
-    [Fact]
     public async Task Handle_ShouldFormatCreatedAtCorrectly()
     {
         var jsonBytes = Encoding.UTF8.GetBytes("{\"x\":1}");
@@ -101,8 +73,6 @@ public class GetPluginBigDatasQueryHandlerTests
         _repoMock
             .Setup(r => r.Entities)
             .Returns(new List<PluginBigData> { entity }.AsAsyncQueryable());
-
-        _compressionMock.Setup(c => c.Decompress(jsonBytes)).Returns(jsonBytes);
 
         var result = await _sut.Handle(new GetPluginBigDatasQuery(), CancellationToken.None);
 
@@ -118,8 +88,6 @@ public class GetPluginBigDatasQueryHandlerTests
         _repoMock
             .Setup(r => r.Entities)
             .Returns(new List<PluginBigData> { entity }.AsAsyncQueryable());
-
-        _compressionMock.Setup(c => c.Decompress(jsonBytes)).Returns(jsonBytes);
 
         var result = await _sut.Handle(new GetPluginBigDatasQuery(), CancellationToken.None);
 

@@ -5,6 +5,7 @@ using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
+using Microsoft.Extensions.Logging;
 
 namespace BimManagerPortal.Tests.Handlers;
 
@@ -13,6 +14,7 @@ public class GetPluginBigDataQueryHandlerTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<ICompressionService> _compressionMock = new();
     private readonly Mock<IGenericRepository<PluginBigData>> _repoMock = new();
+    private readonly Mock<ILogger<GetPluginBigDataQueryHandler>> _loggerMock = new();
 
     private readonly GetPluginBigDataQueryHandler _sut;
 
@@ -24,7 +26,8 @@ public class GetPluginBigDataQueryHandlerTests
 
         _sut = new GetPluginBigDataQueryHandler(
             _unitOfWorkMock.Object,
-            _compressionMock.Object);
+            _compressionMock.Object,
+            _loggerMock.Object);
     }
 
     [Fact]

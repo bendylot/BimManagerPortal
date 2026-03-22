@@ -30,7 +30,7 @@ public class PluginBigDataController
         }
         catch (KeyNotFoundException ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.NotFound(ex.Message);
         }
         catch (ValidationException ex)
         {
@@ -54,7 +54,7 @@ public class PluginBigDataController
         }
         catch (KeyNotFoundException ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.NotFound(ex.Message);
         }
         catch (ValidationException ex)
         {
@@ -82,7 +82,7 @@ public class PluginBigDataController
         }
         catch (KeyNotFoundException ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.NotFound(ex.Message);
         }
         catch (ValidationException ex)
         {

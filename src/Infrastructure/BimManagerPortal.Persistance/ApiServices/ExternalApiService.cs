@@ -12,11 +12,18 @@ namespace BimManagerPortal.Persistance.ApiServices
     public class ExternalApiService : IExternalApiService
     {
         private readonly HttpClient _httpClient;
-        /*private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-            WriteIndented = true // опционально, для красоты в БД
-        };*/
+            WriteIndented = true
+        };
+
+        private static readonly JsonSerializerOptions _deserializeOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         public ExternalApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -24,12 +31,7 @@ namespace BimManagerPortal.Persistance.ApiServices
 
         public async Task SendPluginConfigAsync(PluginConfigRequestDto dto)
         {
-            var _options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true // опционально, для красоты в БД
-            };
-            var response = await _httpClient.PostAsJsonAsync("/api/v1/public/plugin-configurations", dto, _options);
+            var response = await _httpClient.PostAsJsonAsync("/api/v1/public/plugin-configurations", dto, _jsonOptions);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -59,12 +61,7 @@ namespace BimManagerPortal.Persistance.ApiServices
 
         public async Task UpdateExistPluginConfigAsync(PluginConfigRequestDto dto, int id)
         {
-            var _options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true // опционально, для красоты в БД
-            };
-            var response = await _httpClient.PutAsJsonAsync($"/api/v1/public/plugin-configurations/{id}", dto, _options);
+            var response = await _httpClient.PutAsJsonAsync($"/api/v1/public/plugin-configurations/{id}", dto, _jsonOptions);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -110,15 +107,14 @@ namespace BimManagerPortal.Persistance.ApiServices
                     // Если это не JSON, просто читаем как строку
                     detail = await response.Content.ReadAsStringAsync();
                 }
-                throw new Exception();
-                /*throw new SendPluginConfigException(
+                throw new SendPluginConfigException(
                     message: $"API Error: {response.StatusCode}",
                     statusCode: response.StatusCode,
                     detail: detail,
                     userFriendlyMessage: response.StatusCode == System.Net.HttpStatusCode.InternalServerError
-                        ? detail // В вашем случае (500) выводим именно текст из detail
-                        : "Не удалось сохранить конфигурацию"
-                );*/
+                        ? detail
+                        : "Не удалось удалить конфигурацию"
+                );
             }
         }
         public async Task<PluginConfigsResponseDto> GetPluginConfigAsync()
@@ -134,10 +130,7 @@ namespace BimManagerPortal.Persistance.ApiServices
 
             var result = await JsonSerializer.DeserializeAsync<PluginConfigsResponseDto>(
                 stream,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                _deserializeOptions);
 
             if (result == null)
                 throw new InvalidOperationException("Failed to deserialize PluginConfigsResponseDto.");
