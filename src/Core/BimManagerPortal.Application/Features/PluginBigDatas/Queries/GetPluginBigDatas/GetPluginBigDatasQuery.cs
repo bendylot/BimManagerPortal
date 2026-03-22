@@ -1,4 +1,5 @@
-﻿using BimManagerPortal.Application.Interfaces.Repositories;
+﻿using BimManagerPortal.Application.Interfaces.Compress;
+using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using MediatR;
@@ -13,13 +14,16 @@ public class GetPluginBigDatasQueryHandler
     : IRequestHandler<GetPluginBigDatasQuery, List<GetAllPluginBigDatasDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICompressionService _compression;
     private readonly ILogger<GetPluginBigDatasQueryHandler> _logger;
 
     public GetPluginBigDatasQueryHandler(
         IUnitOfWork unitOfWork,
+        ICompressionService compression,
         ILogger<GetPluginBigDatasQueryHandler> logger)
     {
         _unitOfWork = unitOfWork;
+        _compression = compression;
         _logger = logger;
     }
 
@@ -29,11 +33,15 @@ public class GetPluginBigDatasQueryHandler
             .Entities
             .ToListAsync(cancellationToken);
 
+        _logger.LogInformation("Found {Count} plugin big data records", entities.Count);
+
         var list = new List<GetAllPluginBigDatasDto>();
         foreach (var e in entities)
         {
             try
             {
+                _compression.Decompress(e.JsonData);
+
                 var entity = new GetAllPluginBigDatasDto(
                     e.Id.ToString(),
                     e.PluginName,
@@ -43,7 +51,7 @@ public class GetPluginBigDatasQueryHandler
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Failed to map PluginBigData {Id}", e.Id);
+                _logger.LogError(exception, "Failed to decompress data for record {Id}", e.Id);
             }
         }
 

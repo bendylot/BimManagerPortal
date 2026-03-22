@@ -1,18 +1,16 @@
 ﻿using System.Text.Json;
-using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigDatas;
 using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigData;
 
 public record GetPluginBigDataQuery(GetPluginBigDataRequestDto getPluginBigDataRequestDto) : IRequest<GetPluginBigDataResponseDto>;
 
-public class GetPluginBigDataQueryHandler 
+public class GetPluginBigDataQueryHandler
     : IRequestHandler<GetPluginBigDataQuery, GetPluginBigDataResponseDto>
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -31,21 +29,20 @@ public class GetPluginBigDataQueryHandler
 
     public async Task<GetPluginBigDataResponseDto> Handle(GetPluginBigDataQuery query, CancellationToken cancellationToken)
     {
+        var id = query.getPluginBigDataRequestDto.Id;
+
         var entity = await _unitOfWork.Repository<PluginBigData>()
-            .GetByIdAsync(query.getPluginBigDataRequestDto.Id);
+            .GetByIdAsync(id);
 
         try
         {
             var jsonBytes = _compression.Decompress(entity.JsonData);
-
             var json = JsonSerializer.Deserialize<JsonElement>(jsonBytes);
-
-            var entityDto = new GetPluginBigDataResponseDto(json);
-            return entityDto;
+            return new GetPluginBigDataResponseDto(json);
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Failed to decompress/deserialize PluginBigData {Id}", query.getPluginBigDataRequestDto.Id);
+            _logger.LogError(exception, "Failed to decompress data for record {Id}", id);
             throw;
         }
     }

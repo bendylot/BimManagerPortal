@@ -10,6 +10,18 @@
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  seq:
+    image: datalust/seq:latest
+    restart: always
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_ADMINPASSWORD: admin
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    volumes:
+      - seq_data:/data
+
   api:
     image: bendylot/bimmanagerportal-api:latest
     environment:
@@ -18,17 +30,7 @@
       - "5002:8080"
     depends_on:
       - postgres
-  seq:
-    image: datalust/seq:latest
-    container_name: seq
-    environment:
-      ACCEPT_EULA: Y
-    ports:
-      - "5341:5341"   # ingestion (Serilog)
-      - "8082:80"     # web UI → http://localhost:8082
-    volumes:
-      - seq-data:/data
-    restart: unless-stopped
+      - seq
   web:
     image: bendylot/bimmanagerportal-web:latest
     container_name: bimmanagerportal-web
@@ -40,4 +42,4 @@
 
 volumes:
   postgres_data:
-  seq-data:
+  seq_data:
