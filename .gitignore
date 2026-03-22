@@ -221,3 +221,9 @@ bin/*
 /.idea
 .idea/
 .idea/*
+
+.claude
+.claude/
+/.claude
+/.claude/
+.claude/*
