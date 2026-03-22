@@ -35,28 +35,18 @@ public partial class RestrictedAreaReportComponent : ComponentBase
         if (!set.Add(key)) set.Remove(key);
     }
 
-    private void ToggleExpandAll()
-    {
-        _allExpanded = !_allExpanded;
-        _expandedObjects.Clear();
-        if (_allExpanded && RestrictedAreaReportModel.ObjectConiguratorData != null)
-        {
-            for (var i = 0; i < RestrictedAreaReportModel.ObjectConiguratorData.Count; i++)
-                _expandedObjects.Add(i);
-        }
-    }
-
+    #region summary
     private record SummaryStats(
-        int TotalObjects, int TotalDocuments, int TotalEntities,
+        int TotalObjects, int TotalDocuments,
         int TotalCreated, int TotalGoodNotCreated, int TotalBadNotCreated,
         int TotalDeletedZones, int TotalBusyZones);
 
     private SummaryStats ComputeSummary()
     {
         var objs = RestrictedAreaReportModel.ObjectConiguratorData;
-        if (objs == null) return new(0, 0, 0, 0, 0, 0, 0, 0);
+        if (objs == null) return new(0, 0,  0, 0, 0, 0, 0);
 
-        int docs = 0, entities = 0, created = 0, good = 0, bad = 0, deleted = 0, busy = 0;
+        int docs = 0, created = 0, good = 0, bad = 0, deleted = 0, busy = 0;
         foreach (var obj in objs)
         {
             foreach (var sec in obj.SectionsBuildingData ?? [])
@@ -64,7 +54,6 @@ public partial class RestrictedAreaReportComponent : ComponentBase
                 docs += sec.DocumentsBuildingData?.Count ?? 0;
                 foreach (var doc in sec.DocumentsBuildingData ?? [])
                 {
-                    entities += doc.EntityBuildingData?.Count ?? 0;
                     foreach (var ent in doc.EntityBuildingData ?? [])
                     {
                         created += ent.CreatedElements?.Count ?? 0;
@@ -76,9 +65,30 @@ public partial class RestrictedAreaReportComponent : ComponentBase
                 }
             }
         }
-        return new(objs.Count, docs, entities, created, good, bad, deleted, busy);
+        return new(objs.Count, docs, created, good, bad, deleted, busy);
     }
+    #endregion
+    
+    #region sections
+    private record SecStats(int Created, int BadErrors, int DocErrors);
 
+    private SecStats ComputeSecStats(SectionBuildingData sd)
+    {
+        var created = 0;
+        var bad = 0;
+        var docErrors = 0;
+        foreach (var doc in sd.DocumentsBuildingData ?? [])
+        foreach (var ent in doc.EntityBuildingData ?? [])
+        {
+            created += ent.CreatedElements?.Count ?? 0;
+            bad     += ent.NotCreatedElementsData?.BadNotCreatedElements?.Count ?? 0;
+        }
+        return new(created, bad, docErrors);
+    }
+    
+    #endregion
+    
+    #region objects
     private record ObjectStats(int Created, int BadErrors, int DocErrors);
 
     private ObjectStats ComputeObjectStats(ObjectConiguratorData obj)
@@ -94,7 +104,9 @@ public partial class RestrictedAreaReportComponent : ComponentBase
         }
         return new(created, bad, docErr);
     }
-
+    #endregion
+    
+    #region documents
     private record DocStats(int Created, int Bad);
 
     private DocStats ComputeDocStats(DocumentBuildingData doc)
@@ -107,4 +119,5 @@ public partial class RestrictedAreaReportComponent : ComponentBase
         }
         return new(created, bad);
     }
+    #endregion
 }
