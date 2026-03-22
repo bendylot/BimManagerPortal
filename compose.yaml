@@ -18,6 +18,17 @@
       - "5002:8080"
     depends_on:
       - postgres
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      ACCEPT_EULA: Y
+    ports:
+      - "5341:5341"   # ingestion (Serilog)
+      - "8082:80"     # web UI → http://localhost:8082
+    volumes:
+      - seq-data:/data
+    restart: unless-stopped
   web:
     image: bendylot/bimmanagerportal-web:latest
     container_name: bimmanagerportal-web
@@ -29,3 +40,4 @@
 
 volumes:
   postgres_data:
+  seq-data:
