@@ -3,6 +3,8 @@ using BimManagerPortal.Persistance;
 using BimManagerPortal.WebApi;
 using Serilog;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();

@@ -13,6 +13,7 @@
         <PackageReference Include="AutoMapper" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.3" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,6 +34,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Shared\BimManagerPortal.Shared\BimManagerPortal.Shared.csproj" />
+      <ProjectReference Include="..\..\Core\BimManagerPortal.Domain\BimManagerPortal.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

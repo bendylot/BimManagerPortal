@@ -139,8 +139,6 @@ public partial class AllReportPluginsComponent : ComponentBase
         }
         catch (Exception ex)
         {
-            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
-            var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
         }
         finally
@@ -152,19 +150,21 @@ public partial class AllReportPluginsComponent : ComponentBase
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
+        _loadingModalService.Show();
+        await Task.Yield();
         try
         {
-            // взять джсон элемент из апи по id
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
             var jsonString = dto.Json;
-            // засунуть джсон в модальное окно просмотрщика
             JsonModalService.Show(jsonString);
         }
         catch (Exception ex)
         {
-            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
-            var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _loadingModalService.Hide();
         }
     }
     private async Task DeletePluginReport()

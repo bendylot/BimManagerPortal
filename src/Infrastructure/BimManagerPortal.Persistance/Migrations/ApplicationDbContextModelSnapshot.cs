@@ -33,7 +33,7 @@ namespace BimManagerPortal.Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte[]>("JsonData")
                         .IsRequired()
@@ -44,7 +44,7 @@ namespace BimManagerPortal.Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("UserCreater")
                         .IsRequired()
@@ -56,6 +56,42 @@ namespace BimManagerPortal.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BigDataPlugins");
+                });
+
+            modelBuilder.Entity("BimManagerPortal.Domain.Entities.PluginConfigurations.PluginConfiguration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("JsonData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PluginName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserCreater")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserUpdater")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PluginConfigurations");
                 });
 #pragma warning restore 612, 618
         }
