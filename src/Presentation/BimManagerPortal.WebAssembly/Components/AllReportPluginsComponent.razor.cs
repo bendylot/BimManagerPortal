@@ -2,6 +2,7 @@
 using BimManagerPortal.Shared.Dtos;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using BimManagerPortal.Shared.Model;
+using BimManagerPortal.WebAssembly.Components.ModalForm.Loading;
 using BimManagerPortal.WebAssembly.Models.BuiltIntTab;
 using BimManagerPortal.WebAssembly.Models.Results;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
@@ -28,6 +29,8 @@ public partial class AllReportPluginsComponent : ComponentBase
     public EventCallback<GetAllPluginBigDatasDto> OnEditRequested { get; set; }
     [Inject]
     public IPluginReportProviderServiceProvider _pluginReportProviderServiceProvider { get; set; }
+    [Inject]
+    private LoadingModalService _loadingModalService { get; set; }
     #endregion
     
     #region events-methods
@@ -112,20 +115,25 @@ public partial class AllReportPluginsComponent : ComponentBase
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
+        _loadingModalService.Show();
         try
         {
             // взять джсон элемент из апи по id
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
             var jsonString = dto.Json;
-            
+
             // Превращаем обьект в форму отчета запретных зон
-            ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString,SelectedConfiguration.PluginName ));
+            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString, SelectedConfiguration.PluginName));
         }
         catch (Exception ex)
         {
             // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
             var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _loadingModalService.Hide();
         }
     }
     private async Task OpenPluginReportJson()

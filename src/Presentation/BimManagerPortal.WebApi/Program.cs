@@ -8,8 +8,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration
-    .AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
 
 builder.Host.UseSerilog((ctx, _, config) =>
 {

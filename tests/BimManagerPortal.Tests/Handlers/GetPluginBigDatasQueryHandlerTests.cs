@@ -23,8 +23,13 @@ public class GetPluginBigDatasQueryHandlerTests
             .Setup(u => u.Repository<PluginBigData>())
             .Returns(_repoMock.Object);
 
+        _compressionMock
+            .Setup(c => c.Decompress(It.IsAny<byte[]>()))
+            .Returns(Array.Empty<byte>());
+
         _sut = new GetPluginBigDatasQueryHandler(
             _unitOfWorkMock.Object,
+            _compressionMock.Object,
             _loggerMock.Object);
     }
 

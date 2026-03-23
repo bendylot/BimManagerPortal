@@ -1,6 +1,9 @@
 ﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher
+@using BimManagerPortal.WebAssembly.Components.ModalForm.Loading
 @using BimManagerPortal.WebAssembly.Layout.Modals.JsonWatchModal
+@using BimManagerPortal.WebAssembly.Layout.Modals.LoadingModal
 @inject JsonWatcherModalService JsonModalService
+@inject LoadingModalService LoadingModalService
 <div class="container-box p-3">
     <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
             <input type="text"
@@ -90,3 +93,4 @@
     }
 </div>
 <JsonWatcherModal />
+<LoadingModal />

@@ -1,5 +1,6 @@
 using BimManagerPortal.WebAssembly;
 using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher;
+using BimManagerPortal.WebAssembly.Components.ModalForm.Loading;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -15,5 +16,6 @@ builder.Services.AddScoped(sp => new HttpClient
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7067") });
 builder.Services.AddScoped<IPluginReportProviderServiceProvider, PluginReportProviderServiceProvider>();
 builder.Services.AddScoped<JsonWatcherModalService>();
+builder.Services.AddScoped<LoadingModalService>();
 
 await builder.Build().RunAsync();
