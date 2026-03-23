@@ -26,5 +26,11 @@ public class PluginReportProviderServiceProvider : IPluginReportProviderServiceP
     {
         return await _httpClient.GetFromJsonAsync<GetPluginBigDataResponseDto>($"api/v1/public/plugin-big-data/{id}");
     }
-    
+
+    public async Task DeleteConfiguration(string id)
+    {
+        var response = await _httpClient.DeleteAsync($"api/v1/public/plugin-big-data/{id}");
+        response.EnsureSuccessStatusCode();
+    }
+
 }

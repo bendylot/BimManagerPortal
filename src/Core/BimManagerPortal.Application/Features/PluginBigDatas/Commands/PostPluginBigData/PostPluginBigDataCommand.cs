@@ -29,6 +29,7 @@ internal class PostPluginBigDataCommandHandler : IRequestHandler<PostPluginBigDa
         var entity = new PluginBigData(
             dto.UserCreater,
             dto.PluginName,
+            dto.ConfigurationName,
             compressed);
 
         await _unitOfWork.Repository<PluginBigData>()

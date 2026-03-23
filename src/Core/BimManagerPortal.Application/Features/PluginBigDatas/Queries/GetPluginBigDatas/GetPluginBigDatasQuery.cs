@@ -45,6 +45,7 @@ public class GetPluginBigDatasQueryHandler
                 var entity = new GetAllPluginBigDatasDto(
                     e.Id.ToString(),
                     e.PluginName,
+                    e.ConfigurationName,
                     e.UserCreater,
                     e.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
                 list.Add(entity);

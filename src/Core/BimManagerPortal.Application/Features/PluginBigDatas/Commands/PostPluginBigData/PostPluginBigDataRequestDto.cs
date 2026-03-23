@@ -9,13 +9,15 @@ public class PostPluginBigDataRequestDto : IMapFrom<PluginBigData>
 {
     public PostPluginBigDataRequestDto() { }
 
-    public PostPluginBigDataRequestDto(string PluginName, JsonElement JsonData, string UserCreater)
+    public PostPluginBigDataRequestDto(string PluginName, string ConfigurationName, JsonElement JsonData, string UserCreater)
     {
         this.PluginName = PluginName;
+        this.ConfigurationName = ConfigurationName;
         this.JsonData = JsonData;
         this.UserCreater = UserCreater;
     }
     public string PluginName { get; set; }
+    public string ConfigurationName { get; set; }
     public JsonElement? JsonData { get; set; }
     public string UserCreater { get; set; }
 

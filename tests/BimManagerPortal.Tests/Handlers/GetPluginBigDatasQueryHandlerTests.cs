@@ -40,8 +40,8 @@ public class GetPluginBigDatasQueryHandlerTests
 
         var entities = new List<PluginBigData>
         {
-            new("user1", "PluginA", jsonBytes),
-            new("user2", "PluginB", jsonBytes),
+            new("user1", "PluginA", "Config", jsonBytes),
+            new("user2", "PluginB", "Config", jsonBytes),
         };
 
         _repoMock
@@ -73,7 +73,7 @@ public class GetPluginBigDatasQueryHandlerTests
     public async Task Handle_ShouldFormatCreatedAtCorrectly()
     {
         var jsonBytes = Encoding.UTF8.GetBytes("{\"x\":1}");
-        var entity = new PluginBigData("u", "Plugin", jsonBytes);
+        var entity = new PluginBigData("u", "Plugin", "Config", jsonBytes);
 
         _repoMock
             .Setup(r => r.Entities)
@@ -88,7 +88,7 @@ public class GetPluginBigDatasQueryHandlerTests
     public async Task Handle_ShouldIncludeEntityId()
     {
         var jsonBytes = Encoding.UTF8.GetBytes("{\"x\":1}");
-        var entity = new PluginBigData("u", "Plugin", jsonBytes);
+        var entity = new PluginBigData("u", "Plugin", "Config", jsonBytes);
 
         _repoMock
             .Setup(r => r.Entities)

@@ -1,4 +1,5 @@
-﻿using BimManagerPortal.Application.Features.PluginBigDatas.Commands.PostPluginBigData;
+﻿using BimManagerPortal.Application.Features.PluginBigDatas.Commands.DeletePluginBigData;
+using BimManagerPortal.Application.Features.PluginBigDatas.Commands.PostPluginBigData;
 using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigData;
 using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigDatas;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
@@ -98,5 +99,34 @@ public class PluginBigDataController
     }
 
     #endregion
-    
+
+    #region Delete
+
+    [HttpDelete("{id}")]
+    public async Task<IResult> DeletePluginBigData(string id)
+    {
+        try
+        {
+            await _mediator.Send(new DeletePluginBigDataCommand(id));
+            return TypedResults.Ok();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return TypedResults.NotFound(ex.Message);
+        }
+        catch (ValidationException ex)
+        {
+            return TypedResults.BadRequest($"Validation failed: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.Problem(
+                title: "Internal Server Error",
+                detail: ex.Message,
+                statusCode: StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    #endregion
+
 }

@@ -130,6 +130,7 @@
 .summary-item.danger  { border-color: #e74c3c; background: #fff5f5; }
 .summary-item.deleted { border-color: #c0392b; background: #fff0ef; }
 .summary-item.busy    { border-color: #e67e22; background: #fff7f0; }
+.summary-item.info    { border-color: #4a90e2; background: #e8f1fb; }
 
 .summary-value {
     font-size: 26px;
@@ -143,6 +144,7 @@
 .summary-item.danger  .summary-value { color: #e74c3c; }
 .summary-item.deleted .summary-value { color: #c0392b; }
 .summary-item.busy    .summary-value { color: #e67e22; }
+.summary-item.info    .summary-value { color: #4a90e2; }
 
 .summary-label {
     font-size: 11px;
