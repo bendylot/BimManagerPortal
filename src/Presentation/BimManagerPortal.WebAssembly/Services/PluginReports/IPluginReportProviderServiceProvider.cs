@@ -9,4 +9,6 @@ public interface IPluginReportProviderServiceProvider
     Task<List<GetAllPluginBigDatasDto>> GetConfigurations();
 
     Task<GetPluginBigDataResponseDto?> GetConfiguration(string id);
+
+    Task DeleteConfiguration(string id);
 }

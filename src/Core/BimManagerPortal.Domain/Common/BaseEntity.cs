@@ -7,6 +7,6 @@ public abstract class BaseEntity
     protected BaseEntity()
     {
         Id = Guid.NewGuid();
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
     }
 }

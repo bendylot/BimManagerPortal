@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using AutoMapper;
 using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
@@ -9,15 +8,13 @@ namespace BimManagerPortal.Application.Features.PluginBigDatas.Commands.PostPlug
 
 public record PostPluginBigDataCommand(PostPluginBigDataRequestDto PostPluginConfigurationRequestDto) : IRequest;
 
-internal class GetAllPlayersQueryHandler : IRequestHandler<PostPluginBigDataCommand>
+internal class PostPluginBigDataCommandHandler : IRequestHandler<PostPluginBigDataCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
     private readonly ICompressionService _compression;
-    public GetAllPlayersQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ICompressionService compression)
+    public PostPluginBigDataCommandHandler(IUnitOfWork unitOfWork, ICompressionService compression)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
         _compression = compression;
     }
 
@@ -32,6 +29,7 @@ internal class GetAllPlayersQueryHandler : IRequestHandler<PostPluginBigDataComm
         var entity = new PluginBigData(
             dto.UserCreater,
             dto.PluginName,
+            dto.ConfigurationName,
             compressed);
 
         await _unitOfWork.Repository<PluginBigData>()

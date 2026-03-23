@@ -23,7 +23,7 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task AddAsync_ShouldPersistEntity()
     {
-        var entity = new PluginBigData("user", "TestPlugin", [1, 2, 3]);
+        var entity = new PluginBigData("user", "TestPlugin", "Config", [1, 2, 3]);
 
         await _sut.AddAsync(entity);
         await _context.SaveChangesAsync();
@@ -36,7 +36,7 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task GetByIdAsync_WhenEntityExists_ShouldReturnIt()
     {
-        var entity = new PluginBigData("user", "Plugin", [0xFF]);
+        var entity = new PluginBigData("user", "Plugin", "Config", [0xFF]);
         await _sut.AddAsync(entity);
         await _context.SaveChangesAsync();
 
@@ -65,8 +65,8 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllEntities()
     {
-        await _sut.AddAsync(new PluginBigData("u1", "P1", [1]));
-        await _sut.AddAsync(new PluginBigData("u2", "P2", [2]));
+        await _sut.AddAsync(new PluginBigData("u1", "P1", "Config", [1]));
+        await _sut.AddAsync(new PluginBigData("u2", "P2", "Config", [2]));
         await _context.SaveChangesAsync();
 
         var result = await _sut.GetAllAsync();
@@ -77,7 +77,7 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task DeleteAsync_ShouldRemoveEntity()
     {
-        var entity = new PluginBigData("user", "ToDelete", [1]);
+        var entity = new PluginBigData("user", "ToDelete", "Config", [1]);
         await _sut.AddAsync(entity);
         await _context.SaveChangesAsync();
 
@@ -91,8 +91,8 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task Entities_ShouldExposeQueryableSet()
     {
-        await _sut.AddAsync(new PluginBigData("u1", "Alpha", [1]));
-        await _sut.AddAsync(new PluginBigData("u2", "Beta", [2]));
+        await _sut.AddAsync(new PluginBigData("u1", "Alpha", "Config", [1]));
+        await _sut.AddAsync(new PluginBigData("u2", "Beta", "Config", [2]));
         await _context.SaveChangesAsync();
 
         var count = await _sut.Entities.CountAsync();
@@ -103,7 +103,7 @@ public class GenericRepositoryTests : IDisposable
     [Fact]
     public async Task UpdateAsync_ShouldModifyExistingEntity()
     {
-        var entity = new PluginBigData("user", "OldName", [1]);
+        var entity = new PluginBigData("user", "OldName", "Config", [1]);
         await _sut.AddAsync(entity);
         await _context.SaveChangesAsync();
 

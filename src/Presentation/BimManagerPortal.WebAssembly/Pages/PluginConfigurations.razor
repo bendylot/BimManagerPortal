@@ -1,0 +1,64 @@
+@page "/plugin-configurations"
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using BimManagerPortal.Application.Other.PluginsConfigs
+@using BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas
+@using BimManagerPortal.Domain.Enums
+@using BimManagerPortal.WebAssembly.Components.PluginConfigurations.ConfigTabs
+@using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.AllConfigurations
+@using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.CreateConfigurations
+@using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.EditConfigurations
+
+<PageTitle>Конфигурации плагинов</PageTitle>
+
+<h1>Конфигурации плагинов</h1>
+
+<ConfigTabs ActiveTab="_activeTab" ActiveTabChanged="OnTabChanged" />
+
+@switch (_activeTab)
+{
+    case PluginConfigTab.All:
+        <AllConfiguration OnEditRequested="OpenEditTab" />
+        break;
+
+    case PluginConfigTab.Create:
+        <CreateConfiguration OnCreated="() => _activeTab = PluginConfigTab.All" />
+        break;
+
+    case PluginConfigTab.Edit:
+        <EditerConfiguration RestrictedAreaConfigEntity="_editEntity"
+                             OnUpdated="() => _activeTab = PluginConfigTab.All" />
+        break;
+}
+
+@code {
+    private PluginConfigTab _activeTab = PluginConfigTab.All;
+    private RestrictedAreaConfigEntity _editEntity = new();
+
+    private void OnTabChanged(PluginConfigTab tab) => _activeTab = tab;
+
+    private void OpenEditTab(PluginConfigEntity config)
+    {
+        try
+        {
+            var json = config.Data?.ToString();
+            if (string.IsNullOrEmpty(json)) return;
+
+            var proxy = JsonSerializer.Deserialize<RestrictedAreaConfigProxy>(json,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+                        ?? new RestrictedAreaConfigProxy();
+
+            _editEntity = new RestrictedAreaConfigEntity
+            {
+                NameConfig = config.Name,
+                Id         = config.Id,
+                Data       = proxy,
+            };
+            _activeTab = PluginConfigTab.Edit;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}

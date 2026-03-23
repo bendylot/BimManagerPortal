@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -12,11 +12,18 @@ namespace BimManagerPortal.Persistance.ApiServices
     public class ExternalApiService : IExternalApiService
     {
         private readonly HttpClient _httpClient;
-        /*private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+
+        private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-            WriteIndented = true // опционально, для красоты в БД
-        };*/
+            WriteIndented = true
+        };
+
+        private static readonly JsonSerializerOptions _deserializeOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         public ExternalApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -24,72 +31,18 @@ namespace BimManagerPortal.Persistance.ApiServices
 
         public async Task SendPluginConfigAsync(PluginConfigRequestDto dto)
         {
-            var _options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true // опционально, для красоты в БД
-            };
-            var response = await _httpClient.PostAsJsonAsync("/api/v1/public/plugin-configurations", dto, _options);
+            var response = await _httpClient.PostAsJsonAsync("/api/v1/public/plugin-configurations", dto, _jsonOptions);
 
             if (!response.IsSuccessStatusCode)
-            {
-                string? detail = null;
-                try 
-                {
-                    // Пытаемся распарсить Problem Details JSON
-                    var problemDetails = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
-                    detail = problemDetails?["detail"]?.ToString();
-                }
-                catch 
-                {
-                    // Если это не JSON, просто читаем как строку
-                    detail = await response.Content.ReadAsStringAsync();
-                }
-
-                throw new SendPluginConfigException(
-                    message: $"API Error: {response.StatusCode}",
-                    statusCode: response.StatusCode,
-                    detail: detail,
-                    userFriendlyMessage: response.StatusCode == System.Net.HttpStatusCode.InternalServerError 
-                        ? detail // В вашем случае (500) выводим именно текст из detail
-                        : "Не удалось сохранить конфигурацию"
-                );
-            }
+                throw await BuildException(response, "Не удалось сохранить конфигурацию");
         }
 
         public async Task UpdateExistPluginConfigAsync(PluginConfigRequestDto dto, int id)
         {
-            var _options = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-                WriteIndented = true // опционально, для красоты в БД
-            };
-            var response = await _httpClient.PutAsJsonAsync($"/api/v1/public/plugin-configurations/{id}", dto, _options);
+            var response = await _httpClient.PutAsJsonAsync($"/api/v1/public/plugin-configurations/{id}", dto, _jsonOptions);
 
             if (!response.IsSuccessStatusCode)
-            {
-                string? detail = null;
-                try 
-                {
-                    // Пытаемся распарсить Problem Details JSON
-                    var problemDetails = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
-                    detail = problemDetails?["detail"]?.ToString();
-                }
-                catch 
-                {
-                    // Если это не JSON, просто читаем как строку
-                    detail = await response.Content.ReadAsStringAsync();
-                }
-
-                throw new SendPluginConfigException(
-                    message: $"API Error: {response.StatusCode}",
-                    statusCode: response.StatusCode,
-                    detail: detail,
-                    userFriendlyMessage: response.StatusCode == System.Net.HttpStatusCode.InternalServerError 
-                        ? detail // В вашем случае (500) выводим именно текст из detail
-                        : "Не удалось сохранить конфигурацию"
-                );
-            }
+                throw await BuildException(response, "Не удалось сохранить конфигурацию");
         }
 
         public async Task DeletePluginConfigAsync(int id)
@@ -97,30 +50,9 @@ namespace BimManagerPortal.Persistance.ApiServices
             var response = await _httpClient.DeleteAsync($"/api/v1/public/plugin-configurations/{id}");
 
             if (!response.IsSuccessStatusCode)
-            {
-                string? detail = null;
-                try 
-                {
-                    // Пытаемся распарсить Problem Details JSON
-                    var problemDetails = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
-                    detail = problemDetails?["detail"]?.ToString();
-                }
-                catch 
-                {
-                    // Если это не JSON, просто читаем как строку
-                    detail = await response.Content.ReadAsStringAsync();
-                }
-                throw new Exception();
-                /*throw new SendPluginConfigException(
-                    message: $"API Error: {response.StatusCode}",
-                    statusCode: response.StatusCode,
-                    detail: detail,
-                    userFriendlyMessage: response.StatusCode == System.Net.HttpStatusCode.InternalServerError
-                        ? detail // В вашем случае (500) выводим именно текст из detail
-                        : "Не удалось сохранить конфигурацию"
-                );*/
-            }
+                throw await BuildException(response, "Не удалось удалить конфигурацию");
         }
+
         public async Task<PluginConfigsResponseDto> GetPluginConfigAsync()
         {
             var response = await _httpClient.GetAsync("/api/v1/public/plugin-configurations");
@@ -134,15 +66,35 @@ namespace BimManagerPortal.Persistance.ApiServices
 
             var result = await JsonSerializer.DeserializeAsync<PluginConfigsResponseDto>(
                 stream,
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                _deserializeOptions);
 
             if (result == null)
                 throw new InvalidOperationException("Failed to deserialize PluginConfigsResponseDto.");
 
             return result;
+        }
+
+        private static async Task<SendPluginConfigException> BuildException(HttpResponseMessage response, string fallbackMessage)
+        {
+            string? detail = null;
+            try
+            {
+                var problemDetails = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
+                detail = problemDetails?["detail"]?.ToString();
+            }
+            catch
+            {
+                detail = await response.Content.ReadAsStringAsync();
+            }
+
+            return new SendPluginConfigException(
+                message: $"API Error: {response.StatusCode}",
+                statusCode: response.StatusCode,
+                detail: detail,
+                userFriendlyMessage: response.StatusCode == System.Net.HttpStatusCode.InternalServerError
+                    ? detail
+                    : fallbackMessage
+            );
         }
     }
 }

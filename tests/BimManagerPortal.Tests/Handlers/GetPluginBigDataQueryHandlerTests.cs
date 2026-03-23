@@ -5,6 +5,7 @@ using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
 using BimManagerPortal.Domain.Entities.BigDataPlugins;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
+using Microsoft.Extensions.Logging;
 
 namespace BimManagerPortal.Tests.Handlers;
 
@@ -13,6 +14,7 @@ public class GetPluginBigDataQueryHandlerTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<ICompressionService> _compressionMock = new();
     private readonly Mock<IGenericRepository<PluginBigData>> _repoMock = new();
+    private readonly Mock<ILogger<GetPluginBigDataQueryHandler>> _loggerMock = new();
 
     private readonly GetPluginBigDataQueryHandler _sut;
 
@@ -24,7 +26,8 @@ public class GetPluginBigDataQueryHandlerTests
 
         _sut = new GetPluginBigDataQueryHandler(
             _unitOfWorkMock.Object,
-            _compressionMock.Object);
+            _compressionMock.Object,
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -34,7 +37,7 @@ public class GetPluginBigDataQueryHandlerTests
         var originalJson = "{\"setting\":\"value\"}";
         var jsonBytes = Encoding.UTF8.GetBytes(originalJson);
 
-        var entity = new PluginBigData("creator", "MyPlugin", jsonBytes);
+        var entity = new PluginBigData("creator", "MyPlugin", "Config", jsonBytes);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(entityId.ToString()))
@@ -59,7 +62,7 @@ public class GetPluginBigDataQueryHandlerTests
         var compressedData = new byte[] { 0x1F, 0x8B, 0x08 };
         var jsonBytes = Encoding.UTF8.GetBytes("{\"a\":1}");
 
-        var entity = new PluginBigData("user", "Plugin", compressedData);
+        var entity = new PluginBigData("user", "Plugin", "Config", compressedData);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(entityId.ToString()))
@@ -80,7 +83,7 @@ public class GetPluginBigDataQueryHandlerTests
     public async Task Handle_WhenDecompressThrows_ShouldRethrow()
     {
         var entityId = Guid.NewGuid();
-        var entity = new PluginBigData("user", "Plugin", [0x00]);
+        var entity = new PluginBigData("user", "Plugin", "Config", [0x00]);
 
         _repoMock
             .Setup(r => r.GetByIdAsync(entityId.ToString()))

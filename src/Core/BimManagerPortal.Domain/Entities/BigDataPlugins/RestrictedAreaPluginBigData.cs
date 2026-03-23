@@ -2,7 +2,7 @@
 
 public class RestrictedAreaPluginBigData : PluginBigData
 {
-    public RestrictedAreaPluginBigData(string UserCreater, string PluginName, byte[] JsonData) : base(UserCreater, PluginName, JsonData)
+    public RestrictedAreaPluginBigData(string UserCreater, string PluginName, string ConfigurationName, byte[] JsonData) : base(UserCreater, PluginName, ConfigurationName, JsonData)
     {
     }
 }

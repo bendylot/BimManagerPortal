@@ -14,6 +14,5 @@
   <Project Path="src/Infrastructure/BimManagerPortal.Persistance/BimManagerPortal.Persistance.csproj" />
   <Project Path="src/Presentation/BimManagerPortal.WebApi/BimManagerPortal.WebApi.csproj" />
   <Project Path="src/Presentation/BimManagerPortal.WebAssembly/BimManagerPortal.WebAssembly.csproj" />
-  <Project Path="src/Presentation/BimManagerPortal/WebBlazorSite/BimManagerPortal.WebBlazorSite.csproj" />
   <Project Path="src/Shared/BimManagerPortal.Shared/BimManagerPortal.Shared.csproj" />
 </Solution>

@@ -2,6 +2,7 @@
 using BimManagerPortal.Shared.Dtos;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using BimManagerPortal.Shared.Model;
+using BimManagerPortal.WebAssembly.Components.ModalForm.Loading;
 using BimManagerPortal.WebAssembly.Models.BuiltIntTab;
 using BimManagerPortal.WebAssembly.Models.Results;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
@@ -28,6 +29,8 @@ public partial class AllReportPluginsComponent : ComponentBase
     public EventCallback<GetAllPluginBigDatasDto> OnEditRequested { get; set; }
     [Inject]
     public IPluginReportProviderServiceProvider _pluginReportProviderServiceProvider { get; set; }
+    [Inject]
+    private LoadingModalService _loadingModalService { get; set; }
     #endregion
     
     #region events-methods
@@ -60,11 +63,20 @@ public partial class AllReportPluginsComponent : ComponentBase
 
         return (currentSortColumn: _currentSortColumn, sortAscending: _sortAscending) switch
         {
-            (nameof(GetAllPluginBigDatasDto.Id), true) => source.OrderBy(x => x.Id),
+            (nameof(GetAllPluginBigDatasDto.Id), true)  => source.OrderBy(x => x.Id),
             (nameof(GetAllPluginBigDatasDto.Id), false) => source.OrderByDescending(x => x.Id),
 
-            (nameof(GetAllPluginBigDatasDto.PluginName), true) => source.OrderBy(x => x.PluginName),
+            (nameof(GetAllPluginBigDatasDto.PluginName), true)  => source.OrderBy(x => x.PluginName),
             (nameof(GetAllPluginBigDatasDto.PluginName), false) => source.OrderByDescending(x => x.PluginName),
+
+            (nameof(GetAllPluginBigDatasDto.ConfigurationName), true)  => source.OrderBy(x => x.ConfigurationName),
+            (nameof(GetAllPluginBigDatasDto.ConfigurationName), false) => source.OrderByDescending(x => x.ConfigurationName),
+
+            (nameof(GetAllPluginBigDatasDto.CreatedAt), true)  => source.OrderBy(x => x.CreatedAt),
+            (nameof(GetAllPluginBigDatasDto.CreatedAt), false) => source.OrderByDescending(x => x.CreatedAt),
+
+            (nameof(GetAllPluginBigDatasDto.UserCreater), true)  => source.OrderBy(x => x.UserCreater),
+            (nameof(GetAllPluginBigDatasDto.UserCreater), false) => source.OrderByDescending(x => x.UserCreater),
 
             _ => source
         };
@@ -75,7 +87,9 @@ public partial class AllReportPluginsComponent : ComponentBase
             return source;
 
         return source.Where(x =>
-            x.PluginName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase));
+            x.PluginName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            x.ConfigurationName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            x.UserCreater.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase));
     }
     private async Task<IEnumerable<GetAllPluginBigDatasDto>> LoadConfigurations()
     {
@@ -112,54 +126,66 @@ public partial class AllReportPluginsComponent : ComponentBase
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
+        _loadingModalService.Show();
+        await Task.Yield(); // дать рендереру показать модалку до старта запроса
         try
         {
             // взять джсон элемент из апи по id
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
             var jsonString = dto.Json;
-            
+
             // Превращаем обьект в форму отчета запретных зон
-            ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString,SelectedConfiguration.PluginName ));
+            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString, SelectedConfiguration.PluginName));
         }
         catch (Exception ex)
         {
-            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
-            var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _loadingModalService.Hide();
         }
     }
     private async Task OpenPluginReportJson()
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
+        _loadingModalService.Show();
+        await Task.Yield();
         try
         {
-            // взять джсон элемент из апи по id
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
             var jsonString = dto.Json;
-            // засунуть джсон в модальное окно просмотрщика
             JsonModalService.Show(jsonString);
         }
         catch (Exception ex)
         {
-            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
-            var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _loadingModalService.Hide();
         }
     }
     private async Task DeletePluginReport()
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
+        _loadingModalService.Show();
+        await Task.Yield();
         try
         {
-            // TODO
+            await _pluginReportProviderServiceProvider.DeleteConfiguration(id);
+            _selectedId = null;
+            Configurations = await LoadConfigurations();
         }
         catch (Exception ex)
         {
-            // На случай непредвиденных ошибок (проблемы с сетью и т.д.)
-            var _errorMessage = "Критическая ошибка приложения.";
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            _loadingModalService.Hide();
         }
     }
     #endregion

@@ -1,4 +1,5 @@
 ﻿using BimManagerPortal.Domain.Entities.BigDataPlugins;
+using BimManagerPortal.Domain.Entities.PluginConfigurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace BimManagerPortal.Persistance.Contexts;
@@ -10,6 +11,7 @@ public class ApplicationDbContext : DbContext
     {
     }
     public DbSet<PluginBigData> BigDataPlugins { get; set; }
+    public DbSet<PluginConfiguration> PluginConfigurations { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

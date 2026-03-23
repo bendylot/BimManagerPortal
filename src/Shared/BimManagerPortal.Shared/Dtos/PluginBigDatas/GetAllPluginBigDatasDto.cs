@@ -6,12 +6,14 @@ public class GetAllPluginBigDatasDto
 {
     public GetAllPluginBigDatasDto(string Id,
         string PluginName,
+        string ConfigurationName,
         //JsonElement JsonData,
         string UserCreater,
         string CreatedAt)
     {
         this.Id = Id;
         this.PluginName = PluginName;
+        this.ConfigurationName = ConfigurationName;
         this.CreatedAt = CreatedAt;
         //this.JsonData = JsonData;
         this.UserCreater = UserCreater;
@@ -20,6 +22,8 @@ public class GetAllPluginBigDatasDto
     public string Id { get; set; }
     [Required]
     public string PluginName { get; set; }
+    [Required]
+    public string ConfigurationName { get; set; }
     /*[Required]
     public JsonElement JsonData { get; set; }*/
     [Required]

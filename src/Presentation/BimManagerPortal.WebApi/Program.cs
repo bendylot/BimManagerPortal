@@ -3,25 +3,33 @@ using BimManagerPortal.Persistance;
 using BimManagerPortal.WebApi;
 using Serilog;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .Enrich.WithMachineName()
-    .Enrich.WithEnvironmentName()
-    .WriteTo.Console(
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
-    .WriteTo.File(
-        "logs/mybackend-.log",
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 7)
-    .WriteTo.Seq("http://localhost:5341")
-    .CreateLogger();
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration
-    .AddJsonFile("appsettings.Docker.json", optional: true, reloadOnChange: true);
-    //.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+
+builder.Host.UseSerilog((ctx, _, config) =>
+{
+    var seqUrl = ctx.Configuration["Seq:Url"] ?? "http://localhost:5341";
+
+    config
+        .MinimumLevel.Information()
+        .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .Enrich.WithEnvironmentName()
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
+        .WriteTo.File(
+            "logs/mybackend-.log",
+            rollingInterval: RollingInterval.Day,
+            retainedFileCountLimit: 7)
+        .WriteTo.Seq(seqUrl);
+});
+
 builder.Services.AddApplication();
 builder.Services.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);

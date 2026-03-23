@@ -1,5 +1,4 @@
 using System.Text.Json;
-using AutoMapper;
 using BimManagerPortal.Application.Features.PluginBigDatas.Commands.PostPluginBigData;
 using BimManagerPortal.Application.Interfaces.Compress;
 using BimManagerPortal.Application.Interfaces.Repositories;
@@ -10,11 +9,10 @@ namespace BimManagerPortal.Tests.Handlers;
 public class PostPluginBigDataCommandHandlerTests
 {
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
     private readonly Mock<ICompressionService> _compressionMock = new();
     private readonly Mock<IGenericRepository<PluginBigData>> _repoMock = new();
 
-    private readonly GetAllPlayersQueryHandler _sut;
+    private readonly PostPluginBigDataCommandHandler _sut;
 
     public PostPluginBigDataCommandHandlerTests()
     {
@@ -22,9 +20,8 @@ public class PostPluginBigDataCommandHandlerTests
             .Setup(u => u.Repository<PluginBigData>())
             .Returns(_repoMock.Object);
 
-        _sut = new GetAllPlayersQueryHandler(
+        _sut = new PostPluginBigDataCommandHandler(
             _unitOfWorkMock.Object,
-            _mapperMock.Object,
             _compressionMock.Object);
     }
 
@@ -32,7 +29,7 @@ public class PostPluginBigDataCommandHandlerTests
     public async Task Handle_ShouldCompressJsonAndSaveEntity()
     {
         var jsonData = JsonDocument.Parse("{\"key\":\"value\"}").RootElement;
-        var dto = new PostPluginBigDataRequestDto("TestPlugin", jsonData, "user@test.com");
+        var dto = new PostPluginBigDataRequestDto("TestPlugin", "Config", jsonData, "user@test.com");
         var command = new PostPluginBigDataCommand(dto);
 
         var compressedBytes = new byte[] { 0x1F, 0x8B, 0x01 };
@@ -66,7 +63,7 @@ public class PostPluginBigDataCommandHandlerTests
     public async Task Handle_ShouldSerializeJsonBeforeCompressing()
     {
         var jsonData = JsonDocument.Parse("{\"x\":1}").RootElement;
-        var dto = new PostPluginBigDataRequestDto("Plugin", jsonData, "admin");
+        var dto = new PostPluginBigDataRequestDto("Plugin", "Config", jsonData, "admin");
         var command = new PostPluginBigDataCommand(dto);
 
         byte[]? capturedBytes = null;

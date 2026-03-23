@@ -39,14 +39,14 @@ public partial class RestrictedAreaReportComponent : ComponentBase
     private record SummaryStats(
         int TotalObjects, int TotalDocuments,
         int TotalCreated, int TotalGoodNotCreated, int TotalBadNotCreated,
-        int TotalDeletedZones, int TotalBusyZones);
+        int TotalDeletedZones, int TotalBusyZones, int TotalSavedZones);
 
     private SummaryStats ComputeSummary()
     {
         var objs = RestrictedAreaReportModel.ObjectConiguratorData;
-        if (objs == null) return new(0, 0,  0, 0, 0, 0, 0);
+        if (objs == null) return new(0, 0, 0, 0, 0, 0, 0, 0);
 
-        int docs = 0, created = 0, good = 0, bad = 0, deleted = 0, busy = 0;
+        int docs = 0, created = 0, good = 0, bad = 0, deleted = 0, busy = 0, saved = 0;
         foreach (var obj in objs)
         {
             foreach (var sec in obj.SectionsBuildingData ?? [])
@@ -59,13 +59,14 @@ public partial class RestrictedAreaReportComponent : ComponentBase
                         created += ent.CreatedElements?.Count ?? 0;
                         good    += ent.NotCreatedElementsData?.GoodNotCreatedElements?.Count ?? 0;
                         bad     += ent.NotCreatedElementsData?.BadNotCreatedElements?.Count ?? 0;
+                        saved   += ent.SavedOldZones?.Count ?? 0;
                     }
                     deleted += doc.DocumentDeletingZonesResult?.DeletedOldZones?.Count ?? 0;
                     busy    += doc.DocumentDeletingZonesResult?.NotDeletedBusyOldZones?.Count ?? 0;
                 }
             }
         }
-        return new(objs.Count, docs, created, good, bad, deleted, busy);
+        return new(objs.Count, docs, created, good, bad, deleted, busy, saved);
     }
     #endregion
     

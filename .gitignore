@@ -227,3 +227,6 @@ bin/*
 /.claude
 /.claude/
 .claude/*
+
+/logs
+logs
