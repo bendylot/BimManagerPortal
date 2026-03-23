@@ -1,0 +1,44 @@
+.plugin-form {
+    border-radius: 12px !important;
+    border: 1px solid #e8e8f0 !important;
+}
+
+.plugin-form h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6c5ce7;
+    border-color: #e8e8f0 !important;
+}
+
+.plugin-form .card {
+    border: 1px solid #f0f0f8;
+    border-radius: 10px;
+}
+
+.plugin-form .card h6 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.plugin-form .accordion-button:not(.collapsed) {
+    color: #6c5ce7;
+    background-color: #f5f3ff;
+    box-shadow: none;
+}
+
+.plugin-form .accordion-button:focus {
+    box-shadow: none;
+}
+
+.plugin-form .accordion-item {
+    border: 1px solid #f0f0f8;
+    border-radius: 8px !important;
+    margin-bottom: 6px;
+    overflow: hidden;
+}
+
+.models-list .input-group {
+    transition: all 0.2s;
+}

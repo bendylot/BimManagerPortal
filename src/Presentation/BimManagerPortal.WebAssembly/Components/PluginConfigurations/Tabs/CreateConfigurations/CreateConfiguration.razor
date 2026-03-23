@@ -1,0 +1,50 @@
+@using BimManagerPortal.Domain.Enums
+@using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Forms.RestrictedAreaForm
+
+<div class="container-box p-3">
+    <h5 class="mb-3">Выберите приложение</h5>
+
+    <div class="plugin-selector @(SelectedApp != null ? "compact" : "full")">
+        @foreach (var app in AvailableApps)
+        {
+            <div class="plugin-card @(SelectedApp == app ? "active" : "")"
+                 @onclick="() => SelectApp(app)">
+                <span>@app.ToString()</span>
+            </div>
+        }
+    </div>
+
+    <hr />
+
+    @if (SelectedApp != null)
+    {
+        <h5 class="mb-3">Выберите плагин</h5>
+
+        <div class="plugin-selector @(SelectedPlugin != null ? "compact" : "full")">
+            @foreach (var plugin in AvailablePlugins)
+            {
+                <div class="plugin-card @(SelectedPlugin == plugin ? "active" : "")"
+                     @onclick="() => SelectPlugin(plugin)">
+                    <span>@plugin.Name</span>
+                </div>
+            }
+        </div>
+
+        <hr />
+
+        @if (SelectedPlugin != null)
+        {
+            <div class="form-container fade-in">
+                @if (SelectedPlugin.Name == "RestrictedArea")
+                {
+                    <RestrictedAreaForm PluginConfigTab="PluginConfigTab.Create"
+                                        OnCreated="OnCreated" />
+                }
+                else
+                {
+                    <p class="text-muted">Форма для @SelectedPlugin.Name в разработке...</p>
+                }
+            </div>
+        }
+    }
+</div>
