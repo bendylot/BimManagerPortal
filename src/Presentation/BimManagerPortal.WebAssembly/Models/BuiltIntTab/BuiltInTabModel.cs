@@ -4,5 +4,6 @@ public enum BuiltIntTabModel
 {
     AllReportsPlugins,
     no,
-    ReadPluginReport
+    ReadPluginReport,
+    CreatePluginReport
 }

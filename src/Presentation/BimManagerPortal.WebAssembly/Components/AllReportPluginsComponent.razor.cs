@@ -154,7 +154,7 @@ public partial class AllReportPluginsComponent : ComponentBase
             var jsonString = dto.Json;
 
             // Превращаем обьект в форму отчета запретных зон
-            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString, SelectedConfiguration.PluginName));
+            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(id, jsonString, SelectedConfiguration.PluginName));
         }
         catch (Exception ex)
         {

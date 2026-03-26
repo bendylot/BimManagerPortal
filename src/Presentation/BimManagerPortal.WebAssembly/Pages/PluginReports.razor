@@ -1,7 +1,12 @@
-﻿@page "/plugin-reports"
+@page "/plugin-reports"
+@page "/plugin-reports/create-new-report"
+@page "/plugin-reports/{Id}"
 @using BimManagerPortal.WebAssembly.Components
 @using BimManagerPortal.WebAssembly.Models.BuiltIntTab
 @using BimManagerPortal.WebAssembly.Models.Results
+@using BimManagerPortal.WebAssembly.Services.PluginReports
+@inject NavigationManager NavigationManager
+@inject IPluginReportProviderServiceProvider PluginReportService
 
 <PageTitle>Отчеты плагинов</PageTitle>
 
@@ -18,20 +23,77 @@
     case BuiltIntTabModel.ReadPluginReport:
         <ReadReportPluginComponent PluginReportResult="_pluginReport"/>
         break;
+    case BuiltIntTabModel.CreatePluginReport:
+        <CreateReportPluginComponent />
+        break;
 }
 
-
 @code {
-    private BuiltIntTabModel _activeTab = BuiltIntTabModel.AllReportsPlugins;
-    private ReadPluginReportResult? _pluginReport { get; set; }
+    [Parameter] public string? Id { get; set; }
 
-    private void OnReadTabChanged(ReadPluginReportResult result)
+    private BuiltIntTabModel _activeTab = BuiltIntTabModel.AllReportsPlugins;
+    private ReadPluginReportResult? _pluginReport;
+    private string? _currentReportId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != null)
+        {
+            if (Id == _currentReportId && _activeTab == BuiltIntTabModel.ReadPluginReport)
+                return;
+            await LoadAndShowReport(Id);
+        }
+        else
+        {
+            var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+            if (relativePath == "plugin-reports/create-new-report")
+                _activeTab = BuiltIntTabModel.CreatePluginReport;
+            else
+                _activeTab = BuiltIntTabModel.AllReportsPlugins;
+        }
+    }
+
+    private async Task LoadAndShowReport(string id)
+    {
+        try
+        {
+            var allConfigs = await PluginReportService.GetConfigurations();
+            var config = allConfigs.FirstOrDefault(c => c.Id == id);
+            if (config == null)
+            {
+                _activeTab = BuiltIntTabModel.AllReportsPlugins;
+                return;
+            }
+            var dto = await PluginReportService.GetConfiguration(id);
+            _pluginReport = new ReadPluginReportResult(id, dto.Json, config.PluginName);
+            _currentReportId = id;
+            _activeTab = BuiltIntTabModel.ReadPluginReport;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            _activeTab = BuiltIntTabModel.AllReportsPlugins;
+        }
+    }
+
+    private async Task OnReadTabChanged(ReadPluginReportResult result)
     {
         _pluginReport = result;
-        OnTabChanged(BuiltIntTabModel.ReadPluginReport);
+        _currentReportId = result.Id;
+        _activeTab = BuiltIntTabModel.ReadPluginReport;
+        NavigationManager.NavigateTo($"/plugin-reports/{result.Id}", replace: false);
     }
+
     private void OnTabChanged(BuiltIntTabModel tab)
     {
         _activeTab = tab;
+        var url = tab switch
+        {
+            BuiltIntTabModel.AllReportsPlugins => "/plugin-reports",
+            BuiltIntTabModel.CreatePluginReport => "/plugin-reports/create-new-report",
+            BuiltIntTabModel.ReadPluginReport when _currentReportId != null => $"/plugin-reports/{_currentReportId}",
+            _ => "/plugin-reports"
+        };
+        NavigationManager.NavigateTo(url, replace: false);
     }
 }

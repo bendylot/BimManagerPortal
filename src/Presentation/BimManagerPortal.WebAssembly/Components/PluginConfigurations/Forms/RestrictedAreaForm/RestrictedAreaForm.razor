@@ -24,10 +24,10 @@
         <div class="card p-3 mb-3 shadow-sm">
             <h6 class="card-subtitle mb-2 text-muted">Режим построения</h6>
             <div class="row g-2">
-                <TreeOptionSelecter Label="Обработка старых зон"
-                                    Options="@ModelTypes"
-                                    @bind-Value="Config.BuildingMode.HandlerOldZones" />
-                <ValidationMessage For="@(() => Config.BuildingMode.HandlerOldZones)"/>
+                <CheckboxField Label="Принудительное перестроение" 
+                               @bind-Value="Config.BuildingMode.ForcedRebuilding" />
+                <CheckboxField Label="Создать отчет по отработке"
+                               @bind-Value="Config.BuildingMode.CreateReportFile" />
                 <CheckboxField Label="Построение новых зон"
                                @bind-Value="Config.BuildingMode.BuilderNewZones" />
                 <CheckboxField Label="Создание файлов с запретными зонами"
@@ -76,7 +76,7 @@
                         {
                             var index = i;
                             var model = Config.PathsToModels.Models[i];
-                            <div class="mb-2" @key="model.Id">
+                            <div class="mb-2" @key="model.ModelPath">
                                 <div class="input-group">
                                     <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
                                     <InputText class="form-control form-control-sm"

@@ -1,4 +1,6 @@
 @page "/plugin-configurations"
+@page "/plugin-configurations/create-new-configuration"
+@page "/plugin-configurations/{Name}"
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using BimManagerPortal.Application.Other.PluginsConfigs
@@ -8,6 +10,9 @@
 @using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.AllConfigurations
 @using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.CreateConfigurations
 @using BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.EditConfigurations
+@using BimManagerPortal.WebAssembly.Services.PluginConfigurations
+@inject NavigationManager NavigationManager
+@inject IPluginConfigurationService ConfigurationService
 
 <PageTitle>Конфигурации плагинов</PageTitle>
 
@@ -22,22 +27,76 @@
         break;
 
     case PluginConfigTab.Create:
-        <CreateConfiguration OnCreated="() => _activeTab = PluginConfigTab.All" />
+        <CreateConfiguration OnCreated="OnCreated" />
         break;
 
     case PluginConfigTab.Edit:
         <EditerConfiguration RestrictedAreaConfigEntity="_editEntity"
-                             OnUpdated="() => _activeTab = PluginConfigTab.All" />
+                             OnUpdated="OnUpdated" />
         break;
 }
 
 @code {
+    [Parameter] public string? Name { get; set; }
+
     private PluginConfigTab _activeTab = PluginConfigTab.All;
     private RestrictedAreaConfigEntity _editEntity = new();
+    private string? _currentName;
 
-    private void OnTabChanged(PluginConfigTab tab) => _activeTab = tab;
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Name != null)
+        {
+            if (Name == _currentName && _activeTab == PluginConfigTab.Edit)
+                return;
+            await LoadAndOpenEdit(Name);
+        }
+        else
+        {
+            var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+            if (relativePath == "plugin-configurations/create-new-configuration")
+                _activeTab = PluginConfigTab.Create;
+            else
+                _activeTab = PluginConfigTab.All;
+        }
+    }
+
+    private async Task LoadAndOpenEdit(string name)
+    {
+        try
+        {
+            var configs = await ConfigurationService.GetAllAsync();
+            var config = configs.FirstOrDefault(c => c.Name == name);
+            if (config == null) { _activeTab = PluginConfigTab.All; return; }
+            ApplyEditEntity(config);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            _activeTab = PluginConfigTab.All;
+        }
+    }
+
+    private void OnTabChanged(PluginConfigTab tab)
+    {
+        _activeTab = tab;
+        var url = tab switch
+        {
+            PluginConfigTab.All    => "/plugin-configurations",
+            PluginConfigTab.Create => "/plugin-configurations/create-new-configuration",
+            PluginConfigTab.Edit when _currentName != null => $"/plugin-configurations/{Uri.EscapeDataString(_currentName)}",
+            _ => "/plugin-configurations"
+        };
+        NavigationManager.NavigateTo(url, replace: false);
+    }
 
     private void OpenEditTab(PluginConfigEntity config)
+    {
+        ApplyEditEntity(config);
+        NavigationManager.NavigateTo($"/plugin-configurations/{Uri.EscapeDataString(config.Name)}", replace: false);
+    }
+
+    private void ApplyEditEntity(PluginConfigEntity config)
     {
         try
         {
@@ -54,11 +113,24 @@
                 Id         = config.Id,
                 Data       = proxy,
             };
+            _currentName = config.Name;
             _activeTab = PluginConfigTab.Edit;
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
         }
+    }
+
+    private void OnCreated()
+    {
+        _activeTab = PluginConfigTab.All;
+        NavigationManager.NavigateTo("/plugin-configurations", replace: false);
+    }
+
+    private void OnUpdated()
+    {
+        _activeTab = PluginConfigTab.All;
+        NavigationManager.NavigateTo("/plugin-configurations", replace: false);
     }
 }
