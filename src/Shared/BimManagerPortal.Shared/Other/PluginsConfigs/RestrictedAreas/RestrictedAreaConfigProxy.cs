@@ -67,7 +67,7 @@ public class VisDisciplineProxy
 #endregion
 public class PathsToModelsProxy
 {
-    [StringLength(10, MinimumLength = 1,ErrorMessage = "Длина от 1 до 10 символов")]
+    [StringLength(100, MinimumLength = 1,ErrorMessage = "Длина от 1 до 100 символов")]
     public string ObjectName { get; set; } = "";
 
     [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$",ErrorMessage = "Некорректный путь Windows")]
