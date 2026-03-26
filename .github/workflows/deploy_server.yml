@@ -34,7 +34,7 @@ jobs:
             git pull
             
             # 3. Обновляем образы
-            docker compose pull web api
+            docker compose pull
 
             # 4. Перезапускаем контейнеры
             # --force-recreate гарантирует, что контейнеры обновятся до новых версий

@@ -1,8 +1,5 @@
-﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher
-@using BimManagerPortal.WebAssembly.Components.ModalForm.Loading
-@using BimManagerPortal.WebAssembly.Layout.Modals.JsonWatchModal
+﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.Loading
 @using BimManagerPortal.WebAssembly.Layout.Modals.LoadingModal
-@inject JsonWatcherModalService JsonModalService
 @inject LoadingModalService LoadingModalService
 <div class="container-box p-3">
     <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
@@ -23,9 +20,9 @@
                         <i class="bi bi-pencil-square me-1"></i> Прочитать отчет
                     </button>
 
-                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
-                            @onclick="OpenPluginReportJson">
-                        <i class="bi bi-code-slash me-1"></i> Открыть JSON отчета
+                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm"
+                            @onclick="DownloadJson">
+                        <i class="bi bi-download me-1"></i> Скачать JSON
                     </button>
 
                     <button class="btn btn-outline-danger d-flex align-items-center btn-sm" 
@@ -89,5 +86,4 @@
         </div>
     }
 </div>
-<JsonWatcherModal />
 <LoadingModal />
