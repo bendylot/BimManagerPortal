@@ -1,19 +1,13 @@
 @if (_isVisible)
 {
-    <div class="modal-backdrop fade show"></div>
-
-    <div class="modal fade show d-block" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content @BorderClass">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Title</h5>
-                    <button type="button" class="btn-close" @onclick="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <p>@Message</p>
-                </div>
-            </div>
+    <div class="event-toast border @BorderClass">
+        <div class="event-toast-header">
+            <i class="@IconClass me-2"></i>
+            <strong class="me-auto">@Title</strong>
+            <button type="button" class="btn-close btn-close-sm ms-2" @onclick="Close"></button>
+        </div>
+        <div class="event-toast-body">
+            @Message
         </div>
     </div>
 }

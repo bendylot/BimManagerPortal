@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
-using BimManagerPortal.Application.Other.PluginsConfigs;
+using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
+using BimManagerPortal.Shared.Other.PluginsConfigs;
 
 namespace BimManagerPortal.WebAssembly.Services.PluginConfigurations;
 

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace BimManagerPortal.Application.Other.Dtos.Responses.PluginConfigsDto
+namespace BimManagerPortal.Shared.Other.Dtos.Responses.PluginConfigsDto
 {
     public class PluginConfigResponseDto
     {

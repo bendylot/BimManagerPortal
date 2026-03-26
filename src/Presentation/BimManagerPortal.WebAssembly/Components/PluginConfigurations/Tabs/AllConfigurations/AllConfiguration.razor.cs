@@ -1,6 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using BimManagerPortal.Application.Other.PluginsConfigs;
+using BimManagerPortal.Shared.Other.PluginsConfigs;
 using BimManagerPortal.WebAssembly.Layout.Modals.EventModalWindow;
 using BimManagerPortal.WebAssembly.Services.PluginConfigurations;
 using Microsoft.AspNetCore.Components;

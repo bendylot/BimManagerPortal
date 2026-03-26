@@ -1,6 +1,6 @@
-using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
-using BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas;
 using BimManagerPortal.Domain.Enums;
+using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
+using BimManagerPortal.Shared.Other.PluginsConfigs.RestrictedAreas;
 using BimManagerPortal.WebAssembly.Components.ModalForm.Loading;
 using BimManagerPortal.WebAssembly.Layout.Modals.EventModalWindow;
 using BimManagerPortal.WebAssembly.Services.PluginConfigurations;
@@ -48,8 +48,8 @@ public partial class RestrictedAreaForm
 
     private void AddModel(PathsToModelsProxy paths)
     {
-        paths.Models ??= new List<Model>();
-        paths.Models.Add(new Model { ModelPath = "" });
+        paths.Models ??= new List<ModelPath>();
+        paths.Models.Add(new ModelPath());
     }
 
     private void RemoveModel(PathsToModelsProxy paths, int index)
@@ -104,13 +104,13 @@ public partial class RestrictedAreaForm
         try
         {
             await ConfigurationService.UpdateAsync(dto, RestrictedAreaConfig.Id!);
-            ShowSuccess("Конфигурация обновлена");
+                //ShowSuccess("Конфигурация обновлена");
             await OnUpdated.InvokeAsync();
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            ShowError("Ошибка при обновлении конфигурации.");
+            //ShowError("Ошибка при обновлении конфигурации.");
         }
         finally
         {

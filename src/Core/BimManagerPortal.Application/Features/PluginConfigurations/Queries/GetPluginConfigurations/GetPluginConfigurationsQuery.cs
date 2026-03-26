@@ -1,6 +1,6 @@
 using BimManagerPortal.Application.Interfaces.Repositories;
-using BimManagerPortal.Application.Other.PluginsConfigs;
 using BimManagerPortal.Domain.Entities.PluginConfigurations;
+using BimManagerPortal.Shared.Other.PluginsConfigs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

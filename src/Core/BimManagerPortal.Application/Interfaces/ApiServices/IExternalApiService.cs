@@ -1,5 +1,5 @@
-﻿using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
-using BimManagerPortal.Application.Other.Dtos.Responses.PluginConfigsDto;
+﻿using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
+using BimManagerPortal.Shared.Other.Dtos.Responses.PluginConfigsDto;
 
 namespace BimManagerPortal.Application.Interfaces.ApiServices
 {

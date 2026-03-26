@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas;
+namespace BimManagerPortal.Shared.Other.PluginsConfigs.RestrictedAreas;
 
 public class RestrictedAreaConfigProxy
 {
@@ -36,9 +36,7 @@ public class DisciplinesProxy
 public class ArDisciplineProxy
 {
     public bool ArDoors { get; set; } = false;
-    public bool ArRoomProperties { get; set; } = false;
     public bool ArParking { get; set; } = false;
-    public bool ArDoorsReinforcedConcrete { get; set; } = false;
     public bool ArDoorOpenings { get; set; } = false;
 }
 public class KrDisciplineProxy
@@ -85,12 +83,14 @@ public class PathsToModelsProxy
 
     [StringLength(20, MinimumLength = 0,ErrorMessage = "Длина от 0 до 20 символов")]
     public string SuffixForFilesWithOnlyRestrictedAreas { get; set; } = "_Запретные зоны";
-
-    public List<Model> Models { get; set; } = new();
+    
+    [ValidateComplexType]
+    public List<ModelPath> Models { get; set; } = new();
 }
-public class Model
+public class ModelPath
 {
-    [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$",ErrorMessage = "Некорректный путь Windows")]
-    [StringLength(255, MinimumLength = 1,ErrorMessage = "Длина от 1 до 255 символов")]
-    public string ModelPath { get; set; }
+    [Required(ErrorMessage = "Путь не может быть пустым")]
+    [RegularExpression(@"^[a-zA-Z]:\\([^<>:""/\\|?*\r\n]+\\)*[^<>:""/\\|?*\r\n]*$", ErrorMessage = "Некорректный путь Windows")]
+    [StringLength(255, MinimumLength = 1, ErrorMessage = "Длина от 1 до 255 символов")]
+    public string Model { get; set; } = "";
 }

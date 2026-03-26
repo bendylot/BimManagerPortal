@@ -49,11 +49,6 @@
                     <tr>
                         <th
                             style="cursor:pointer"
-                            @onclick='() => SortBy("PluginName")'>
-                            Плагин @SortIcon("PluginName")
-                        </th>
-                        <th
-                            style="cursor:pointer"
                             @onclick='() => SortBy("ConfigurationName")'>
                             Имя конфигурации @SortIcon("ConfigurationName")
                         </th>
@@ -74,7 +69,6 @@
                     {
                         <tr @onclick="() => SelectRow(config.Id)"
                             class="@( _selectedId == config.Id ? "selected" : "" )">
-                            <td style="font-weight: 500;">@config.PluginName</td>
                             <td style="font-weight: 500;">@config.ConfigurationName</td>
                             <td style="font-weight: 500;">@config.CreatedAt</td>
                             <td style="font-weight: 500;">@config.UserCreater</td>

@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas
+namespace BimManagerPortal.Shared.Other.PluginsConfigs.RestrictedAreas
 {
     public class RestrictedAreaConfigEntity
     {
         [Required]
-        [StringLength(20, MinimumLength = 1,ErrorMessage = "Длина от 0 до 20 символов")]
+        [StringLength(100, MinimumLength = 1,ErrorMessage = "Длина от 1 до 100 символов")]
         public string NameConfig { get; set; } = "";
         public string? Id { get; set; }
         [ValidateComplexType]
