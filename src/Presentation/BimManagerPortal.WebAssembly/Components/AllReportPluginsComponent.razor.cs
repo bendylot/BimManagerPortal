@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
 using BimManagerPortal.Shared.Dtos;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using BimManagerPortal.Shared.Model;
@@ -7,6 +8,7 @@ using BimManagerPortal.WebAssembly.Models.BuiltIntTab;
 using BimManagerPortal.WebAssembly.Models.Results;
 using BimManagerPortal.WebAssembly.Services.PluginReports;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BimManagerPortal.WebAssembly.Components;
 
@@ -15,8 +17,8 @@ public partial class AllReportPluginsComponent : ComponentBase
     #region fields
     private string? _selectedId;
     private string _searchTerm = string.Empty;
-    private string? _currentSortColumn;
-    private bool _sortAscending = true;
+    private string? _currentSortColumn = nameof(GetAllPluginBigDatasDto.CreatedAt);
+    private bool _sortAscending = false;
     [Parameter] 
     public EventCallback<ReadPluginReportResult> ActiveTabChanged { get; set; }
     #endregion
@@ -31,6 +33,8 @@ public partial class AllReportPluginsComponent : ComponentBase
     public IPluginReportProviderServiceProvider _pluginReportProviderServiceProvider { get; set; }
     [Inject]
     private LoadingModalService _loadingModalService { get; set; }
+    [Inject]
+    private IJSRuntime _jsRuntime { get; set; }
     #endregion
     
     #region events-methods
@@ -47,6 +51,21 @@ public partial class AllReportPluginsComponent : ComponentBase
     #endregion
     
     #region private methods
+
+    private static string FormatJsonElement(JsonElement element)
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        if (element.ValueKind == JsonValueKind.String)
+        {
+            using var doc = JsonDocument.Parse(element.GetString()!);
+            return JsonSerializer.Serialize(doc.RootElement, options);
+        }
+        return JsonSerializer.Serialize(element, options);
+    }
     
     private MarkupString SortIcon(string column)
     {
@@ -135,7 +154,7 @@ public partial class AllReportPluginsComponent : ComponentBase
             var jsonString = dto.Json;
 
             // Превращаем обьект в форму отчета запретных зон
-            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(jsonString, SelectedConfiguration.PluginName));
+            await ActiveTabChanged.InvokeAsync(new ReadPluginReportResult(id, jsonString, SelectedConfiguration.PluginName));
         }
         catch (Exception ex)
         {
@@ -146,7 +165,7 @@ public partial class AllReportPluginsComponent : ComponentBase
             _loadingModalService.Hide();
         }
     }
-    private async Task OpenPluginReportJson()
+    private async Task DownloadJson()
     {
         if (SelectedConfiguration?.Id == null) return;
         var id = SelectedConfiguration.Id;
@@ -155,8 +174,8 @@ public partial class AllReportPluginsComponent : ComponentBase
         try
         {
             var dto = await _pluginReportProviderServiceProvider.GetConfiguration(id);
-            var jsonString = dto.Json;
-            JsonModalService.Show(jsonString);
+            var fileName = $"{SelectedConfiguration.ConfigurationName}.json";
+            await _jsRuntime.InvokeVoidAsync("downloadFile", fileName, FormatJsonElement(dto.Json));
         }
         catch (Exception ex)
         {

@@ -3,7 +3,7 @@ using BimManagerPortal.Application.Features.PluginConfigurations.Commands.PostPl
 using BimManagerPortal.Application.Features.PluginConfigurations.Commands.PutPluginConfiguration;
 using BimManagerPortal.Application.Features.PluginConfigurations.Queries.GetPluginConfiguration;
 using BimManagerPortal.Application.Features.PluginConfigurations.Queries.GetPluginConfigurations;
-using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
+using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace BimManagerPortal.Application.Other.PluginsConfigs
+namespace BimManagerPortal.Shared.Other.PluginsConfigs
 {
     public class PluginConfigEntity
     {

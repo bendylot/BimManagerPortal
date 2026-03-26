@@ -1,7 +1,7 @@
 using System.Text.Json;
 using BimManagerPortal.Application.Interfaces.Repositories;
-using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
 using BimManagerPortal.Domain.Entities.PluginConfigurations;
+using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
 using MediatR;
 
 namespace BimManagerPortal.Application.Features.PluginConfigurations.Commands.PostPluginConfiguration;

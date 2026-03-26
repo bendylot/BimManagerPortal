@@ -1,7 +1,10 @@
-using BimManagerPortal.Application.Other.PluginsConfigs;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using BimManagerPortal.Shared.Other.PluginsConfigs;
 using BimManagerPortal.WebAssembly.Layout.Modals.EventModalWindow;
 using BimManagerPortal.WebAssembly.Services.PluginConfigurations;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BimManagerPortal.WebAssembly.Components.PluginConfigurations.Tabs.AllConfigurations;
 
@@ -9,11 +12,12 @@ public partial class AllConfiguration
 {
     private string? _selectedId;
     private string _searchTerm = string.Empty;
-    private string? _currentSortColumn;
-    private bool _sortAscending = true;
+    private string? _currentSortColumn = nameof(PluginConfigEntity.CreatedAt);
+    private bool _sortAscending = false;
     private EventModalWindow _eventModal = default!;
 
     [Inject] private IPluginConfigurationService ConfigurationService { get; set; } = default!;
+    [Inject] private IJSRuntime JsRuntime { get; set; } = default!;
 
     [Parameter] public EventCallback<PluginConfigEntity> OnEditRequested { get; set; }
 
@@ -87,6 +91,33 @@ public partial class AllConfiguration
     {
         if (SelectedConfiguration == null) return;
         OnEditRequested.InvokeAsync(SelectedConfiguration);
+    }
+
+    private async Task DownloadJson()
+    {
+        if (SelectedConfiguration == null) return;
+        var fileName = $"{SelectedConfiguration.Name}.json";
+        var formatted = FormatData(SelectedConfiguration.Data);
+        await JsRuntime.InvokeVoidAsync("downloadFile", fileName, formatted);
+    }
+
+    private static string FormatData(object? data)
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        if (data is JsonElement element)
+        {
+            if (element.ValueKind == JsonValueKind.String)
+            {
+                using var doc = JsonDocument.Parse(element.GetString()!);
+                return JsonSerializer.Serialize(doc.RootElement, options);
+            }
+            return JsonSerializer.Serialize(element, options);
+        }
+        return JsonSerializer.Serialize(data, options);
     }
 
     private async Task DeleteConfiguration()

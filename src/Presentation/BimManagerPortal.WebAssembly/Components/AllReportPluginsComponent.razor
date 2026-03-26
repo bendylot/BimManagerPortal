@@ -1,8 +1,5 @@
-﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.JsonWatcher
-@using BimManagerPortal.WebAssembly.Components.ModalForm.Loading
-@using BimManagerPortal.WebAssembly.Layout.Modals.JsonWatchModal
+﻿@using BimManagerPortal.WebAssembly.Components.ModalForm.Loading
 @using BimManagerPortal.WebAssembly.Layout.Modals.LoadingModal
-@inject JsonWatcherModalService JsonModalService
 @inject LoadingModalService LoadingModalService
 <div class="container-box p-3">
     <div class="row mb-4 align-items-center g-2"> <div class="col-md-4">
@@ -23,9 +20,9 @@
                         <i class="bi bi-pencil-square me-1"></i> Прочитать отчет
                     </button>
 
-                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm" 
-                            @onclick="OpenPluginReportJson">
-                        <i class="bi bi-code-slash me-1"></i> Открыть JSON отчета
+                    <button class="btn btn-outline-secondary d-flex align-items-center btn-sm"
+                            @onclick="DownloadJson">
+                        <i class="bi bi-download me-1"></i> Скачать JSON
                     </button>
 
                     <button class="btn btn-outline-danger d-flex align-items-center btn-sm" 
@@ -52,11 +49,6 @@
                     <tr>
                         <th
                             style="cursor:pointer"
-                            @onclick='() => SortBy("PluginName")'>
-                            Плагин @SortIcon("PluginName")
-                        </th>
-                        <th
-                            style="cursor:pointer"
                             @onclick='() => SortBy("ConfigurationName")'>
                             Имя конфигурации @SortIcon("ConfigurationName")
                         </th>
@@ -77,7 +69,6 @@
                     {
                         <tr @onclick="() => SelectRow(config.Id)"
                             class="@( _selectedId == config.Id ? "selected" : "" )">
-                            <td style="font-weight: 500;">@config.PluginName</td>
                             <td style="font-weight: 500;">@config.ConfigurationName</td>
                             <td style="font-weight: 500;">@config.CreatedAt</td>
                             <td style="font-weight: 500;">@config.UserCreater</td>
@@ -89,5 +80,4 @@
         </div>
     }
 </div>
-<JsonWatcherModal />
 <LoadingModal />

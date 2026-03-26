@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
-using BimManagerPortal.Application.Other.PluginsConfigs.RestrictedAreas;
+using BimManagerPortal.Shared.Other.PluginsConfigs.RestrictedAreas;
 
-namespace BimManagerPortal.Application.Other.PluginsConfigs
+namespace BimManagerPortal.Shared.Other.PluginsConfigs
 {
     [JsonDerivedType(typeof(RestrictedAreaConfigProxy))]
     public interface IPluginConfigData

@@ -3,9 +3,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using BimManagerPortal.Application.Interfaces.ApiServices;
-using BimManagerPortal.Application.Other.Dtos.Requests.PluginConfigs;
-using BimManagerPortal.Application.Other.Dtos.Responses.PluginConfigsDto;
 using BimManagerPortal.Application.Other.Exceptions;
+using BimManagerPortal.Shared.Other.Dtos.Requests.PluginConfigs;
+using BimManagerPortal.Shared.Other.Dtos.Responses.PluginConfigsDto;
 
 namespace BimManagerPortal.Persistance.ApiServices
 {
