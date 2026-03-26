@@ -20,21 +20,23 @@
 
 <ConfigTabs ActiveTab="_activeTab" ActiveTabChanged="OnTabChanged" />
 
-@switch (_activeTab)
-{
-    case PluginConfigTab.All:
-        <AllConfiguration OnEditRequested="OpenEditTab" />
-        break;
+<div class="tab-panel">
+    @switch (_activeTab)
+    {
+        case PluginConfigTab.All:
+            <AllConfiguration OnEditRequested="OpenEditTab" />
+            break;
 
-    case PluginConfigTab.Create:
-        <CreateConfiguration OnCreated="OnCreated" />
-        break;
+        case PluginConfigTab.Create:
+            <CreateConfiguration OnCreated="OnCreated" />
+            break;
 
-    case PluginConfigTab.Edit:
-        <EditerConfiguration RestrictedAreaConfigEntity="_editEntity"
-                             OnUpdated="OnUpdated" />
-        break;
-}
+        case PluginConfigTab.Edit:
+            <EditerConfiguration RestrictedAreaConfigEntity="_editEntity"
+                                 OnUpdated="OnUpdated" />
+            break;
+    }
+</div>
 
 @code {
     [Parameter] public string? Name { get; set; }
