@@ -37,11 +37,11 @@ public class PluginBigDataController
         {
             return TypedResults.BadRequest($"Validation failed: {ex.Message}");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return TypedResults.Problem(
                 title: "Internal Server Error",
-                detail: ex.Message,
+                detail: "An unexpected error occurred.",
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }
@@ -61,11 +61,11 @@ public class PluginBigDataController
         {
             return TypedResults.BadRequest($"Validation failed: {ex.Message}");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return TypedResults.Problem(
                 title: "Internal Server Error",
-                detail: ex.Message,
+                detail: "An unexpected error occurred.",
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }
@@ -89,11 +89,11 @@ public class PluginBigDataController
         {
             return TypedResults.BadRequest($"Validation failed: {ex.Message}");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return TypedResults.Problem(
                 title: "Internal Server Error",
-                detail: ex.Message,
+                detail: "An unexpected error occurred.",
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }
@@ -118,11 +118,11 @@ public class PluginBigDataController
         {
             return TypedResults.BadRequest($"Validation failed: {ex.Message}");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return TypedResults.Problem(
                 title: "Internal Server Error",
-                detail: ex.Message,
+                detail: "An unexpected error occurred.",
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }

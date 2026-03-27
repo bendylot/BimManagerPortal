@@ -32,7 +32,8 @@ public class GetPluginBigDataQueryHandler
         var id = query.getPluginBigDataRequestDto.Id;
 
         var entity = await _unitOfWork.Repository<PluginBigData>()
-            .GetByIdAsync(id);
+            .GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Запись с id '{id}' не найдена.");
 
         try
         {

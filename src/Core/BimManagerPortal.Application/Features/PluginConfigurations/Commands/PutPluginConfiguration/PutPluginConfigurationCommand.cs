@@ -25,8 +25,7 @@ internal class PutPluginConfigurationCommandHandler : IRequestHandler<PutPluginC
 
         entity.Name    = command.Dto.Name;
         entity.JsonData = JsonSerializer.Serialize(command.Dto.Configuration);
-        entity.UpdatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
-            TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
+        entity.UpdatedAt = DateTime.UtcNow;
 
         await _unitOfWork.Repository<PluginConfiguration>().UpdateAsync(entity);
         await _unitOfWork.SaveAsync(ct);

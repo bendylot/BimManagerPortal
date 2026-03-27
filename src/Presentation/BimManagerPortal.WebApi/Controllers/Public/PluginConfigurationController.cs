@@ -29,9 +29,9 @@ public class PluginConfigurationController
             var result = await _mediator.Send(new GetPluginConfigurationsQuery());
             return TypedResults.Ok(result);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return TypedResults.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(detail: "An unexpected error occurred.", statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 
@@ -47,9 +47,9 @@ public class PluginConfigurationController
         {
             return TypedResults.NotFound(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return TypedResults.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(detail: "An unexpected error occurred.", statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 
@@ -65,9 +65,9 @@ public class PluginConfigurationController
         {
             return TypedResults.BadRequest(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return TypedResults.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(detail: "An unexpected error occurred.", statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 
@@ -87,9 +87,9 @@ public class PluginConfigurationController
         {
             return TypedResults.BadRequest(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return TypedResults.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(detail: "An unexpected error occurred.", statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 
@@ -105,9 +105,9 @@ public class PluginConfigurationController
         {
             return TypedResults.NotFound(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return TypedResults.Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            return TypedResults.Problem(detail: "An unexpected error occurred.", statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 }
