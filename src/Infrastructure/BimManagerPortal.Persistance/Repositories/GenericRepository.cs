@@ -22,11 +22,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseAuditabl
         return entity;
     }
  
-    public Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity)
     {
-        T exist = _dbContext.Set<T>().Find(entity.Id);
+        var exist = await _dbContext.Set<T>().FindAsync(entity.Id)
+            ?? throw new KeyNotFoundException($"Запись с id '{entity.Id}' не найдена.");
         _dbContext.Entry(exist).CurrentValues.SetValues(entity);
-        return Task.CompletedTask;
     }
  
     public Task DeleteAsync(T entity)

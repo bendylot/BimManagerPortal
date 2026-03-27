@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using BimManagerPortal.Persistance.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi;
 
 namespace BimManagerPortal.WebApi;
@@ -43,23 +44,30 @@ public static class DependencyInjection
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            db.Database.Migrate();
+            try
+            {
+                db.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+                logger.LogCritical(ex, "Database migration failed on startup.");
+                throw;
+            }
         }
-        
+
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PluginsBigDataManager v1");
+                c.RoutePrefix = "swagger";
+            });
         }
 
         app.UseHttpsRedirection();
-        
-        // Swagger
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "PluginsBigDataManager v1");
-            c.RoutePrefix = "swagger";
-        });
 
         // CORS
         app.UseCors("AllowAll");
