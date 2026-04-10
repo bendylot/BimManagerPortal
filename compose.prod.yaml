@@ -51,5 +51,5 @@ services:
       - api
 
 volumes:
-  postgres_prod_data:
+  postgres_data:
   seq_prod_data:
