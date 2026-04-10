@@ -32,13 +32,21 @@ jobs:
             # echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
 
             git pull
-            
-            # 3. Обновляем образы
+
+            # 3. Пишем .env из секретов
+            cat > .env <<'ENVEOF'
+POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+SEQ_ADMIN_PASSWORD=${{ secrets.SEQ_ADMIN_PASSWORD }}
+ENVEOF
+
+            # 4. Обновляем образы
             docker compose pull
 
-            # 4. Перезапускаем контейнеры
+            # 5. Перезапускаем контейнеры
             # --force-recreate гарантирует, что контейнеры обновятся до новых версий
             docker compose up -d --force-recreate
 
-            # 5. Чистим старые образы ("висючие" слои), чтобы не забивать диск сервера
+            # 6. Чистим старые образы ("висючие" слои), чтобы не забивать диск сервера
             docker image prune -f

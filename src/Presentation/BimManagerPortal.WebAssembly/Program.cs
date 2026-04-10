@@ -10,12 +10,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-var apiBaseUrl = builder.Configuration["ApiBaseUrl"]!;
+var baseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = baseAddress });
 
 builder.Services.AddHttpClient<IPluginConfigurationService, PluginConfigurationService>(client =>
-    client.BaseAddress = new Uri(apiBaseUrl));
+    client.BaseAddress = baseAddress);
 
 builder.Services.AddScoped<IPluginReportProviderServiceProvider, PluginReportProviderServiceProvider>();
 builder.Services.AddScoped<JsonWatcherModalService>();

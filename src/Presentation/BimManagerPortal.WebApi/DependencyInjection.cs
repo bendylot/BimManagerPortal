@@ -12,7 +12,6 @@ public static class DependencyInjection
     {
         // Controllers
         services.AddControllers();
-        services.AddOpenApi();
         // CORS
         services.AddCors(options =>
         {
@@ -33,7 +32,6 @@ public static class DependencyInjection
             {
                 Type = JsonSchemaType.Object
             });
-
         });
 
         return services;
@@ -56,24 +54,19 @@ public static class DependencyInjection
             }
         }
 
-        if (app.Environment.IsDevelopment())
+        app.UseRouting();
+
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
         {
-            app.MapOpenApi();
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PluginsBigDataManager v1");
-                c.RoutePrefix = "swagger";
-            });
-        }
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "PluginsBigDataManager v1");
+            c.RoutePrefix = "swagger";
+        });
 
         app.UseHttpsRedirection();
 
         // CORS
         app.UseCors("AllowAll");
-
-        // Routing
-        app.UseRouting();
 
         // Controllers
         app.MapControllers();

@@ -1,0 +1,61 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: bimmanagerportal-postgres
+    environment:
+      POSTGRES_DB: postgre_db
+      POSTGRES_USER: postgre_user
+      POSTGRES_PASSWORD: postgre_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_local_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgre_user -d postgre_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  seq:
+    image: datalust/seq:latest
+    container_name: bimmanagerportal-seq
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_ADMINPASSWORD: admin
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    volumes:
+      - seq_local_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    image: bimmanagerportal-api:local
+    container_name: bimmanagerportal-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    ports:
+      - "5002:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      seq:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-web
+    image: bimmanagerportal-web:local
+    container_name: bimmanagerportal-web
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  postgres_local_data:
+  seq_local_data:

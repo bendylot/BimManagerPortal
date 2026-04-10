@@ -1,7 +1,9 @@
 ﻿using BimManagerPortal.Application.Features.PluginBigDatas.Commands.DeletePluginBigData;
 using BimManagerPortal.Application.Features.PluginBigDatas.Commands.PostPluginBigData;
+using BimManagerPortal.Application.Features.PluginBigDatas.Commands.SeedFakePluginBigData;
 using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigData;
 using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigDatas;
+using BimManagerPortal.Application.Features.PluginBigDatas.Queries.GetPluginBigDatasPaged;
 using BimManagerPortal.Shared.Dtos.PluginBigDatas;
 using FluentValidation;
 using MediatR;
@@ -45,6 +47,29 @@ public class PluginBigDataController
                 statusCode: StatusCodes.Status500InternalServerError);
         }
     }
+    [HttpGet("paged")]
+    public async Task<IResult> GetAllPluginBigDatasPaged(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortColumn = "CreatedAt",
+        [FromQuery] bool sortAscending = false)
+    {
+        try
+        {
+            var dto = await _mediator.Send(
+                new GetPluginBigDatasPagedQuery(page, pageSize, search, sortColumn, sortAscending));
+            return TypedResults.Ok(dto);
+        }
+        catch (Exception)
+        {
+            return TypedResults.Problem(
+                title: "Internal Server Error",
+                detail: "An unexpected error occurred.",
+                statusCode: StatusCodes.Status500InternalServerError);
+        }
+    }
+
     [HttpGet("{id}")]
     public async Task<IResult> GetAllPluginBigData(string id)
     {
@@ -99,6 +124,23 @@ public class PluginBigDataController
     }
 
     #endregion
+
+    [HttpPost("seed-fake")]
+    public async Task<IResult> SeedFakePluginBigData([FromQuery] int count = 20)
+    {
+        try
+        {
+            var created = await _mediator.Send(new SeedFakePluginBigDataCommand(count));
+            return TypedResults.Ok(new { created });
+        }
+        catch (Exception)
+        {
+            return TypedResults.Problem(
+                title: "Internal Server Error",
+                detail: "An unexpected error occurred.",
+                statusCode: StatusCodes.Status500InternalServerError);
+        }
+    }
 
     #region Delete
 

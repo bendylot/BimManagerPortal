@@ -71,30 +71,117 @@
 
                 <div class="card p-3 shadow-sm mt-3">
                     <h6 class="card-subtitle mb-3 text-muted">Список путей к моделям</h6>
-                    <div class="models-list">
+
+                    <!-- Import tabs -->
+                    <ul class="nav nav-tabs mb-0">
+                        <li class="nav-item">
+                            <button class="nav-link @(_activeImportTab == 0 ? "active" : "")" type="button"
+                                    @onclick='() => _activeImportTab = 0'>
+                                <i class="bi bi-folder2-open"></i> Из проводника
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link @(_activeImportTab == 1 ? "active" : "")" type="button"
+                                    @onclick='() => _activeImportTab = 1'>
+                                <i class="bi bi-clipboard"></i> Вставить пути
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="border border-top-0 rounded-bottom p-3 mb-3">
+                        @if (_activeImportTab == 0)
+                        {
+                            <!-- Way 1: folder path + file picker -->
+                            <InputFile id="rvtFolderFilePicker" OnChange="HandleFolderFilesSelected" multiple accept=".rvt" style="display:none" />
+                            <div class="mb-2">
+                                <label class="small">Путь к папке с моделями</label>
+                                <div class="input-group input-group-sm">
+                                    <InputText class="form-control form-control-sm font-monospace"
+                                               placeholder='X:\00_Проекты\...\01_AR\'
+                                               @bind-Value="_folderPath" />
+                                    <button class="btn btn-outline-secondary btn-sm" type="button"
+                                            @onclick="OpenFolderFilePicker">
+                                        <i class="bi bi-file-earmark-plus"></i> Выбрать файлы
+                                    </button>
+                                </div>
+                            </div>
+                            @if (_folderFileNames.Count > 0)
+                            {
+                                <div class="mb-2 small text-muted border rounded p-2 bg-light">
+                                    <strong>Выбрано файлов: @_folderFileNames.Count</strong> —
+                                    @string.Join(", ", _folderFileNames.Take(4))@(_folderFileNames.Count > 4 ? $" и ещё {_folderFileNames.Count - 4}..." : "")
+                                </div>
+                            }
+                            <button class="btn btn-outline-primary btn-sm w-100 mt-1" type="button"
+                                    @onclick="ApplyFolderImport"
+                                    disabled="@(string.IsNullOrWhiteSpace(_folderPath) || _folderFileNames.Count == 0)">
+                                <i class="bi bi-plus-circle"></i> Добавить в список (@_folderFileNames.Count файл(ов))
+                            </button>
+                            <small class="text-muted mt-1 d-block">
+                                <i class="bi bi-info-circle"></i> Введите путь к папке, выберите .rvt файлы — полный путь собирается автоматически. Повторите для следующей папки.
+                            </small>
+                        }
+                        else
+                        {
+                            <!-- Way 2: paste quoted paths, auto-parse -->
+                            <div class="mb-2">
+                                <label class="small">Вставьте пути (в кавычках или построчно)</label>
+                                <textarea class="form-control form-control-sm font-monospace" rows="5"
+                                          placeholder='@("\"X:\\00_Проекты\\...\\file1.rvt\"\n\"X:\\00_Проекты\\...\\file2.rvt\"")'
+                                          @bind="_pasteText"
+                                          @bind:event="oninput"></textarea>
+                            </div>
+                            @if (ParsedPasteCount > 0)
+                            {
+                                <div class="mb-2 small text-success">
+                                    <i class="bi bi-check-circle"></i> Найдено путей: <strong>@ParsedPasteCount</strong>
+                                </div>
+                            }
+                            <button class="btn btn-outline-primary btn-sm w-100" type="button"
+                                    @onclick="ApplyPasteImport"
+                                    disabled="@(string.IsNullOrWhiteSpace(_pasteText))">
+                                <i class="bi bi-plus-circle"></i> Добавить в список
+                            </button>
+                            <small class="text-muted mt-1 d-block">
+                                <i class="bi bi-info-circle"></i> Пути в двойных кавычках разбираются автоматически. Также поддерживается формат «по одному пути на строку».
+                            </small>
+                        }
+                    </div>
+
+                    <!-- Current models list -->
+                    <div class="models-list mt-3">
                         @for (int i = 0; i < Config.PathsToModels.Models.Count; i++)
                         {
                             var index = i;
                             <div class="mb-2" @key="index">
                                 <div class="input-group">
                                     <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
-                                    <InputText class="form-control form-control-sm"
+                                    <InputText class="form-control form-control-sm font-monospace"
                                                placeholder="Введите путь к модели..."
                                                @bind-Value="Config.PathsToModels.Models[index].Model"/>
-                                    <button class="btn btn-outline-danger btn-sm" type="button"
-                                            @onclick="() => RemoveModel(Config.PathsToModels, index)">
-                                        <i class="bi bi-dash-lg"></i> −
+                                    <button class="btn btn-outline-danger btn-sm px-2" type="button"
+                                            @onclick="() => RemoveModel(Config.PathsToModels, index)"
+                                            style="min-width:2rem">
+                                        ×
                                     </button>
                                 </div>
                                 <ValidationMessage For="@(() => Config.PathsToModels.Models[index].Model)"/>
                             </div>
                         }
                     </div>
-                    <div class="d-grid mt-2">
+
+                    <div class="d-flex gap-2 mt-2">
                         <button class="btn btn-outline-success btn-sm" type="button"
                                 @onclick="() => AddModel(Config.PathsToModels)">
-                            <i class="bi bi-plus-lg"></i> + Добавить модель
+                            <i class="bi bi-plus-lg"></i> Добавить вручную
                         </button>
+                        @if (Config.PathsToModels.Models.Count > 0)
+                        {
+                            <button class="btn btn-outline-danger btn-sm" type="button"
+                                    @onclick="ClearAllModels">
+                                <i class="bi bi-trash"></i> Очистить все
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
