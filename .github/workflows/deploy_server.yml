@@ -41,11 +41,11 @@ jobs:
               '${{ secrets.SEQ_ADMIN_PASSWORD }}' > .env
 
             # 4. Обновляем образы
-            docker compose pull
+            docker compose -f compose.prod.yaml pull
 
             # 5. Перезапускаем контейнеры
             # --force-recreate гарантирует, что контейнеры обновятся до новых версий
-            docker compose up -d --force-recreate
+            docker compose -f compose.prod.yaml up -d --force-recreate
 
             # 6. Чистим старые образы ("висючие" слои), чтобы не забивать диск сервера
             docker image prune -f
