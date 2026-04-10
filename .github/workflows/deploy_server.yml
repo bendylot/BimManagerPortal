@@ -19,33 +19,27 @@ jobs:
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          SEQ_ADMIN_PASSWORD: ${{ secrets.SEQ_ADMIN_PASSWORD }}
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          # Если используете пароль вместо ключа, замените key на password: ${{ secrets.SERVER_PASSWORD }}
+          envs: POSTGRES_DB,POSTGRES_USER,POSTGRES_PASSWORD,SEQ_ADMIN_PASSWORD
           script: |
             # 1. Переходим в папку с проектом
             cd BimManagerPortal
 
-            # 2. Авторизуемся в Docker Hub (если репозиторий приватный)
-            # echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
-
             git pull
 
-            # 3. Пишем .env из секретов
-            printf 'POSTGRES_DB=%s\nPOSTGRES_USER=%s\nPOSTGRES_PASSWORD=%s\nSEQ_ADMIN_PASSWORD=%s\n' \
-              '${{ secrets.POSTGRES_DB }}' \
-              '${{ secrets.POSTGRES_USER }}' \
-              '${{ secrets.POSTGRES_PASSWORD }}' \
-              '${{ secrets.SEQ_ADMIN_PASSWORD }}' > .env
-
-            # 4. Обновляем образы
+            # 2. Обновляем образы
             docker compose -f compose.prod.yaml pull
 
-            # 5. Перезапускаем контейнеры
-            # --force-recreate гарантирует, что контейнеры обновятся до новых версий
-            docker compose -f compose.prod.yaml up -d --force-recreate
+            # 3. Перезапускаем только изменившиеся контейнеры
+            docker compose -f compose.prod.yaml up -d
 
-            # 6. Чистим старые образы ("висючие" слои), чтобы не забивать диск сервера
+            # 4. Чистим старые образы ("висячие" слои), чтобы не забивать диск сервера
             docker image prune -f
