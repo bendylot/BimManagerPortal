@@ -34,12 +34,11 @@ jobs:
             git pull
 
             # 3. Пишем .env из секретов
-            cat > .env <<'ENVEOF'
-POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-SEQ_ADMIN_PASSWORD=${{ secrets.SEQ_ADMIN_PASSWORD }}
-ENVEOF
+            printf 'POSTGRES_DB=%s\nPOSTGRES_USER=%s\nPOSTGRES_PASSWORD=%s\nSEQ_ADMIN_PASSWORD=%s\n' \
+              '${{ secrets.POSTGRES_DB }}' \
+              '${{ secrets.POSTGRES_USER }}' \
+              '${{ secrets.POSTGRES_PASSWORD }}' \
+              '${{ secrets.SEQ_ADMIN_PASSWORD }}' > .env
 
             # 4. Обновляем образы
             docker compose pull
