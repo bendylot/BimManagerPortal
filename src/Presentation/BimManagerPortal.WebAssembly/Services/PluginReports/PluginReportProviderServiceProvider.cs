@@ -22,6 +22,19 @@ public class PluginReportProviderServiceProvider : IPluginReportProviderServiceP
         return result ?? new List<GetAllPluginBigDatasDto>();
     }
 
+    public async Task<PagedResultDto<GetAllPluginBigDatasDto>> GetConfigurationsPaged(
+        int page, int pageSize, string? search, string? sortColumn, bool sortAscending)
+    {
+        var url = $"api/v1/public/plugin-big-data/paged?page={page}&pageSize={pageSize}&sortAscending={sortAscending}";
+        if (!string.IsNullOrWhiteSpace(search))
+            url += $"&search={Uri.EscapeDataString(search)}";
+        if (!string.IsNullOrWhiteSpace(sortColumn))
+            url += $"&sortColumn={sortColumn}";
+
+        var result = await _httpClient.GetFromJsonAsync<PagedResultDto<GetAllPluginBigDatasDto>>(url);
+        return result ?? new PagedResultDto<GetAllPluginBigDatasDto>();
+    }
+
     public async Task<GetPluginBigDataResponseDto?> GetConfiguration(string id)
     {
         return await _httpClient.GetFromJsonAsync<GetPluginBigDataResponseDto>($"api/v1/public/plugin-big-data/{id}");

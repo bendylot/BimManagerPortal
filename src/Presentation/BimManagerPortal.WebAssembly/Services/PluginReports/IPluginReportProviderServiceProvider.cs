@@ -8,6 +8,9 @@ public interface IPluginReportProviderServiceProvider
 {
     Task<List<GetAllPluginBigDatasDto>> GetConfigurations();
 
+    Task<PagedResultDto<GetAllPluginBigDatasDto>> GetConfigurationsPaged(
+        int page, int pageSize, string? search, string? sortColumn, bool sortAscending);
+
     Task<GetPluginBigDataResponseDto?> GetConfiguration(string id);
 
     Task DeleteConfiguration(string id);

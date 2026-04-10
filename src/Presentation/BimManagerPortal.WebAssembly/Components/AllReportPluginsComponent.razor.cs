@@ -19,14 +19,21 @@ public partial class AllReportPluginsComponent : ComponentBase
     private string _searchTerm = string.Empty;
     private string? _currentSortColumn = nameof(GetAllPluginBigDatasDto.CreatedAt);
     private bool _sortAscending = false;
-    [Parameter] 
+
+    private PagedResultDto<GetAllPluginBigDatasDto> _pagedResult = new();
+    private int _currentPage = 1;
+    private const int PageSize = 20;
+
+    private CancellationTokenSource? _searchCts;
+
+    [Parameter]
     public EventCallback<ReadPluginReportResult> ActiveTabChanged { get; set; }
     #endregion
-    
+
     #region properties
-    private GetAllPluginBigDatasDto? SelectedConfiguration => Configurations?.FirstOrDefault(c => c.Id == _selectedId);
-    protected IEnumerable<GetAllPluginBigDatasDto>? Configurations { get; set; } = new List<GetAllPluginBigDatasDto>();
-    private IEnumerable<GetAllPluginBigDatasDto> FilteredData => ApplySorting(ApplyFiltering(Configurations ?? Enumerable.Empty<GetAllPluginBigDatasDto>()));
+    private GetAllPluginBigDatasDto? SelectedConfiguration =>
+        _pagedResult.Items.FirstOrDefault(c => c.Id == _selectedId);
+
     [Parameter]
     public EventCallback<GetAllPluginBigDatasDto> OnEditRequested { get; set; }
     [Inject]
@@ -36,20 +43,38 @@ public partial class AllReportPluginsComponent : ComponentBase
     [Inject]
     private IJSRuntime _jsRuntime { get; set; }
     #endregion
-    
+
     #region events-methods
-    
+
     protected override async Task OnInitializedAsync()
     {
-        Configurations = await LoadConfigurations();
+        await LoadPage();
     }
-    
+
     private void SelectRow(string? id)
     {
         _selectedId = id;
     }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        _searchTerm = e.Value?.ToString() ?? "";
+        _currentPage = 1;
+        _selectedId = null;
+
+        _searchCts?.Cancel();
+        _searchCts = new CancellationTokenSource();
+        var token = _searchCts.Token;
+
+        try
+        {
+            await Task.Delay(300, token);
+            await LoadPage();
+        }
+        catch (OperationCanceledException) { }
+    }
     #endregion
-    
+
     #region private methods
 
     private static string FormatJsonElement(JsonElement element)
@@ -66,7 +91,7 @@ public partial class AllReportPluginsComponent : ComponentBase
         }
         return JsonSerializer.Serialize(element, options);
     }
-    
+
     private MarkupString SortIcon(string column)
     {
         if (_currentSortColumn != column)
@@ -75,60 +100,24 @@ public partial class AllReportPluginsComponent : ComponentBase
         var icon = _sortAscending ? "▲" : "▼";
         return new MarkupString($"<span class='ms-1'>{icon}</span>");
     }
-    private IEnumerable<GetAllPluginBigDatasDto> ApplySorting(IEnumerable<GetAllPluginBigDatasDto> source)
+
+    private async Task LoadPage()
     {
-        if (_currentSortColumn == null)
-            return source;
-
-        return (currentSortColumn: _currentSortColumn, sortAscending: _sortAscending) switch
-        {
-            (nameof(GetAllPluginBigDatasDto.Id), true)  => source.OrderBy(x => x.Id),
-            (nameof(GetAllPluginBigDatasDto.Id), false) => source.OrderByDescending(x => x.Id),
-
-            (nameof(GetAllPluginBigDatasDto.PluginName), true)  => source.OrderBy(x => x.PluginName),
-            (nameof(GetAllPluginBigDatasDto.PluginName), false) => source.OrderByDescending(x => x.PluginName),
-
-            (nameof(GetAllPluginBigDatasDto.ConfigurationName), true)  => source.OrderBy(x => x.ConfigurationName),
-            (nameof(GetAllPluginBigDatasDto.ConfigurationName), false) => source.OrderByDescending(x => x.ConfigurationName),
-
-            (nameof(GetAllPluginBigDatasDto.CreatedAt), true)  => source.OrderBy(x => x.CreatedAt),
-            (nameof(GetAllPluginBigDatasDto.CreatedAt), false) => source.OrderByDescending(x => x.CreatedAt),
-
-            (nameof(GetAllPluginBigDatasDto.UserCreater), true)  => source.OrderBy(x => x.UserCreater),
-            (nameof(GetAllPluginBigDatasDto.UserCreater), false) => source.OrderByDescending(x => x.UserCreater),
-
-            _ => source
-        };
-    }
-    private IEnumerable<GetAllPluginBigDatasDto> ApplyFiltering(IEnumerable<GetAllPluginBigDatasDto> source)
-    {
-        if (string.IsNullOrWhiteSpace(_searchTerm))
-            return source;
-
-        return source.Where(x =>
-            x.PluginName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            x.ConfigurationName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            x.UserCreater.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase));
-    }
-    private async Task<IEnumerable<GetAllPluginBigDatasDto>> LoadConfigurations()
-    {
-        var list = new List<GetAllPluginBigDatasDto>();
         try
         {
-            list.AddRange(await _pluginReportProviderServiceProvider.GetConfigurations());
+            _pagedResult = await _pluginReportProviderServiceProvider.GetConfigurationsPaged(
+                _currentPage, PageSize, _searchTerm, _currentSortColumn, _sortAscending);
         }
         catch (Exception ex)
         {
-            // Обработка ошибки (например, вывод в консоль или UI)
             Console.WriteLine(ex.Message);
         }
-
-        return list;
+        StateHasChanged();
     }
     #endregion
-    
+
     #region razor methods
-    private void SortBy(string column)
+    private async Task SortBy(string column)
     {
         if (_currentSortColumn == column)
             _sortAscending = !_sortAscending;
@@ -137,6 +126,40 @@ public partial class AllReportPluginsComponent : ComponentBase
             _currentSortColumn = column;
             _sortAscending = true;
         }
+        _currentPage = 1;
+        _selectedId = null;
+        await LoadPage();
+    }
+
+    private async Task GoToPage(int page)
+    {
+        if (page < 1 || page > _pagedResult.TotalPages) return;
+        _currentPage = page;
+        _selectedId = null;
+        await LoadPage();
+    }
+
+    // Returns page numbers with -1 as ellipsis placeholder
+    private IEnumerable<int> GetPageNumbers()
+    {
+        var total = _pagedResult.TotalPages;
+        var cur = _currentPage;
+        var pages = new List<int>();
+
+        if (total <= 7)
+        {
+            for (var i = 1; i <= total; i++) pages.Add(i);
+            return pages;
+        }
+
+        pages.Add(1);
+        if (cur > 3) pages.Add(-1);
+        for (var i = Math.Max(2, cur - 1); i <= Math.Min(total - 1, cur + 1); i++)
+            pages.Add(i);
+        if (cur < total - 2) pages.Add(-1);
+        pages.Add(total);
+
+        return pages;
     }
     #endregion
     
@@ -196,7 +219,10 @@ public partial class AllReportPluginsComponent : ComponentBase
         {
             await _pluginReportProviderServiceProvider.DeleteConfiguration(id);
             _selectedId = null;
-            Configurations = await LoadConfigurations();
+            // если удалили последний элемент на странице — переходим на предыдущую
+            if (_pagedResult.Items.Count == 1 && _currentPage > 1)
+                _currentPage--;
+            await LoadPage();
         }
         catch (Exception ex)
         {
