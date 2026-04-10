@@ -31,20 +31,14 @@ services:
 
   api:
     image: bendylot/bimmanagerportal-api:latest
-    container_name: bimmanagerportal-api
-    restart: always
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB:-postgre_db};Username=${POSTGRES_USER:-postgre_user};Password=${POSTGRES_PASSWORD}
-      - Seq__Url=http://seq:5341
+      - ASPNETCORE_ENVIRONMENT=Docker
     ports:
       - "5002:8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-      seq:
-        condition: service_started
-
+      - postgres
+      - seq
+    
   web:
     image: bendylot/bimmanagerportal-web:latest
     container_name: bimmanagerportal-web
