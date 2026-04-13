@@ -31,7 +31,7 @@ builder.Host.UseSerilog((ctx, _, config) =>
 });
 
 builder.Services.AddApplication();
-builder.Services.AddPresentation();
+builder.Services.AddPresentation(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();

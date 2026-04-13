@@ -1,0 +1,39 @@
+@page "/auth/forbidden"
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1rem;text-align:center;padding:2rem;">
+    <h2>Доступ запрещён</h2>
+    <p>Ваш аккаунт Google не зарегистрирован в системе.</p>
+
+    @if (!string.IsNullOrEmpty(GoogleId))
+    {
+        <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;padding:1.5rem;max-width:560px;width:100%;text-align:left;">
+            <p style="margin-bottom:0.5rem;font-weight:600;">Данные вашего аккаунта для добавления в БД:</p>
+            <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+                <tr>
+                    <td style="padding:4px 8px;color:#6c757d;white-space:nowrap;">GoogleId</td>
+                    <td style="padding:4px 8px;font-family:monospace;word-break:break-all;">@GoogleId</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;color:#6c757d;">Email</td>
+                    <td style="padding:4px 8px;font-family:monospace;">@Email</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;color:#6c757d;">Name</td>
+                    <td style="padding:4px 8px;font-family:monospace;">@Name</td>
+                </tr>
+            </table>
+            <hr style="margin:1rem 0;" />
+            <p style="margin-bottom:0.25rem;font-weight:600;">SQL для вставки:</p>
+            <pre style="background:#212529;color:#f8f9fa;padding:1rem;border-radius:6px;font-size:0.8rem;overflow-x:auto;white-space:pre-wrap;word-break:break-all;">INSERT INTO "Users" ("Id", "CreatedAt", "GoogleId", "Email", "Name", "AvatarUrl")
+VALUES (gen_random_uuid(), now(), '@GoogleId', '@Email', '@Name', null);</pre>
+        </div>
+    }
+
+    <a href="/">На главную</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery] private string? GoogleId { get; set; }
+    [SupplyParameterFromQuery] private string? Email { get; set; }
+    [SupplyParameterFromQuery] private string? Name { get; set; }
+}

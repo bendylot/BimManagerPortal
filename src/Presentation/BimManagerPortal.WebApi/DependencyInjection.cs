@@ -1,17 +1,23 @@
-﻿using System.Text.Json;
+﻿using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 using BimManagerPortal.Persistance.Contexts;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 namespace BimManagerPortal.WebApi;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services)
+    public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
     {
         // Controllers
         services.AddControllers();
+
         // CORS
         services.AddCors(options =>
         {
@@ -22,6 +28,46 @@ public static class DependencyInjection
                     .AllowAnyHeader();
             });
         });
+
+        // Auth: Cookie (промежуточная) + Google OAuth + JWT Bearer
+        services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        })
+        .AddCookie(options =>
+        {
+            options.Cookie.SameSite = SameSiteMode.Lax;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        })
+        .AddGoogle(options =>
+        {
+            options.ClientId = configuration["Google:ClientId"]!;
+            options.ClientSecret = configuration["Google:ClientSecret"]!;
+            options.CallbackPath = "/api/v1/auth/google/callback";
+            options.Events.OnCreatingTicket = ctx =>
+            {
+                if (ctx.User.TryGetProperty("picture", out var pic))
+                    ctx.Identity!.AddClaim(new Claim("picture", pic.GetString() ?? ""));
+                return Task.CompletedTask;
+            };
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration["Jwt:Issuer"],
+                ValidAudience = configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!))
+            };
+        });
+
+        services.AddAuthorization();
+
         // Swagger / OpenAPI
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>
@@ -65,10 +111,11 @@ public static class DependencyInjection
 
         app.UseHttpsRedirection();
 
-        // CORS
         app.UseCors("AllowAll");
 
-        // Controllers
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.MapControllers();
 
         return app;

@@ -1,0 +1,298 @@
+@page "/account"
+@using System.Net.Http.Headers
+@using System.Security.Claims
+@using System.Text
+@using System.Text.Json
+@attribute [Authorize]
+@inject HttpClient Http
+@inject CustomAuthStateProvider AuthStateProvider
+
+<div class="account-page">
+    <h3 class="account-title">Личный кабинет</h3>
+
+    @if (_loading)
+    {
+        <p>Загрузка...</p>
+    }
+    else
+    {
+        <div class="account-sections">
+
+            <!-- ПРОФИЛЬ -->
+            <section class="account-section">
+                <div class="section-header">
+                    <h5>Профиль</h5>
+                </div>
+
+                <div class="profile-header">
+                    @if (!string.IsNullOrEmpty(_profile.AvatarUrl))
+                    {
+                        <img src="@_profile.AvatarUrl" alt="@_profile.Name" class="profile-avatar" referrerpolicy="no-referrer" />
+                    }
+                    <div>
+                        <div class="profile-name">@_profile.Name</div>
+                        <div class="profile-role">@RoleDisplay(_profile.Role)</div>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field">
+                        <label>Имя Фамилия</label>
+                        <input type="text" value="@_profile.Name" disabled class="form-control" />
+                    </div>
+                    <div class="field">
+                        <label>Почта</label>
+                        <input type="text" value="@_profile.Email" disabled class="form-control" />
+                    </div>
+                    <div class="field">
+                        <label>Рабочий компьютер</label>
+                        <input type="text" @bind="_workComputer" class="form-control" placeholder="Введите имя компьютера" />
+                    </div>
+                    <div class="field">
+                        <label>ID работника</label>
+                        <input type="text" @bind="_employeeId" class="form-control" placeholder="Введите ID работника" />
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(_saveMessage))
+                {
+                    <div class="save-message @(_saveSuccess ? "success" : "error")">@_saveMessage</div>
+                }
+
+                <button class="btn-save" @onclick="SaveProfile" disabled="@_saving">
+                    @(_saving ? "Сохранение..." : "Сохранить")
+                </button>
+            </section>
+
+            <!-- ДАННЫЕ ПЛАГИНОВ -->
+            <section class="account-section">
+                <div class="section-header">
+                    <h5>Данные плагинов</h5>
+                </div>
+                <p class="placeholder-text">Будет разработан позже</p>
+            </section>
+
+            <!-- СПЕЦИАЛЬНЫЕ ВОЗМОЖНОСТИ — только для разработчика -->
+            <AuthorizeView Roles="Developer">
+                <Authorized>
+                    <section class="account-section">
+                        <div class="section-header">
+                            <h5>Специальные возможности</h5>
+                            <span class="role-badge">Разработчик</span>
+                        </div>
+                        <p class="placeholder-text">Будет разработан позже</p>
+                    </section>
+                </Authorized>
+            </AuthorizeView>
+
+        </div>
+    }
+</div>
+
+@code {
+    private ProfileData _profile = new();
+    private string? _workComputer;
+    private string? _employeeId;
+    private bool _loading = true;
+    private bool _saving;
+    private string? _saveMessage;
+    private bool _saveSuccess;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await AuthStateProvider.GetTokenAsync();
+        if (token == null) return;
+
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await Http.GetAsync("api/v1/auth/me");
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            var doc = JsonDocument.Parse(json).RootElement;
+            _profile = new ProfileData
+            {
+                Name       = doc.GetProperty("name").GetString() ?? "",
+                Email      = doc.GetProperty("email").GetString() ?? "",
+                AvatarUrl  = doc.TryGetProperty("avatarUrl", out var av) ? av.GetString() : null,
+                Role       = doc.TryGetProperty("role", out var r) ? r.GetString() : null,
+            };
+            _workComputer = doc.TryGetProperty("workComputer", out var wc) ? wc.GetString() : null;
+            _employeeId   = doc.TryGetProperty("employeeId",   out var ei) ? ei.GetString() : null;
+        }
+        _loading = false;
+    }
+
+    private async Task SaveProfile()
+    {
+        _saving = true;
+        _saveMessage = null;
+
+        var token = await AuthStateProvider.GetTokenAsync();
+        if (token == null) return;
+
+        Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var body = JsonSerializer.Serialize(new { workComputer = _workComputer, employeeId = _employeeId });
+        var content = new StringContent(body, Encoding.UTF8, "application/json");
+        var response = await Http.PutAsync("api/v1/auth/profile", content);
+
+        _saveSuccess = response.IsSuccessStatusCode;
+        _saveMessage = _saveSuccess ? "Сохранено" : "Ошибка при сохранении";
+        _saving = false;
+    }
+
+    private static string RoleDisplay(string? role) => role switch
+    {
+        "Developer"    => "Разработчик",
+        "BimManager"   => "БИМ Менеджер",
+        "Designer"     => "Проектировщик",
+        _              => "Нет роли"
+    };
+
+    private class ProfileData
+    {
+        public string Name      { get; set; } = "";
+        public string Email     { get; set; } = "";
+        public string? AvatarUrl { get; set; }
+        public string? Role     { get; set; }
+    }
+}
+
+<style>
+    .account-page {
+        max-width: 620px;
+    }
+
+    .account-title {
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    .account-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .account-section {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1.5rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .section-header h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .role-badge {
+        font-size: 0.75rem;
+        padding: 2px 10px;
+        border-radius: 999px;
+        background: #d1e7ff;
+        color: #0d6efd;
+        font-weight: 500;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .profile-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #dee2e6;
+    }
+
+    .profile-name {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .profile-role {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.875rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .field label {
+        display: block;
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 4px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    .form-control:disabled {
+        background: #f8f9fa;
+        color: #495057;
+        cursor: default;
+    }
+
+    .form-control:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+    }
+
+    .btn-save {
+        padding: 8px 24px;
+        background: #0d6efd;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .btn-save:hover:not(:disabled) {
+        background: #0b5ed7;
+    }
+
+    .btn-save:disabled {
+        opacity: 0.65;
+        cursor: default;
+    }
+
+    .save-message {
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .save-message.success { color: #198754; }
+    .save-message.error   { color: #dc3545; }
+
+    .placeholder-text {
+        color: #adb5bd;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+</style>
