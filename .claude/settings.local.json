@@ -11,7 +11,12 @@
       "Bash(docker compose up:*)",
       "Bash(docker compose:*)",
       "Bash(xargs grep:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "Bash(dotnet ef:*)",
+      "Bash(Get-Service -Name \"postgresql*\")",
+      "Bash(sc query:*)",
+      "Bash(wmic service:*)",
+      "Read(//c/Program Files/**)"
     ]
   }
 }
