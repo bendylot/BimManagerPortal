@@ -1,0 +1,258 @@
+@using BimManagerPortal.Shared.Dtos.ErrorDictionary
+@using BimManagerPortal.WebAssembly.Models.ErrorDictionary
+@using BimManagerPortal.WebAssembly.Services.ErrorDictionary
+
+<div class="container-box p-3">
+
+    <!-- Конструктор -->
+    <div class="constructor-card mb-4">
+        <div class="constructor-header">
+            <span class="constructor-title">
+                @if (_editingId.HasValue)
+                {
+                    <span>Редактирование записи</span>
+                }
+                else
+                {
+                    <span>Конструктор словаря</span>
+                }
+            </span>
+        </div>
+        <div class="constructor-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label form-label-sm">Словарь</label>
+                    <select class="form-select form-select-sm"
+                            @bind="_formType"
+                            disabled="@_editingId.HasValue">
+                        <option value="@ErrorDictionaryType.EngineerErrors">Словарь ошибок для инженеров</option>
+                        <option value="@ErrorDictionaryType.AllowedErrors">Словарь допустимых ошибок</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label form-label-sm">Ключевое предложение / определение</label>
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           placeholder="Введите ключевое предложение..."
+                           @bind="_formKeyPhrase" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label form-label-sm">Пояснение</label>
+                    <textarea class="form-control form-control-sm"
+                              rows="2"
+                              placeholder="Введите пояснение..."
+                              @bind="_formExplanation"></textarea>
+                </div>
+                <div class="col-md-1 d-flex align-items-end gap-1">
+                    <button class="btn btn-sm btn-primary w-100"
+                            @onclick="SaveEntry"
+                            disabled="@_isSaving">
+                        @if (_isSaving)
+                        {
+                            <span class="spinner-border spinner-border-sm" role="status"></span>
+                        }
+                        else if (_editingId.HasValue)
+                        {
+                            <span>Сохранить</span>
+                        }
+                        else
+                        {
+                            <span>Добавить</span>
+                        }
+                    </button>
+                    @if (_editingId.HasValue)
+                    {
+                        <button class="btn btn-sm btn-outline-secondary w-100" @onclick="CancelEdit">
+                            Отмена
+                        </button>
+                    }
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <div class="alert alert-danger alert-sm mt-2 mb-0 py-1 px-2">@_errorMessage</div>
+            }
+        </div>
+    </div>
+
+    <!-- Два словаря -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="dict-section">
+                <div class="dict-header engineer">
+                    Словарь всех ошибок для инженеров
+                    <span class="badge bg-light text-dark ms-2">@EngineerEntries.Count</span>
+                </div>
+                <div class="dict-body">
+                    @if (!EngineerEntries.Any())
+                    {
+                        <div class="empty-hint">Записи отсутствуют. Добавьте первую запись через конструктор.</div>
+                    }
+                    else
+                    {
+                        @foreach (var entry in EngineerEntries)
+                        {
+                            <div class="dict-entry @(_editingId == entry.Id ? "editing" : "")">
+                                <div class="entry-key">@entry.KeyPhrase</div>
+                                <div class="entry-explanation">@entry.Explanation</div>
+                                <div class="entry-actions">
+                                    <button class="btn btn-xs btn-outline-primary" @onclick="() => StartEdit(entry)">
+                                        ✏
+                                    </button>
+                                    <button class="btn btn-xs btn-outline-danger" @onclick="() => DeleteEntry(entry.Id)">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="dict-section">
+                <div class="dict-header allowed">
+                    Словарь всех допустимых ошибок
+                    <span class="badge bg-light text-dark ms-2">@AllowedEntries.Count</span>
+                </div>
+                <div class="dict-body">
+                    @if (!AllowedEntries.Any())
+                    {
+                        <div class="empty-hint">Записи отсутствуют. Добавьте первую запись через конструктор.</div>
+                    }
+                    else
+                    {
+                        @foreach (var entry in AllowedEntries)
+                        {
+                            <div class="dict-entry @(_editingId == entry.Id ? "editing" : "")">
+                                <div class="entry-key">@entry.KeyPhrase</div>
+                                <div class="entry-explanation">@entry.Explanation</div>
+                                <div class="entry-actions">
+                                    <button class="btn btn-xs btn-outline-primary" @onclick="() => StartEdit(entry)">
+                                        ✏
+                                    </button>
+                                    <button class="btn btn-xs btn-outline-danger" @onclick="() => DeleteEntry(entry.Id)">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public IErrorDictionaryService ErrorDictionaryService { get; set; } = null!;
+
+    private List<ErrorDictionaryEntryDto> _entries = new();
+
+    private ErrorDictionaryType _formType = ErrorDictionaryType.EngineerErrors;
+    private string _formKeyPhrase = string.Empty;
+    private string _formExplanation = string.Empty;
+    private Guid? _editingId;
+    private bool _isSaving;
+    private string _errorMessage = string.Empty;
+
+    private List<ErrorDictionaryEntryDto> EngineerEntries =>
+        _entries.Where(e => e.DictionaryType == (int)ErrorDictionaryType.EngineerErrors).ToList();
+
+    private List<ErrorDictionaryEntryDto> AllowedEntries =>
+        _entries.Where(e => e.DictionaryType == (int)ErrorDictionaryType.AllowedErrors).ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEntries();
+    }
+
+    private async Task LoadEntries()
+    {
+        _entries = await ErrorDictionaryService.GetAll();
+    }
+
+    private void StartEdit(ErrorDictionaryEntryDto entry)
+    {
+        _editingId = entry.Id;
+        _formType = (ErrorDictionaryType)entry.DictionaryType;
+        _formKeyPhrase = entry.KeyPhrase;
+        _formExplanation = entry.Explanation;
+        _errorMessage = string.Empty;
+    }
+
+    private void CancelEdit()
+    {
+        _editingId = null;
+        _formKeyPhrase = string.Empty;
+        _formExplanation = string.Empty;
+        _errorMessage = string.Empty;
+    }
+
+    private async Task SaveEntry()
+    {
+        if (string.IsNullOrWhiteSpace(_formKeyPhrase))
+        {
+            _errorMessage = "Заполните ключевое предложение.";
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(_formExplanation))
+        {
+            _errorMessage = "Заполните пояснение.";
+            return;
+        }
+
+        _isSaving = true;
+        _errorMessage = string.Empty;
+        try
+        {
+            if (_editingId.HasValue)
+            {
+                await ErrorDictionaryService.Update(new UpdateErrorDictionaryEntryRequestDto
+                {
+                    Id = _editingId.Value,
+                    KeyPhrase = _formKeyPhrase,
+                    Explanation = _formExplanation,
+                    UserUpdater = "system"
+                });
+                _editingId = null;
+            }
+            else
+            {
+                await ErrorDictionaryService.Create(new CreateErrorDictionaryEntryRequestDto
+                {
+                    DictionaryType = (int)_formType,
+                    KeyPhrase = _formKeyPhrase,
+                    Explanation = _formExplanation,
+                    UserCreater = "system"
+                });
+            }
+
+            _formKeyPhrase = string.Empty;
+            _formExplanation = string.Empty;
+            await LoadEntries();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Ошибка: {ex.Message}";
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private async Task DeleteEntry(Guid id)
+    {
+        try
+        {
+            await ErrorDictionaryService.Delete(id);
+            await LoadEntries();
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Ошибка удаления: {ex.Message}";
+        }
+    }
+}

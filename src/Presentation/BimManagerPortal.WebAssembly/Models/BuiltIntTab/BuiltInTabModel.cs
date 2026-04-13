@@ -5,5 +5,6 @@ public enum BuiltIntTabModel
     AllReportsPlugins,
     no,
     ReadPluginReport,
-    CreatePluginReport
+    CreatePluginReport,
+    ReferenceInfo
 }

@@ -4,9 +4,11 @@
 @using BimManagerPortal.WebAssembly.Components
 @using BimManagerPortal.WebAssembly.Models.BuiltIntTab
 @using BimManagerPortal.WebAssembly.Models.Results
+@using BimManagerPortal.WebAssembly.Services.ErrorDictionary
 @using BimManagerPortal.WebAssembly.Services.PluginReports
 @inject NavigationManager NavigationManager
 @inject IPluginReportProviderServiceProvider PluginReportService
+@inject IErrorDictionaryService ErrorDictionaryService
 
 <PageTitle>Отчеты плагинов</PageTitle>
 
@@ -25,6 +27,9 @@
         break;
     case BuiltIntTabModel.CreatePluginReport:
         <CreateReportPluginComponent />
+        break;
+    case BuiltIntTabModel.ReferenceInfo:
+        <ReferenceInfoComponent ErrorDictionaryService="ErrorDictionaryService"/>
         break;
 }
 
