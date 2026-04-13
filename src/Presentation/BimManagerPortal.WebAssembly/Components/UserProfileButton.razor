@@ -1,0 +1,81 @@
+@using System.Security.Claims
+@inject BimManagerPortal.WebAssembly.Auth.CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
+<AuthorizeView>
+    <Authorized>
+        <div class="user-profile">
+            <button class="avatar-btn" @onclick="ToggleDropdown" @onclick:stopPropagation="true">
+                @if (!string.IsNullOrEmpty(_avatarUrl))
+                {
+                    <img src="@_avatarUrl" alt="@_userName" class="avatar" referrerpolicy="no-referrer" />
+                }
+                else
+                {
+                    <div class="avatar-initials">@_initials</div>
+                }
+            </button>
+
+            @if (_dropdownOpen)
+            {
+                <div class="profile-dropdown">
+                    <div class="profile-dropdown-header">@_userName</div>
+                    <div class="profile-dropdown-email">@_email</div>
+                    <hr class="profile-dropdown-divider" />
+                    <button class="profile-dropdown-item" @onclick="GoToAccount">Настройки аккаунта</button>
+                    <button class="profile-dropdown-item profile-dropdown-logout" @onclick="Logout">Выйти</button>
+                </div>
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <a href="/api/v1/auth/google" class="btn-login">Войти</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthState { get; set; }
+
+    private bool _dropdownOpen;
+    private string? _userName;
+    private string? _email;
+    private string? _avatarUrl;
+    private string _initials = "?";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthState is null) return;
+        var state = await AuthState;
+        _userName = state.User.FindFirst(ClaimTypes.Name)?.Value
+                 ?? state.User.FindFirst("name")?.Value;
+        _email = state.User.FindFirst(ClaimTypes.Email)?.Value
+              ?? state.User.FindFirst("email")?.Value;
+        _avatarUrl = state.User.FindFirst("picture")?.Value;
+        _initials = BuildInitials(_userName);
+    }
+
+    private void ToggleDropdown() => _dropdownOpen = !_dropdownOpen;
+
+    private void GoToAccount()
+    {
+        _dropdownOpen = false;
+        Nav.NavigateTo("account");
+    }
+
+    private async Task Logout()
+    {
+        _dropdownOpen = false;
+        await AuthStateProvider.NotifyUserLoggedOutAsync();
+        Nav.NavigateTo("/", forceLoad: true);
+    }
+
+    private static string BuildInitials(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return "?";
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 2
+            ? $"{parts[0][0]}{parts[1][0]}"
+            : parts[0][0].ToString();
+    }
+}

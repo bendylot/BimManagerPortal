@@ -1,0 +1,16 @@
+@page "/auth/callback"
+@inject BimManagerPortal.WebAssembly.Auth.CustomAuthStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
+@code {
+    [SupplyParameterFromQuery]
+    private string? Token { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Token))
+            await AuthStateProvider.NotifyUserAuthenticatedAsync(Token);
+
+        Nav.NavigateTo("/", replace: true);
+    }
+}

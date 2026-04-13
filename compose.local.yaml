@@ -37,6 +37,9 @@ services:
     container_name: bimmanagerportal-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+      - Google__ClientId=${GOOGLE_CLIENT_ID}
+      - Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
+      - Jwt__Secret=${JWT_SECRET}
     ports:
       - "5002:8080"
     depends_on:
