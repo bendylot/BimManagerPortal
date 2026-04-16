@@ -153,6 +153,20 @@
     text-align: center;
 }
 
+/* Вложенные сводки (разделы / документы) */
+.nested-summary-card {
+    background: #f5eeff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 10px 0 14px;
+    border: 1px solid #ddd0f7;
+}
+
+.nested-summary-card--doc {
+    background: #f0f6ff;
+    border-color: #ccddf7;
+}
+
 /* Объекты */
 .objects-container {
     display: flex;

@@ -71,22 +71,26 @@ public partial class RestrictedAreaReportComponent : ComponentBase
     #endregion
     
     #region sections
-    private record SecStats(int Created, int BadErrors, int DocErrors);
+    private record SecStats(int Created, int BadErrors, int DocErrors, int GoodNotCreated, int DeletedZones, int BusyZones, int SavedZones);
 
     private SecStats ComputeSecStats(SectionBuildingData sd)
     {
-        var created = 0;
-        var bad = 0;
-        var docErrors = 0;
+        int created = 0, bad = 0, good = 0, deleted = 0, busy = 0, saved = 0;
         foreach (var doc in sd.DocumentsBuildingData ?? [])
-        foreach (var ent in doc.EntityBuildingData ?? [])
         {
-            created += ent.CreatedElements?.Count ?? 0;
-            bad     += ent.NotCreatedElementsData?.BadNotCreatedElements?.Count ?? 0;
+            foreach (var ent in doc.EntityBuildingData ?? [])
+            {
+                created += ent.CreatedElements?.Count ?? 0;
+                bad     += ent.NotCreatedElementsData?.BadNotCreatedElements?.Count ?? 0;
+                good    += ent.NotCreatedElementsData?.GoodNotCreatedElements?.Count ?? 0;
+                saved   += ent.SavedOldZones?.Count ?? 0;
+            }
+            deleted += doc.DocumentDeletingZonesResult?.DeletedOldZones?.Count ?? 0;
+            busy    += doc.DocumentDeletingZonesResult?.NotDeletedBusyOldZones?.Count ?? 0;
         }
-        return new(created, bad, docErrors);
+        return new(created, bad, 0, good, deleted, busy, saved);
     }
-    
+
     #endregion
     
     #region objects
@@ -108,17 +112,21 @@ public partial class RestrictedAreaReportComponent : ComponentBase
     #endregion
     
     #region documents
-    private record DocStats(int Created, int Bad);
+    private record DocStats(int Created, int Bad, int GoodNotCreated, int DeletedZones, int BusyZones, int SavedZones);
 
     private DocStats ComputeDocStats(DocumentBuildingData doc)
     {
-        int created = 0, bad = 0;
+        int created = 0, bad = 0, good = 0, saved = 0;
         foreach (var ent in doc.EntityBuildingData ?? [])
         {
             created += ent.CreatedElements?.Count ?? 0;
             bad     += ent.NotCreatedElementsData?.BadNotCreatedElements?.Count ?? 0;
+            good    += ent.NotCreatedElementsData?.GoodNotCreatedElements?.Count ?? 0;
+            saved   += ent.SavedOldZones?.Count ?? 0;
         }
-        return new(created, bad);
+        int deleted = doc.DocumentDeletingZonesResult?.DeletedOldZones?.Count ?? 0;
+        int busy    = doc.DocumentDeletingZonesResult?.NotDeletedBusyOldZones?.Count ?? 0;
+        return new(created, bad, good, deleted, busy, saved);
     }
     #endregion
 }

@@ -141,6 +141,40 @@
 
                                         @if (secExpanded)
                                         {
+                                            <div class="nested-summary-card">
+                                                <div class="summary-title">Сводка по разделу</div>
+                                                <div class="summary-grid">
+                                                    <div class="summary-item">
+                                                        <span class="summary-value">@(section.DocumentsBuildingData?.Count ?? 0)</span>
+                                                        <span class="summary-label">Документов</span>
+                                                    </div>
+                                                    <div class="summary-item success">
+                                                        <span class="summary-value">@secStats.Created</span>
+                                                        <span class="summary-label">Создано зон</span>
+                                                    </div>
+                                                    <div class="summary-item danger">
+                                                        <span class="summary-value">@secStats.BadErrors</span>
+                                                        <span class="summary-label">Не создано (ошибки)</span>
+                                                    </div>
+                                                    <div class="summary-item warning">
+                                                        <span class="summary-value">@secStats.GoodNotCreated</span>
+                                                        <span class="summary-label">Не создано (допустимо)</span>
+                                                    </div>
+                                                    <div class="summary-item deleted">
+                                                        <span class="summary-value">@secStats.DeletedZones</span>
+                                                        <span class="summary-label">Удалено старых зон</span>
+                                                    </div>
+                                                    <div class="summary-item busy">
+                                                        <span class="summary-value">@secStats.BusyZones</span>
+                                                        <span class="summary-label">Занятых зон</span>
+                                                    </div>
+                                                    <div class="summary-item info">
+                                                        <span class="summary-value">@secStats.SavedZones</span>
+                                                        <span class="summary-label">Сохранено зон</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             @if (section.DocumentsBuildingData?.Any() == true)
                                             {
                                                 <div class="documents-container">
@@ -172,6 +206,40 @@
 
                                                             @if (docExpanded)
                                                             {
+                                                                <div class="nested-summary-card nested-summary-card--doc">
+                                                                    <div class="summary-title">Сводка по документу</div>
+                                                                    <div class="summary-grid">
+                                                                        <div class="summary-item">
+                                                                            <span class="summary-value">@(document.EntityBuildingData?.Count ?? 0)</span>
+                                                                            <span class="summary-label">Сущностей</span>
+                                                                        </div>
+                                                                        <div class="summary-item success">
+                                                                            <span class="summary-value">@docStats.Created</span>
+                                                                            <span class="summary-label">Создано зон</span>
+                                                                        </div>
+                                                                        <div class="summary-item danger">
+                                                                            <span class="summary-value">@docStats.Bad</span>
+                                                                            <span class="summary-label">Не создано (ошибки)</span>
+                                                                        </div>
+                                                                        <div class="summary-item warning">
+                                                                            <span class="summary-value">@docStats.GoodNotCreated</span>
+                                                                            <span class="summary-label">Не создано (допустимо)</span>
+                                                                        </div>
+                                                                        <div class="summary-item deleted">
+                                                                            <span class="summary-value">@docStats.DeletedZones</span>
+                                                                            <span class="summary-label">Удалено старых зон</span>
+                                                                        </div>
+                                                                        <div class="summary-item busy">
+                                                                            <span class="summary-value">@docStats.BusyZones</span>
+                                                                            <span class="summary-label">Занятых зон</span>
+                                                                        </div>
+                                                                        <div class="summary-item info">
+                                                                            <span class="summary-value">@docStats.SavedZones</span>
+                                                                            <span class="summary-label">Сохранено зон</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
                                                                 @if (document.EntityBuildingData?.Any() == true)
                                                                 {
                                                                     <div class="entities-container">
