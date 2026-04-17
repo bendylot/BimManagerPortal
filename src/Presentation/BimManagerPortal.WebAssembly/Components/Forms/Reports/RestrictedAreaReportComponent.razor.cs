@@ -21,6 +21,65 @@ public partial class RestrictedAreaReportComponent : ComponentBase
     private readonly HashSet<int> _expandedErrorDocs       = new();
 
     private bool _allExpanded = false;
+    private string _searchId = string.Empty;
+
+    private bool IdMatches(string? id) =>
+        !string.IsNullOrEmpty(_searchId) &&
+        (id?.Contains(_searchId, StringComparison.OrdinalIgnoreCase) == true);
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        _searchId = (e.Value as string ?? string.Empty).Trim();
+        if (!string.IsNullOrEmpty(_searchId))
+            ExpandMatchingContainers();
+    }
+
+    private void ClearSearch() => _searchId = string.Empty;
+
+    private void ExpandMatchingContainers()
+    {
+        if (RestrictedAreaReportModel?.ObjectConiguratorData == null) return;
+
+        foreach (var (obj, objIndex) in RestrictedAreaReportModel.ObjectConiguratorData.Select((o, i) => (o, i)))
+        {
+            foreach (var (sec, secIndex) in (obj.SectionsBuildingData ?? []).Select((s, i) => (s, i)))
+            {
+                var secKey = objIndex * 10000 + secIndex;
+                foreach (var (doc, docIndex) in (sec.DocumentsBuildingData ?? []).Select((d, i) => (d, i)))
+                {
+                    var docKey = secKey * 10000 + docIndex;
+                    bool anyMatch = false;
+
+                    foreach (var (ent, entIndex) in (doc.EntityBuildingData ?? []).Select((e, i) => (e, i)))
+                    {
+                        var entKey = docKey * 10000 + entIndex;
+                        if (ent.HostElements?.Any(e => IdMatches(e.ElementId)) == true)
+                        { anyMatch = true; _expandedHostElements.Add(entKey); }
+                        if (ent.CreatedElements?.Any(e => IdMatches(e.ElementId)) == true)
+                        { anyMatch = true; _expandedCreatedElements.Add(entKey); }
+                        if (ent.SavedOldZones?.Any(e => IdMatches(e.ElementId)) == true)
+                        { anyMatch = true; _expandedSavedZones.Add(entKey); }
+                        if (ent.NotCreatedElementsData?.GoodNotCreatedElements?.Any(e => IdMatches(e.BadElementId)) == true)
+                        { anyMatch = true; _expandedGoodErrors.Add(entKey); }
+                        if (ent.NotCreatedElementsData?.BadNotCreatedElements?.Any(e => IdMatches(e.BadElementId)) == true)
+                        { anyMatch = true; _expandedBadErrors.Add(entKey); }
+                    }
+
+                    if (doc.DocumentDeletingZonesResult?.DeletedOldZones?.Any(id => IdMatches(id)) == true)
+                    { anyMatch = true; _expandedDeletedZones.Add(docKey + 1000000); }
+                    if (doc.DocumentDeletingZonesResult?.NotDeletedBusyOldZones?.Any(e => IdMatches(e.ElementId)) == true)
+                    { anyMatch = true; _expandedNotDeletedZones.Add(docKey + 2000000); }
+
+                    if (anyMatch)
+                    {
+                        _expandedDocuments.Add(docKey);
+                        _expandedSections.Add(secKey);
+                        _expandedObjects.Add(objIndex);
+                    }
+                }
+            }
+        }
+    }
 
     private string FormatDate(DateTime? date) => date?.ToString("dd.MM.yyyy HH:mm:ss") ?? "—";
 
