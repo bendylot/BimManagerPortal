@@ -76,6 +76,23 @@
         </div>
     }
 
+    <!-- Поиск по ID -->
+    @if (RestrictedAreaReportModel.ObjectConiguratorData?.Any() == true)
+    {
+        <div class="search-box-container">
+            <span class="search-icon">🔍</span>
+            <input class="search-id-input"
+                   type="text"
+                   placeholder="Поиск по ID элемента..."
+                   value="@_searchId"
+                   @oninput="OnSearchInput" />
+            @if (!string.IsNullOrEmpty(_searchId))
+            {
+                <button class="search-clear-btn" @onclick="ClearSearch">✕</button>
+            }
+        </div>
+    }
+
     <!-- Объекты конфигуратора -->
     @if (RestrictedAreaReportModel.ObjectConiguratorData?.Any() == true)
     {
@@ -139,234 +156,301 @@
                                             <span class="section-time">@FormatTimeSpan(section.ComputeProcessTime)</span>
                                         </div>
 
-                                        @if (secExpanded)
+                                        <!-- Сводка по разделу — всегда видна -->
+                                        <div class="nested-summary-card">
+                                            <div class="summary-title">Сводка по разделу</div>
+                                            <div class="summary-grid">
+                                                <div class="summary-item">
+                                                    <span class="summary-value">@(section.DocumentsBuildingData?.Count ?? 0)</span>
+                                                    <span class="summary-label">Документов</span>
+                                                </div>
+                                                <div class="summary-item success">
+                                                    <span class="summary-value">@secStats.Created</span>
+                                                    <span class="summary-label">Создано зон</span>
+                                                </div>
+                                                <div class="summary-item danger">
+                                                    <span class="summary-value">@secStats.BadErrors</span>
+                                                    <span class="summary-label">Не создано (ошибки)</span>
+                                                </div>
+                                                <div class="summary-item warning">
+                                                    <span class="summary-value">@secStats.GoodNotCreated</span>
+                                                    <span class="summary-label">Не создано (допустимо)</span>
+                                                </div>
+                                                <div class="summary-item deleted">
+                                                    <span class="summary-value">@secStats.DeletedZones</span>
+                                                    <span class="summary-label">Удалено старых зон</span>
+                                                </div>
+                                                <div class="summary-item busy">
+                                                    <span class="summary-value">@secStats.BusyZones</span>
+                                                    <span class="summary-label">Занятых зон</span>
+                                                </div>
+                                                <div class="summary-item info">
+                                                    <span class="summary-value">@secStats.SavedZones</span>
+                                                    <span class="summary-label">Сохранено зон</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if (secExpanded && section.DocumentsBuildingData?.Any() == true)
                                         {
-                                            @if (section.DocumentsBuildingData?.Any() == true)
-                                            {
-                                                <div class="documents-container">
-                                                    @foreach (var (document, docIndex) in section.DocumentsBuildingData.Select((d, i) => (d, i)))
-                                                    {
-                                                        var docKey = secKey * 10000 + docIndex;
-                                                        var docExpanded = _expandedDocuments.Contains(docKey);
-                                                        var docStats = ComputeDocStats(document);
+                                            <div class="documents-container">
+                                                @foreach (var (document, docIndex) in section.DocumentsBuildingData.Select((d, i) => (d, i)))
+                                                {
+                                                    var docKey = secKey * 10000 + docIndex;
+                                                    var docExpanded = _expandedDocuments.Contains(docKey);
+                                                    var docStats = ComputeDocStats(document);
 
-                                                        <div class="document-card">
-                                                            <div class="document-header collapsible" @onclick="() => ToggleSet(_expandedDocuments, docKey)">
-                                                                <span class="collapse-arrow">@(docExpanded ? "▼" : "▶")</span>
-                                                                <div class="document-title-wrapper">
-                                                                    <span class="document-name">@document.DocumentTitle</span>
-                                                                    <span class="document-section-badge">@(document.DocumentSection)</span>
-                                                                </div>
-                                                                <div class="doc-mini-stats">
-                                                                    @if (docStats.Created > 0)
-                                                                    {
-                                                                        <span class="mini-badge success">✓ @docStats.Created</span>
-                                                                    }
-                                                                    @if (docStats.Bad > 0)
-                                                                    {
-                                                                        <span class="mini-badge danger">✗ @docStats.Bad</span>
-                                                                    }
-                                                                </div>
-                                                                <span class="document-time">@FormatTimeSpan(document.ComputeProcessTime)</span>
+                                                    <div class="document-card">
+                                                        <div class="document-header collapsible" @onclick="() => ToggleSet(_expandedDocuments, docKey)">
+                                                            <span class="collapse-arrow">@(docExpanded ? "▼" : "▶")</span>
+                                                            <div class="document-title-wrapper">
+                                                                <span class="document-name">@document.DocumentTitle</span>
+                                                                <span class="document-section-badge">@(document.DocumentSection)</span>
                                                             </div>
-
-                                                            @if (docExpanded)
-                                                            {
-                                                                @if (document.EntityBuildingData?.Any() == true)
+                                                            <div class="doc-mini-stats">
+                                                                @if (docStats.Created > 0)
                                                                 {
-                                                                    <div class="entities-container">
-                                                                        @foreach (var (entity, entIndex) in document.EntityBuildingData.Select((e, i) => (e, i)))
-                                                                        {
-                                                                            var entKey = docKey * 10000 + entIndex;
+                                                                    <span class="mini-badge success">✓ @docStats.Created</span>
+                                                                }
+                                                                @if (docStats.Bad > 0)
+                                                                {
+                                                                    <span class="mini-badge danger">✗ @docStats.Bad</span>
+                                                                }
+                                                            </div>
+                                                            <span class="document-time">@FormatTimeSpan(document.ComputeProcessTime)</span>
+                                                        </div>
 
-                                                                            <div class="entity-card">
-                                                                                <div class="entity-header">
-                                                                                    <span class="entity-name">@entity.EntityName</span>
-                                                                                    <span class="entity-time">@FormatTimeSpan(entity.ComputeProcessTime)</span>
-                                                                                </div>
+                                                        <!-- Сводка по документу — всегда видна -->
+                                                        <div class="nested-summary-card nested-summary-card--doc">
+                                                            <div class="summary-title">Сводка по документу</div>
+                                                            <div class="summary-grid">
+                                                                <div class="summary-item">
+                                                                    <span class="summary-value">@(document.EntityBuildingData?.Count ?? 0)</span>
+                                                                    <span class="summary-label">Сущностей</span>
+                                                                </div>
+                                                                <div class="summary-item success">
+                                                                    <span class="summary-value">@docStats.Created</span>
+                                                                    <span class="summary-label">Создано зон</span>
+                                                                </div>
+                                                                <div class="summary-item danger">
+                                                                    <span class="summary-value">@docStats.Bad</span>
+                                                                    <span class="summary-label">Не создано (ошибки)</span>
+                                                                </div>
+                                                                <div class="summary-item warning">
+                                                                    <span class="summary-value">@docStats.GoodNotCreated</span>
+                                                                    <span class="summary-label">Не создано (допустимо)</span>
+                                                                </div>
+                                                                <div class="summary-item deleted">
+                                                                    <span class="summary-value">@docStats.DeletedZones</span>
+                                                                    <span class="summary-label">Удалено старых зон</span>
+                                                                </div>
+                                                                <div class="summary-item busy">
+                                                                    <span class="summary-value">@docStats.BusyZones</span>
+                                                                    <span class="summary-label">Занятых зон</span>
+                                                                </div>
+                                                                <div class="summary-item info">
+                                                                    <span class="summary-value">@docStats.SavedZones</span>
+                                                                    <span class="summary-label">Сохранено зон</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                                                                <div class="stats-grid">
-                                                                                    @if (entity.HostElements?.Any() == true)
-                                                                                    {
-                                                                                        <div class="stat-item">
-                                                                                            <span class="stat-label">Хост элементы</span>
-                                                                                            <span class="stat-value">@entity.HostElements.Count</span>
-                                                                                            <button class="btn-show-ids" @onclick:stopPropagation="true"
-                                                                                                    @onclick="() => ToggleSet(_expandedHostElements, entKey)">
-                                                                                                @(_expandedHostElements.Contains(entKey) ? "▲" : "▼")
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    }
-                                                                                    @if (entity.CreatedElements?.Any() == true)
-                                                                                    {
-                                                                                        <div class="stat-item">
-                                                                                            <span class="stat-label">Создано</span>
-                                                                                            <span class="stat-value success-text">@entity.CreatedElements.Count</span>
-                                                                                            <button class="btn-show-ids success" @onclick:stopPropagation="true"
-                                                                                                    @onclick="() => ToggleSet(_expandedCreatedElements, entKey)">
-                                                                                                @(_expandedCreatedElements.Contains(entKey) ? "▲" : "▼")
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    }
-                                                                                    @if (entity.SavedOldZones?.Any() == true)
-                                                                                    {
-                                                                                        <div class="stat-item">
-                                                                                            <span class="stat-label">Сохранено старых зон</span>
-                                                                                            <span class="stat-value info-text">@entity.SavedOldZones.Count</span>
-                                                                                            <button class="btn-show-ids info" @onclick:stopPropagation="true"
-                                                                                                    @onclick="() => ToggleSet(_expandedSavedZones, entKey)">
-                                                                                                @(_expandedSavedZones.Contains(entKey) ? "▲" : "▼")
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    }
-                                                                                </div>
+                                                        @if (docExpanded)
+                                                        {
+                                                            @if (document.EntityBuildingData?.Any() == true)
+                                                            {
+                                                                <div class="entities-container">
+                                                                    @foreach (var (entity, entIndex) in document.EntityBuildingData.Select((e, i) => (e, i)))
+                                                                    {
+                                                                        var entKey = docKey * 10000 + entIndex;
 
-                                                                                @if (_expandedHostElements.Contains(entKey) && entity.HostElements?.Any() == true)
+                                                                        <div class="entity-card">
+                                                                            <div class="entity-header">
+                                                                                <span class="entity-name">@entity.EntityName</span>
+                                                                                <span class="entity-time">@FormatTimeSpan(entity.ComputeProcessTime)</span>
+                                                                            </div>
+
+                                                                            <div class="stats-grid">
+                                                                                @if (entity.HostElements?.Any() == true)
                                                                                 {
-                                                                                    <div class="ids-chips-list">
-                                                                                        @foreach (var el in entity.HostElements)
-                                                                                        {
-                                                                                            <span class="id-chip neutral">@el.ElementId</span>
-                                                                                        }
+                                                                                    <div class="stat-item">
+                                                                                        <span class="stat-label">Хост элементы</span>
+                                                                                        <span class="stat-value">@entity.HostElements.Count</span>
+                                                                                        <button class="btn-show-ids" @onclick:stopPropagation="true"
+                                                                                                @onclick="() => ToggleSet(_expandedHostElements, entKey)">
+                                                                                            @(_expandedHostElements.Contains(entKey) ? "▲" : "▼")
+                                                                                        </button>
                                                                                     </div>
                                                                                 }
-
-                                                                                @if (_expandedCreatedElements.Contains(entKey) && entity.CreatedElements?.Any() == true)
+                                                                                @if (entity.CreatedElements?.Any() == true)
                                                                                 {
-                                                                                    <div class="ids-chips-list">
-                                                                                        @foreach (var el in entity.CreatedElements)
-                                                                                        {
-                                                                                            <span class="id-chip success">@el.ElementId</span>
-                                                                                        }
+                                                                                    <div class="stat-item">
+                                                                                        <span class="stat-label">Создано</span>
+                                                                                        <span class="stat-value success-text">@entity.CreatedElements.Count</span>
+                                                                                        <button class="btn-show-ids success" @onclick:stopPropagation="true"
+                                                                                                @onclick="() => ToggleSet(_expandedCreatedElements, entKey)">
+                                                                                            @(_expandedCreatedElements.Contains(entKey) ? "▲" : "▼")
+                                                                                        </button>
                                                                                     </div>
                                                                                 }
-
-                                                                                @if (_expandedSavedZones.Contains(entKey) && entity.SavedOldZones?.Any() == true)
+                                                                                @if (entity.SavedOldZones?.Any() == true)
                                                                                 {
-                                                                                    <div class="ids-chips-list">
-                                                                                        @foreach (var el in entity.SavedOldZones)
-                                                                                        {
-                                                                                            <span class="id-chip info">@el.ElementId</span>
-                                                                                        }
-                                                                                    </div>
-                                                                                }
-
-                                                                                @if (entity.NotCreatedElementsData != null)
-                                                                                {
-                                                                                    <div class="errors-container">
-                                                                                        @if (entity.NotCreatedElementsData.GoodNotCreatedElements?.Any() == true)
-                                                                                        {
-                                                                                            <div class="error-group good">
-                                                                                                <div class="error-group-header">
-                                                                                                    <span class="error-group-title">Не создано (допустимо)</span>
-                                                                                                    <span class="error-count">@entity.NotCreatedElementsData.GoodNotCreatedElements.Count</span>
-                                                                                                    <button class="btn-toggle-ids good" @onclick:stopPropagation="true"
-                                                                                                            @onclick="() => ToggleSet(_expandedGoodErrors, entKey)">
-                                                                                                        @(_expandedGoodErrors.Contains(entKey) ? "▲" : "▼")
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                                @if (_expandedGoodErrors.Contains(entKey))
-                                                                                                {
-                                                                                                    <div class="ids-list">
-                                                                                                        @foreach (var elem in entity.NotCreatedElementsData.GoodNotCreatedElements)
-                                                                                                        {
-                                                                                                            <div class="id-row">
-                                                                                                                <span class="id-badge good">@elem.BadElementId</span>
-                                                                                                                <span class="id-reason">@elem.ReasonNotCreated</span>
-                                                                                                            </div>
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                }
-                                                                                            </div>
-                                                                                        }
-
-                                                                                        @if (entity.NotCreatedElementsData.BadNotCreatedElements?.Any() == true)
-                                                                                        {
-                                                                                            <div class="error-group bad">
-                                                                                                <div class="error-group-header">
-                                                                                                    <span class="error-group-title">Не создано (ошибки)</span>
-                                                                                                    <span class="error-count">@entity.NotCreatedElementsData.BadNotCreatedElements.Count</span>
-                                                                                                    <button class="btn-toggle-ids" @onclick:stopPropagation="true"
-                                                                                                            @onclick="() => ToggleSet(_expandedBadErrors, entKey)">
-                                                                                                        @(_expandedBadErrors.Contains(entKey) ? "▲" : "▼")
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                                @if (_expandedBadErrors.Contains(entKey))
-                                                                                                {
-                                                                                                    <div class="ids-list">
-                                                                                                        @foreach (var elem in entity.NotCreatedElementsData.BadNotCreatedElements)
-                                                                                                        {
-                                                                                                            <div class="id-row">
-                                                                                                                <span class="id-badge">@elem.BadElementId</span>
-                                                                                                                <span class="id-reason">@elem.ReasonNotCreated</span>
-                                                                                                            </div>
-                                                                                                        }
-                                                                                                    </div>
-                                                                                                }
-                                                                                            </div>
-                                                                                        }
+                                                                                    <div class="stat-item">
+                                                                                        <span class="stat-label">Сохранено старых зон</span>
+                                                                                        <span class="stat-value info-text">@entity.SavedOldZones.Count</span>
+                                                                                        <button class="btn-show-ids info" @onclick:stopPropagation="true"
+                                                                                                @onclick="() => ToggleSet(_expandedSavedZones, entKey)">
+                                                                                            @(_expandedSavedZones.Contains(entKey) ? "▲" : "▼")
+                                                                                        </button>
                                                                                     </div>
                                                                                 }
                                                                             </div>
-                                                                        }
-                                                                    </div>
-                                                                }
 
-                                                                @if (document.DocumentDeletingZonesResult != null)
-                                                                {
-                                                                    <div class="zones-result">
-                                                                        <div class="zones-section-title">Результаты удаления зон</div>
-                                                                        <div class="zones-grid">
-                                                                            @if (document.DocumentDeletingZonesResult.DeletedOldZones?.Any() == true)
+                                                                            @if (_expandedHostElements.Contains(entKey) && entity.HostElements?.Any() == true)
                                                                             {
-                                                                                var delKey = docKey + 1000000;
-                                                                                <div class="zone-stat-row">
-                                                                                    <span class="zone-label">Удалено старых</span>
-                                                                                    <span class="zone-value deleted">@document.DocumentDeletingZonesResult.DeletedOldZones.Count</span>
-                                                                                    <button class="btn-show-ids danger" @onclick:stopPropagation="true"
-                                                                                            @onclick="() => ToggleSet(_expandedDeletedZones, delKey)">
-                                                                                        @(_expandedDeletedZones.Contains(delKey) ? "▲" : "▼")
-                                                                                    </button>
+                                                                                <div class="ids-chips-list">
+                                                                                    @foreach (var el in entity.HostElements)
+                                                                                    {
+                                                                                        <span class="id-chip neutral @(IdMatches(el.ElementId) ? "search-match" : "")">@el.ElementId</span>
+                                                                                    }
                                                                                 </div>
-                                                                                @if (_expandedDeletedZones.Contains(delKey))
-                                                                                {
-                                                                                    <div class="ids-chips-list full-width">
-                                                                                        @foreach (var id in document.DocumentDeletingZonesResult.DeletedOldZones)
-                                                                                        {
-                                                                                            <span class="id-chip danger">@id</span>
-                                                                                        }
-                                                                                    </div>
-                                                                                }
                                                                             }
-                                                                            @if (document.DocumentDeletingZonesResult.NotDeletedBusyOldZones?.Any() == true)
+
+                                                                            @if (_expandedCreatedElements.Contains(entKey) && entity.CreatedElements?.Any() == true)
                                                                             {
-                                                                                var busyKey = docKey + 2000000;
-                                                                                <div class="zone-stat-row">
-                                                                                    <span class="zone-label">Не удалено (занято)</span>
-                                                                                    <span class="zone-value busy">@document.DocumentDeletingZonesResult.NotDeletedBusyOldZones.Count</span>
-                                                                                    <button class="btn-show-ids warning" @onclick:stopPropagation="true"
-                                                                                            @onclick="() => ToggleSet(_expandedNotDeletedZones, busyKey)">
-                                                                                        @(_expandedNotDeletedZones.Contains(busyKey) ? "▲" : "▼")
-                                                                                    </button>
+                                                                                <div class="ids-chips-list">
+                                                                                    @foreach (var el in entity.CreatedElements)
+                                                                                    {
+                                                                                        <span class="id-chip success @(IdMatches(el.ElementId) ? "search-match" : "")">@el.ElementId</span>
+                                                                                    }
                                                                                 </div>
-                                                                                @if (_expandedNotDeletedZones.Contains(busyKey))
-                                                                                {
-                                                                                    <div class="ids-chips-list full-width">
-                                                                                        @foreach (var el in document.DocumentDeletingZonesResult.NotDeletedBusyOldZones)
-                                                                                        {
-                                                                                            <span class="id-chip warning">@el.ElementId</span>
-                                                                                        }
-                                                                                    </div>
-                                                                                }
+                                                                            }
+
+                                                                            @if (_expandedSavedZones.Contains(entKey) && entity.SavedOldZones?.Any() == true)
+                                                                            {
+                                                                                <div class="ids-chips-list">
+                                                                                    @foreach (var el in entity.SavedOldZones)
+                                                                                    {
+                                                                                        <span class="id-chip info @(IdMatches(el.ElementId) ? "search-match" : "")">@el.ElementId</span>
+                                                                                    }
+                                                                                </div>
+                                                                            }
+
+                                                                            @if (entity.NotCreatedElementsData != null)
+                                                                            {
+                                                                                <div class="errors-container">
+                                                                                    @if (entity.NotCreatedElementsData.GoodNotCreatedElements?.Any() == true)
+                                                                                    {
+                                                                                        <div class="error-group good">
+                                                                                            <div class="error-group-header">
+                                                                                                <span class="error-group-title">Не создано (допустимо)</span>
+                                                                                                <span class="error-count">@entity.NotCreatedElementsData.GoodNotCreatedElements.Count</span>
+                                                                                                <button class="btn-toggle-ids good" @onclick:stopPropagation="true"
+                                                                                                        @onclick="() => ToggleSet(_expandedGoodErrors, entKey)">
+                                                                                                    @(_expandedGoodErrors.Contains(entKey) ? "▲" : "▼")
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            @if (_expandedGoodErrors.Contains(entKey))
+                                                                                            {
+                                                                                                <div class="ids-list">
+                                                                                                    @foreach (var elem in entity.NotCreatedElementsData.GoodNotCreatedElements)
+                                                                                                    {
+                                                                                                        <div class="id-row">
+                                                                                                            <span class="id-badge good @(IdMatches(elem.BadElementId) ? "search-match" : "")">@elem.BadElementId</span>
+                                                                                                            <span class="id-reason">@elem.ReasonNotCreated</span>
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                </div>
+                                                                                            }
+                                                                                        </div>
+                                                                                    }
+
+                                                                                    @if (entity.NotCreatedElementsData.BadNotCreatedElements?.Any() == true)
+                                                                                    {
+                                                                                        <div class="error-group bad">
+                                                                                            <div class="error-group-header">
+                                                                                                <span class="error-group-title">Не создано (ошибки)</span>
+                                                                                                <span class="error-count">@entity.NotCreatedElementsData.BadNotCreatedElements.Count</span>
+                                                                                                <button class="btn-toggle-ids" @onclick:stopPropagation="true"
+                                                                                                        @onclick="() => ToggleSet(_expandedBadErrors, entKey)">
+                                                                                                    @(_expandedBadErrors.Contains(entKey) ? "▲" : "▼")
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            @if (_expandedBadErrors.Contains(entKey))
+                                                                                            {
+                                                                                                <div class="ids-list">
+                                                                                                    @foreach (var elem in entity.NotCreatedElementsData.BadNotCreatedElements)
+                                                                                                    {
+                                                                                                        <div class="id-row">
+                                                                                                            <span class="id-badge @(IdMatches(elem.BadElementId) ? "search-match" : "")">@elem.BadElementId</span>
+                                                                                                            <span class="id-reason">@elem.ReasonNotCreated</span>
+                                                                                                        </div>
+                                                                                                    }
+                                                                                                </div>
+                                                                                            }
+                                                                                        </div>
+                                                                                    }
+                                                                                </div>
                                                                             }
                                                                         </div>
-                                                                    </div>
-                                                                }
+                                                                    }
+                                                                </div>
                                                             }
-                                                        </div>
-                                                    }
-                                                </div>
-                                            }
+
+                                                            @if (document.DocumentDeletingZonesResult != null)
+                                                            {
+                                                                <div class="zones-result">
+                                                                    <div class="zones-section-title">Результаты удаления зон</div>
+                                                                    <div class="zones-grid">
+                                                                        @if (document.DocumentDeletingZonesResult.DeletedOldZones?.Any() == true)
+                                                                        {
+                                                                            var delKey = docKey + 1000000;
+                                                                            <div class="zone-stat-row">
+                                                                                <span class="zone-label">Удалено старых</span>
+                                                                                <span class="zone-value deleted">@document.DocumentDeletingZonesResult.DeletedOldZones.Count</span>
+                                                                                <button class="btn-show-ids danger" @onclick:stopPropagation="true"
+                                                                                        @onclick="() => ToggleSet(_expandedDeletedZones, delKey)">
+                                                                                    @(_expandedDeletedZones.Contains(delKey) ? "▲" : "▼")
+                                                                                </button>
+                                                                            </div>
+                                                                            @if (_expandedDeletedZones.Contains(delKey))
+                                                                            {
+                                                                                <div class="ids-chips-list full-width">
+                                                                                    @foreach (var id in document.DocumentDeletingZonesResult.DeletedOldZones)
+                                                                                    {
+                                                                                        <span class="id-chip danger @(IdMatches(id) ? "search-match" : "")">@id</span>
+                                                                                    }
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                        @if (document.DocumentDeletingZonesResult.NotDeletedBusyOldZones?.Any() == true)
+                                                                        {
+                                                                            var busyKey = docKey + 2000000;
+                                                                            <div class="zone-stat-row">
+                                                                                <span class="zone-label">Не удалено (занято)</span>
+                                                                                <span class="zone-value busy">@document.DocumentDeletingZonesResult.NotDeletedBusyOldZones.Count</span>
+                                                                                <button class="btn-show-ids warning" @onclick:stopPropagation="true"
+                                                                                        @onclick="() => ToggleSet(_expandedNotDeletedZones, busyKey)">
+                                                                                    @(_expandedNotDeletedZones.Contains(busyKey) ? "▲" : "▼")
+                                                                                </button>
+                                                                            </div>
+                                                                            @if (_expandedNotDeletedZones.Contains(busyKey))
+                                                                            {
+                                                                                <div class="ids-chips-list full-width">
+                                                                                    @foreach (var el in document.DocumentDeletingZonesResult.NotDeletedBusyOldZones)
+                                                                                    {
+                                                                                        <span class="id-chip warning @(IdMatches(el.ElementId) ? "search-match" : "")">@el.ElementId</span>
+                                                                                    }
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
                                         }
                                     </div>
                                 }
