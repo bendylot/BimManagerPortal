@@ -133,6 +133,32 @@ public partial class RestrictedAreaForm
 
     private void ClearAllModels() => Config.PathsToModels.Models.Clear();
 
+    private bool ArCeilingsEnabled
+    {
+        get => Config.DisciplineSettings.ArDisciplineSetting.ArCeilings != null;
+        set
+        {
+            if (value && Config.DisciplineSettings.ArDisciplineSetting.ArCeilings == null)
+                Config.DisciplineSettings.ArDisciplineSetting.ArCeilings = new();
+            else if (!value)
+                Config.DisciplineSettings.ArDisciplineSetting.ArCeilings = null;
+        }
+    }
+
+    private string _newCeilingString = "";
+
+    private void AddCeilingString()
+    {
+        if (string.IsNullOrWhiteSpace(_newCeilingString)) return;
+        Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings.Add(_newCeilingString.Trim());
+        _newCeilingString = "";
+    }
+
+    private void RemoveCeilingString(int index)
+    {
+        Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings.RemoveAt(index);
+    }
+
     private async Task CreateConfig()
     {
         if (!_editContext.Validate()) return;

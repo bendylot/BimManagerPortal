@@ -38,6 +38,15 @@ public class ArDisciplineProxy
     public bool ArDoors { get; set; } = false;
     public bool ArParking { get; set; } = false;
     public bool ArDoorOpenings { get; set; } = false;
+    
+    [ValidateComplexType]
+    public CeilingsSettings? ArCeilings { get; set; }
+}
+
+public class CeilingsSettings
+{
+    public List<string> listRestrictedStrings { get; set; } = new();
+    public double offsetBorder { get; set; }
 }
 public class KrDisciplineProxy
 {

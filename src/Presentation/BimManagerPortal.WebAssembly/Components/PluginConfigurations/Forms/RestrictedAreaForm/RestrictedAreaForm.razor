@@ -207,6 +207,47 @@
                             <CheckboxField Label="Форма Машиноместа"
                                            @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArParking" />
                         </div>
+
+                        <div class="card p-3 shadow-sm mt-3">
+                            <h6 class="card-subtitle mb-2 text-muted">Потолки АР</h6>
+                            <CheckboxField Label="Учитывать потолки АР"
+                                           @bind-Value="ArCeilingsEnabled" />
+                            @if (Config.DisciplineSettings.ArDisciplineSetting.ArCeilings != null)
+                            {
+                                <div class="mt-3 mb-3">
+                                    <label class="small">Отступ от границы</label>
+                                    <InputNumber class="form-control form-control-sm"
+                                                 @bind-Value="Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.offsetBorder" />
+                                </div>
+                                <div>
+                                    <label class="small">Строки ограничений</label>
+                                    @for (int i = 0; i < Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings.Count; i++)
+                                    {
+                                        var index = i;
+                                        <div class="input-group input-group-sm mb-1" @key="index">
+                                            <span class="input-group-text bg-white text-muted small">@(index + 1)</span>
+                                            <InputText class="form-control form-control-sm"
+                                                       Value="@Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings[index]"
+                                                       ValueChanged="@(v => Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings[index] = v)"
+                                                       ValueExpression="@(() => Config.DisciplineSettings.ArDisciplineSetting.ArCeilings.listRestrictedStrings[index])" />
+                                            <button class="btn btn-outline-danger btn-sm px-2" type="button"
+                                                    @onclick="() => RemoveCeilingString(index)"
+                                                    style="min-width:2rem">×</button>
+                                        </div>
+                                    }
+                                    <div class="input-group input-group-sm mt-2">
+                                        <InputText class="form-control form-control-sm"
+                                                   placeholder="Добавить строку..."
+                                                   @bind-Value="_newCeilingString" />
+                                        <button class="btn btn-outline-success btn-sm" type="button"
+                                                @onclick="AddCeilingString"
+                                                disabled="@string.IsNullOrWhiteSpace(_newCeilingString)">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
